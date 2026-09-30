@@ -7,7 +7,7 @@
            xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
            xsi:type="TaskPaneApp">
   <Id>b279575a-0d32-46cb-a2b9-1ab2913883ad</Id>
-  <Version>1.0.0.0</Version>
+  <Version>1.0.1.0</Version>
   <ProviderName>The Ultraspeaker</ProviderName>
   <DefaultLocale>it-IT</DefaultLocale>
   <DisplayName DefaultValue="The Ultraspeaker Projector Lab">
@@ -22,8 +22,8 @@
     <Override Locale="fr-FR" Value="Réglez le projecteur avant de parler : guide en 10 étapes avec des mires sur mesure pour le format, la netteté, le noir, le blanc, la couleur et les références cliniques."/>
     <Override Locale="de-DE" Value="Stellen Sie den Projektor vor Ihrem Vortrag ein: 10-Schritte-Anleitung mit passenden Testbildern für Format, Schärfe, Schwarz, Weiß, Farbe und klinische Referenzen."/>
   </Description>
-  <IconUrl DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/assets/projector-lab-icon-64.png"/>
-  <HighResolutionIconUrl DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/assets/projector-lab-icon-128.png"/>
+  <IconUrl DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/assets/projector-lab-icon-64.png?v=3"/>
+  <HighResolutionIconUrl DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/assets/projector-lab-icon-128.png?v=3"/>
   <SupportUrl DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/support.html"/>
   <AppDomains>
     <AppDomain>https://niki977.github.io</AppDomain>
@@ -84,9 +84,9 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16" DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/assets/projector-lab-icon-16.png"/>
-        <bt:Image id="Icon.32" DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/assets/projector-lab-icon-32.png"/>
-        <bt:Image id="Icon.80" DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/assets/projector-lab-icon-80.png"/>
+        <bt:Image id="Icon.16" DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/assets/projector-lab-icon-16.png?v=3"/>
+        <bt:Image id="Icon.32" DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/assets/projector-lab-icon-32.png?v=3"/>
+        <bt:Image id="Icon.80" DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/assets/projector-lab-icon-80.png?v=3"/>
       </bt:Images>
       <bt:Urls>
         <bt:Url id="Taskpane.Url" DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/index.html"/>
