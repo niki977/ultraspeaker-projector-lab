@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The Ultraspeaker Projector Lab – manifest per PowerPoint.
+     Tutti gli indirizzi puntano a https://niki977.github.io/ultraspeaker-projector-lab/ : se pubblichi in un'altra cartella, sostituisci quel testo ovunque. -->
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+           xsi:type="TaskPaneApp">
+  <Id>b279575a-0d32-46cb-a2b9-1ab2913883ad</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>The Ultraspeaker</ProviderName>
+  <DefaultLocale>it-IT</DefaultLocale>
+  <DisplayName DefaultValue="The Ultraspeaker Projector Lab">
+    <Override Locale="en-US" Value="The Ultraspeaker Projector Lab"/>
+    <Override Locale="es-ES" Value="The Ultraspeaker Projector Lab"/>
+    <Override Locale="fr-FR" Value="The Ultraspeaker Projector Lab"/>
+    <Override Locale="de-DE" Value="The Ultraspeaker Projector Lab"/>
+  </DisplayName>
+  <Description DefaultValue="Regola il proiettore prima di parlare: guida in 10 passi con pattern di test su misura per formato, fuoco, nero, bianco, colore e riferimenti clinici.">
+    <Override Locale="en-US" Value="Set up the projector before you speak: a 10-step guide with tailored test patterns for format, focus, black, white, colour and clinical references."/>
+    <Override Locale="es-ES" Value="Ajusta el proyector antes de hablar: guía en 10 pasos con patrones de prueba a medida para formato, enfoque, negro, blanco, color y referencias clínicas."/>
+    <Override Locale="fr-FR" Value="Réglez le projecteur avant de parler : guide en 10 étapes avec des mires sur mesure pour le format, la netteté, le noir, le blanc, la couleur et les références cliniques."/>
+    <Override Locale="de-DE" Value="Stellen Sie den Projektor vor Ihrem Vortrag ein: 10-Schritte-Anleitung mit passenden Testbildern für Format, Schärfe, Schwarz, Weiß, Farbe und klinische Referenzen."/>
+  </Description>
+  <IconUrl DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/assets/projector-lab-icon-64.png"/>
+  <HighResolutionIconUrl DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/assets/projector-lab-icon-128.png"/>
+  <SupportUrl DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/support.html"/>
+  <AppDomains>
+    <AppDomain>https://niki977.github.io</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Presentation"/>
+  </Hosts>
+  <!-- Inserisce le slide di test con PowerPointApi 1.2; tag (1.3), selezione (1.5) e rilevamento del formato (1.8) si attivano solo se disponibili -->
+  <Requirements>
+    <Sets DefaultMinVersion="1.1">
+      <Set Name="PowerPointApi" MinVersion="1.2"/>
+    </Sets>
+  </Requirements>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/index.html"/>
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Hosts>
+      <Host xsi:type="Presentation">
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="GetStarted.Title"/>
+            <Description resid="GetStarted.Description"/>
+            <LearnMoreUrl resid="Home.Url"/>
+          </GetStarted>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <OfficeTab id="TabHome">
+              <Group id="Ultraspeaker.ProjectorLab.Group">
+                <Label resid="Group.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16"/>
+                  <bt:Image size="32" resid="Icon.32"/>
+                  <bt:Image size="80" resid="Icon.80"/>
+                </Icon>
+                <Control xsi:type="Button" id="Ultraspeaker.ProjectorLab.Open">
+                  <Label resid="Button.Label"/>
+                  <Supertip>
+                    <Title resid="Button.Label"/>
+                    <Description resid="Button.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16"/>
+                    <bt:Image size="32" resid="Icon.32"/>
+                    <bt:Image size="80" resid="Icon.80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>UltraspeakerProjectorLab</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16" DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/assets/projector-lab-icon-16.png"/>
+        <bt:Image id="Icon.32" DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/assets/projector-lab-icon-32.png"/>
+        <bt:Image id="Icon.80" DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/assets/projector-lab-icon-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/index.html"/>
+        <bt:Url id="Home.Url" DefaultValue="https://niki977.github.io/ultraspeaker-projector-lab/support.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="Group.Label" DefaultValue="The Ultraspeaker">
+          <bt:Override Locale="en-US" Value="The Ultraspeaker"/>
+        </bt:String>
+        <bt:String id="Button.Label" DefaultValue="Projector Lab">
+          <bt:Override Locale="en-US" Value="Projector Lab"/>
+        </bt:String>
+        <bt:String id="GetStarted.Title" DefaultValue="Projector Lab è pronto">
+          <bt:Override Locale="en-US" Value="Projector Lab is ready"/>
+          <bt:Override Locale="es-ES" Value="Projector Lab está listo"/>
+          <bt:Override Locale="fr-FR" Value="Projector Lab est prêt"/>
+          <bt:Override Locale="de-DE" Value="Projector Lab ist bereit"/>
+        </bt:String>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="Button.Tooltip" DefaultValue="Guida in 10 passi e pattern di test per regolare il proiettore.">
+          <bt:Override Locale="en-US" Value="10-step guide and test patterns to set up the projector."/>
+          <bt:Override Locale="es-ES" Value="Guía en 10 pasos y patrones de prueba para ajustar el proyector."/>
+          <bt:Override Locale="fr-FR" Value="Guide en 10 étapes et mires pour régler le projecteur."/>
+          <bt:Override Locale="de-DE" Value="10-Schritte-Anleitung und Testbilder zum Einstellen des Projektors."/>
+        </bt:String>
+        <bt:String id="GetStarted.Description" DefaultValue="Apri Projector Lab dalla scheda Home e inserisci le slide di test.">
+          <bt:Override Locale="en-US" Value="Open Projector Lab from the Home tab and insert the test slides."/>
+          <bt:Override Locale="es-ES" Value="Abre Projector Lab desde la pestaña Inicio e inserta las diapositivas de prueba."/>
+          <bt:Override Locale="fr-FR" Value="Ouvrez Projector Lab depuis l’onglet Accueil et insérez les diapositives de test."/>
+          <bt:Override Locale="de-DE" Value="Öffnen Sie Projector Lab über die Registerkarte Start und fügen Sie die Testfolien ein."/>
+        </bt:String>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>
