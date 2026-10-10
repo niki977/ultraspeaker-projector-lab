@@ -897,7 +897,7 @@
     $("#nextBtn").onclick = () => { if (S.step === STEPS().length - 1) copyReport(); else goStep(S.step + 1); };
     $("#photoIn").onchange = (e) => onPhoto(e.target.files && e.target.files[0]);
     // In PowerPoint i link si aprono nel browser di sistema
-    $$(".links a").forEach((el) => el.addEventListener("click", (e) => {
+    $$(".links a, .brand-link").forEach((el) => el.addEventListener("click", (e) => {
       if (!inOffice) return;
       try {
         if (Office.context.requirements.isSetSupported("OpenBrowserWindowApi", "1.1")) { e.preventDefault(); Office.context.ui.openBrowserWindow(el.href); }

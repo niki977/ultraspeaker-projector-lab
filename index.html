@@ -214,13 +214,16 @@ details.issue p{margin:0;padding:0 11px 11px;font-size:12.5px;color:var(--ink-2)
 .restart:hover{color:var(--ink)}
 .restart.danger.armed{color:#ff9d96;border-color:rgba(255,157,150,.55);background:rgba(179,38,30,.12)}
 .restart.armed,.btn.restart-final.armed{color:#ffcf80;border-color:rgba(255,207,128,.55);background:rgba(255,207,128,.07)}
+.brand-link{display:block;width:min(200px,60%);border-radius:6px}
+.brand-link .lockup{width:100%}
+.brand-link:hover .lockup{opacity:.85}
 </style>
 </head>
 <body>
 <div class="app">
   <header class="brand">
     <div class="brand-row">
-      <img class="lockup" src="assets/logo-projector-lab-white.svg" alt="The Ultraspeaker Projector Lab">
+      <a class="brand-link" href="https://www.theultraspeaker.com" target="_blank" rel="noopener" title="www.theultraspeaker.com"><img class="lockup" src="assets/logo-projector-lab-white.svg" alt="The Ultraspeaker Projector Lab"></a>
       <label class="lang">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
         <select id="lang" data-i18n-aria="lang"></select>
