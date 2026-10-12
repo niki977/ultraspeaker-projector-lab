@@ -48,17 +48,17 @@
     if (hh && !o.noHint) sc.text(0.35, o.hintY != null ? o.hintY : H - 0.52, W - 0.7, 0.34, hh, 12, color, { align: o.hintAlign || "left" });
   }
 
-  // Logo The Ultraspeaker piccolo e semitrasparente, come un watermark (cx, cy = centro)
-  const WM_RATIO = 802 / 3955;
+  // Arena di The Ultraspeaker piccola e semitrasparente, come un watermark (brand book: Arena in basso a destra; cx, cy = centro)
+  const WM_RATIO = 1747 / 2503;
   function wm(sc, cx, cy, w, dark) {
     const src = root.PL_WM && (dark ? root.PL_WM.dark : root.PL_WM.light);
     if (!src) return;
     const h = w * WM_RATIO;
     sc.image(cx - w / 2, cy - h / 2, w, h, src);
   }
-  const WM_W = 1.35;
+  const WM_W = 0.55;
   // Posizione standard: in basso a destra, sulla riga del suggerimento
-  const wmCorner = (sc, W, dark) => wm(sc, W - 0.35 - WM_W / 2, H - 0.35, WM_W, dark);
+  const wmCorner = (sc, W, dark) => wm(sc, W - 0.35 - WM_W / 2, H - 0.4, WM_W, dark);
 
   /* ---------- Pattern ---------- */
   const P = {};

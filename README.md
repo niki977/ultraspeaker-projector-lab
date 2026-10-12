@@ -64,7 +64,7 @@ nel gruppo «The Ultraspeaker», accanto a QR Lab e Image Lab.
 | `vendor/pptxgen.bundle.js` | PptxGenJS 3.12 (licenza MIT) per creare le slide |
 | `projector-lab-manifest.xml` | Manifest dell’add-in per PowerPoint |
 | `assets/` | Lockup Projector Lab (bianco/nero), logetto mirino, logo The Ultraspeaker, icone PNG (16–512 px) |
-| `fonts/` | Quicksand in woff2 e licenza OFL |
+| `fonts/` | Champagne & Limousines in woff2 (carattere del brand book) |
 | `support.html`, `privacy.html`, `terms.html`, `GUIDA-INSTALLAZIONE.html` | Supporto, privacy, condizioni d’uso e guida, in 5 lingue con selettore come nel pannello |
 | `legal.css`, `legal.js` | Stile e cambio lingua di queste pagine |
 | `store/LISTING.md` | Testi per la scheda del Marketplace |
