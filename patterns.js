@@ -99,9 +99,6 @@
     sc.rect(W / 2 - q / 2, 0.383, q, q, "FF0000");
     sc.rect(gx - q / 2, cyM - q / 2, q, q, "00FF00");
     sc.rect(W - gx - q / 2, cyM - q / 2, q, q, "0000FF");
-    // Watermark tra il triangolo rosso e il mirino in basso a destra
-    const x0 = W / 2 + bw / 2, x1 = W - inset - D, ww = Math.min(WM_W * s, (x1 - x0) * 0.7);
-    wm(sc, (x0 + x1) / 2, 6.98, ww, dark);
     return sc;
   }
   P.screenLight = (W) => screenTest(W, false);
@@ -125,8 +122,6 @@
     sc.text(W / 2 - lw / 2, cell * 0.2, lw, cell * 0.6, L["p.grid.title"] || "", 12, "D9D9D9", { bold: true, align: "center", spacing: 2 });
     sc.rect(W / 2 - lw / 2, H - cell * 0.8, lw, cell * 0.6, "000000");
     sc.text(W / 2 - lw / 2, H - cell * 0.8, lw, cell * 0.6, L["p.grid.hint"] || "", 12, "D9D9D9", { align: "center" });
-    sc.rect(W / 2 - 0.85, H - cell * 1.65, 1.7, cell * 0.72, "000000");
-    wm(sc, W / 2, H - cell * 1.29, WM_W, true);
     return sc;
   };
 
@@ -260,7 +255,6 @@
     const px = 5 * bw, pw = bw / 3;
     sc.rect(px, y3, pw, h3, "090909").rect(px + pw, y3, pw, h3, "131313").rect(px + 2 * pw, y3, pw + 0.005, h3, "1D1D1D");
     // Watermark nel riquadro nero in basso a destra
-    wm(sc, 6.5 * bw, H - 0.4, Math.min(WM_W, bw * 0.8), true);
     return sc;
   };
   // 9. Rampe colore a 32 gradini (saturazione e colori che si "impastano")

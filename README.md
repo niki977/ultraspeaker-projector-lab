@@ -27,7 +27,7 @@ sul proiettore (doppio clic = tutto schermo): si adattano al formato reale dello
 I pattern derivano dal Screen Test The Ultraspeaker 2.1 (bordo a scacchi, mirini, triangoli, quadrati e riquadro RGB)
 più: griglia, stelle di Siemens e scala dei corpi, nero 0–20%, bianco 80–99%, scala di grigi, grigi a confronto per la dominante, barre SMPTE 75%,
 rampe colore a 32 gradini, bianchi dello smalto / tessuti molli / ombre del cavo orale, spazio per una foto clinica,
-campi pieni bianco/grigio/nero. Ogni pattern porta il logo The Ultraspeaker piccolo e semitrasparente, come un watermark.
+campi pieni bianco/grigio/nero. I pattern portano l’Arena di The Ultraspeaker piccola e semitrasparente in basso a destra, come un watermark (tranne Screen Test chiaro e scuro, Geometria e barre SMPTE).
 
 ## Requisiti
 
@@ -60,7 +60,7 @@ nel gruppo «The Ultraspeaker», accanto a QR Lab e Image Lab.
 | `show.html` | Finestra dei pattern a schermo intero |
 | `i18n.js` | Testi e procedura nelle 5 lingue |
 | `venn-data.js` | Immagine del cerchio RGB del Screen Test |
-| `wm-data.js` | Logo The Ultraspeaker semitrasparente (watermark dei pattern) |
+| `wm-data.js` | Arena di The Ultraspeaker semitrasparente (watermark dei pattern) |
 | `vendor/pptxgen.bundle.js` | PptxGenJS 3.12 (licenza MIT) per creare le slide |
 | `projector-lab-manifest.xml` | Manifest dell’add-in per PowerPoint |
 | `assets/` | Lockup Projector Lab (bianco/nero), logetto mirino, logo The Ultraspeaker, icone PNG (16–512 px) |
