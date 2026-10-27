@@ -189,7 +189,7 @@ window.PL_I18N = {
     "prev": "Indietro",
     "next": "Avanti",
     "finish": "Fine",
-    "timer.start": "Avvia timer riscaldamento (10 min)",
+    "timer.start": "Avvia timer riscaldamento (15 min)",
     "timer.run": "Riscaldamento: {t}",
     "timer.done": "Proiettore caldo: puoi iniziare",
     "venue": "Sala / evento",
@@ -255,7 +255,7 @@ window.PL_I18N = {
         id: "prep", title: "Prima di iniziare", short: "Prep.",
         goal: "Collega il computer e prepara proiettore e sala: metà dei problemi si risolve qui, prima di toccare i menu.",
         checks: [
-          "Accendi il proiettore 10–15 minuti prima: la lampada raggiunge luminosità e colore stabili solo da calda.",
+          "Accendi il proiettore in anticipo: con la lampada almeno 15 minuti, meglio 30, perché luminosità e colore si stabilizzano solo da calda; con laser o LED ne bastano 5–10.",
           "Portatile collegato alla corrente; salvaschermo e risparmio energetico disattivati.",
           "Cavo HDMI (o USB-C) ben inserito. Evita la VGA: immagine meno nitida e colori instabili.",
           "Risoluzione del computer uguale a quella nativa del proiettore (spesso 1920×1080 o 1920×1200; nei modelli vecchi 1280×800 o 1024×768).",
@@ -366,6 +366,7 @@ window.PL_I18N = {
         adjust: [
           "Temperatura colore: Normale / Media / 6500 K (D65). Alta = bluastro, Bassa = giallastro.",
           "Gamma: 2,2 o Standard. Valori diversi scuriscono o sbiancano i mezzitoni.",
+          "Gamut / Spazio colore (se c’è): sRGB o Rec.709. Evita Nativo, Wide o DCI-P3: slide e foto sono in sRGB e con un gamut più ampio i colori risultano ipersaturi, soprattutto rossi e gengive.",
           "Se c’è il bilanciamento del bianco RGB: Gain per i chiari, Offset / Bias per gli scuri.",
         ],
         issues: [
@@ -446,6 +447,8 @@ window.PL_I18N = {
           "Mostra la tua slide più impegnativa: una foto clinica, il testo più piccolo, un grafico.",
           "Guardala dall’ultima fila e da un lato della sala.",
           "Annota le impostazioni che hai usato (il report qui sotto si copia con un clic).",
+          "Se il proiettore lo consente, salva le regolazioni come preset Utente / Memoria: se torni in questa sala le ritrovi in un attimo.",
+          "Se nel talk mostri video clinici, avviane uno: Motion smoothing / Interpolazione dei fotogrammi su Off, altrimenti i movimenti sembrano innaturali e compaiono artefatti.",
           "Rimuovi le slide di test prima di iniziare, oppure lasciale in fondo.",
         ],
         cant: [
@@ -645,7 +648,7 @@ window.PL_I18N = {
     "prev": "Back",
     "next": "Next",
     "finish": "Finish",
-    "timer.start": "Start warm-up timer (10 min)",
+    "timer.start": "Start warm-up timer (15 min)",
     "timer.run": "Warming up: {t}",
     "timer.done": "Projector is warm: you can start",
     "venue": "Venue / event",
@@ -710,7 +713,7 @@ window.PL_I18N = {
         id: "prep", title: "Before you start", short: "Prep",
         goal: "Connect the computer and prepare projector and room: half of the problems are solved here, before touching any menu.",
         checks: [
-          "Switch the projector on 10–15 minutes early: the lamp only reaches stable brightness and colour once warm.",
+          "Switch the projector on early: with a lamp at least 15 minutes, ideally 30, because brightness and colour only settle once warm; laser or LED models need 5–10.",
           "Laptop on mains power; screen saver and power saving off.",
           "HDMI (or USB-C) cable firmly connected. Avoid VGA: softer image and unstable colours.",
           "Computer resolution equal to the projector’s native resolution (often 1920×1080 or 1920×1200; older models 1280×800 or 1024×768).",
@@ -821,6 +824,7 @@ window.PL_I18N = {
         adjust: [
           "Colour temperature: Normal / Medium / 6500 K (D65). High = bluish, Low = yellowish.",
           "Gamma: 2.2 or Standard. Other values darken or wash out the midtones.",
+          "Gamut / Colour space (if available): sRGB or Rec.709. Avoid Native, Wide or DCI-P3: slides and photos are sRGB, and a wider gamut makes colours oversaturated, especially reds and gums.",
           "If RGB white balance is available: Gain for highlights, Offset / Bias for shadows.",
         ],
         issues: [
@@ -901,6 +905,8 @@ window.PL_I18N = {
           "Show your most demanding slide: a clinical photo, the smallest text, a chart.",
           "Look at it from the back row and from one side of the room.",
           "Note the settings you used (the report below copies with one click).",
+          "If the projector allows it, save the adjustments as a User / Memory preset: if you come back to this room you get them back in seconds.",
+          "If your talk includes clinical videos, play one: Motion smoothing / Frame interpolation Off, otherwise movement looks unnatural and artefacts appear.",
           "Remove the test slides before you start, or leave them at the end.",
         ],
         cant: [
@@ -1098,7 +1104,7 @@ window.PL_I18N = {
     "prev": "Atrás",
     "next": "Siguiente",
     "finish": "Fin",
-    "timer.start": "Iniciar calentamiento (10 min)",
+    "timer.start": "Iniciar calentamiento (15 min)",
     "timer.run": "Calentando: {t}",
     "timer.done": "Proyector caliente: puedes empezar",
     "venue": "Sala / evento",
@@ -1161,7 +1167,7 @@ window.PL_I18N = {
         id: "prep", title: "Antes de empezar", short: "Prep.",
         goal: "Conecta el ordenador y prepara proyector y sala: la mitad de los problemas se resuelve aquí, antes de tocar los menús.",
         checks: [
-          "Enciende el proyector 10–15 minutos antes: la lámpara solo alcanza brillo y color estables en caliente.",
+          "Enciende el proyector con antelación: con lámpara al menos 15 minutos, mejor 30, porque brillo y color solo se estabilizan en caliente; con láser o LED bastan 5–10.",
           "Portátil conectado a la corriente; salvapantallas y ahorro de energía desactivados.",
           "Cable HDMI (o USB-C) bien conectado. Evita VGA: imagen menos nítida y colores inestables.",
           "Resolución del ordenador igual a la nativa del proyector (a menudo 1920×1080 o 1920×1200; en modelos antiguos 1280×800 o 1024×768).",
@@ -1264,6 +1270,7 @@ window.PL_I18N = {
         adjust: [
           "Temperatura de color: Normal / Media / 6500 K (D65). Alta = azulado, Baja = amarillento.",
           "Gamma: 2,2 o Estándar. Otros valores oscurecen o lavan los medios tonos.",
+          "Gamut / Espacio de color (si existe): sRGB o Rec.709. Evita Nativo, Wide o DCI-P3: diapositivas y fotos están en sRGB y con un gamut más amplio los colores salen sobresaturados, sobre todo rojos y encías.",
           "Si hay balance de blancos RGB: Gain para las luces, Offset / Bias para las sombras.",
         ],
         issues: [
@@ -1344,6 +1351,8 @@ window.PL_I18N = {
           "Muestra tu diapositiva más exigente: una foto clínica, el texto más pequeño, un gráfico.",
           "Mírala desde la última fila y desde un lado de la sala.",
           "Anota los ajustes que has usado (el informe de abajo se copia con un clic).",
+          "Si el proyector lo permite, guarda los ajustes como preset Usuario / Memoria: si vuelves a esta sala los recuperas en un momento.",
+          "Si en la charla muestras vídeos clínicos, reproduce uno: Motion smoothing / Interpolación de fotogramas en Off, si no los movimientos parecen poco naturales y aparecen artefactos.",
           "Quita las diapositivas de prueba antes de empezar, o déjalas al final.",
         ],
         cant: [
@@ -1540,7 +1549,7 @@ window.PL_I18N = {
     "prev": "Retour",
     "next": "Suivant",
     "finish": "Terminer",
-    "timer.start": "Lancer la chauffe (10 min)",
+    "timer.start": "Lancer la chauffe (15 min)",
     "timer.run": "Chauffe : {t}",
     "timer.done": "Projecteur chaud : vous pouvez commencer",
     "venue": "Salle / événement",
@@ -1603,7 +1612,7 @@ window.PL_I18N = {
         id: "prep", title: "Avant de commencer", short: "Prép.",
         goal: "Branchez l’ordinateur et préparez projecteur et salle : la moitié des problèmes se règle ici, avant de toucher aux menus.",
         checks: [
-          "Allumez le projecteur 10–15 minutes avant : la lampe n’atteint une luminosité et une couleur stables qu’une fois chaude.",
+          "Allumez le projecteur à l’avance : avec une lampe au moins 15 minutes, idéalement 30, car luminosité et couleur ne se stabilisent qu’à chaud ; avec un laser ou des LED, 5 à 10 suffisent.",
           "Ordinateur branché sur secteur ; économiseur d’écran et économie d’énergie désactivés.",
           "Câble HDMI (ou USB-C) bien branché. Évitez le VGA : image moins nette et couleurs instables.",
           "Résolution de l’ordinateur égale à la résolution native du projecteur (souvent 1920×1080 ou 1920×1200 ; sur les anciens modèles 1280×800 ou 1024×768).",
@@ -1706,6 +1715,7 @@ window.PL_I18N = {
         adjust: [
           "Température de couleur : Normale / Moyenne / 6500 K (D65). Haute = bleuté, Basse = jaunâtre.",
           "Gamma : 2,2 ou Standard. D’autres valeurs assombrissent ou délavent les tons moyens.",
+          "Gamut / Espace colorimétrique (s’il existe) : sRGB ou Rec.709. Évitez Natif, Wide ou DCI-P3 : diapositives et photos sont en sRGB et un gamut plus large sursature les couleurs, surtout les rouges et les gencives.",
           "Si la balance des blancs RVB existe : Gain pour les hautes lumières, Offset / Bias pour les ombres.",
         ],
         issues: [
@@ -1786,6 +1796,8 @@ window.PL_I18N = {
           "Affichez votre diapositive la plus exigeante : une photo clinique, le plus petit texte, un graphique.",
           "Regardez-la depuis le dernier rang et depuis un côté de la salle.",
           "Notez les réglages utilisés (le rapport ci-dessous se copie en un clic).",
+          "Si le projecteur le permet, enregistrez les réglages dans un préréglage Utilisateur / Mémoire : si vous revenez dans cette salle, vous les retrouvez en un instant.",
+          "Si votre intervention comporte des vidéos cliniques, lancez-en une : Motion smoothing / Interpolation d’images sur Off, sinon les mouvements paraissent artificiels et des artefacts apparaissent.",
           "Supprimez les diapositives de test avant de commencer, ou laissez-les à la fin.",
         ],
         cant: [
@@ -1982,7 +1994,7 @@ window.PL_I18N = {
     "prev": "Zurück",
     "next": "Weiter",
     "finish": "Fertig",
-    "timer.start": "Aufwärm-Timer starten (10 Min.)",
+    "timer.start": "Aufwärm-Timer starten (15 Min.)",
     "timer.run": "Aufwärmen: {t}",
     "timer.done": "Projektor ist warm: Sie können beginnen",
     "venue": "Saal / Veranstaltung",
@@ -2045,7 +2057,7 @@ window.PL_I18N = {
         id: "prep", title: "Bevor Sie beginnen", short: "Vorb.",
         goal: "Computer anschließen, Projektor und Raum vorbereiten: Die Hälfte der Probleme löst sich hier, bevor Sie ein Menü anfassen.",
         checks: [
-          "Schalten Sie den Projektor 10–15 Minuten vorher ein: Die Lampe erreicht erst warm eine stabile Helligkeit und Farbe.",
+          "Schalten Sie den Projektor rechtzeitig ein: mit Lampe mindestens 15 Minuten, besser 30, denn Helligkeit und Farbe stabilisieren sich erst im warmen Zustand; Laser- oder LED-Modelle brauchen 5–10.",
           "Laptop am Netzteil; Bildschirmschoner und Energiesparen aus.",
           "HDMI- (oder USB-C-)Kabel fest eingesteckt. VGA vermeiden: weicheres Bild und instabile Farben.",
           "Auflösung des Computers gleich der nativen Auflösung des Projektors (oft 1920×1080 oder 1920×1200; ältere Modelle 1280×800 oder 1024×768).",
@@ -2148,6 +2160,7 @@ window.PL_I18N = {
         adjust: [
           "Farbtemperatur: Normal / Mittel / 6500 K (D65). Hoch = bläulich, Niedrig = gelblich.",
           "Gamma: 2,2 oder Standard. Andere Werte verdunkeln oder verwaschen die Mitteltöne.",
+          "Farbraum / Gamut (falls vorhanden): sRGB oder Rec.709. Vermeiden Sie Nativ, Wide oder DCI-P3: Folien und Fotos sind in sRGB, ein größerer Farbraum macht die Farben übersättigt, vor allem Rot und Zahnfleisch.",
           "Falls RGB-Weißabgleich vorhanden: Gain für die Lichter, Offset / Bias für die Schatten.",
         ],
         issues: [
@@ -2228,6 +2241,8 @@ window.PL_I18N = {
           "Zeigen Sie Ihre anspruchsvollste Folie: ein klinisches Foto, den kleinsten Text, ein Diagramm.",
           "Betrachten Sie sie aus der letzten Reihe und von einer Seite des Saals.",
           "Notieren Sie die verwendeten Einstellungen (der Bericht unten wird mit einem Klick kopiert).",
+          "Wenn der Projektor es erlaubt, speichern Sie die Einstellungen als Benutzer-/Speicher-Preset: Kommen Sie wieder in diesen Saal, sind sie sofort wieder da.",
+          "Zeigen Sie im Vortrag klinische Videos, spielen Sie eines ab: Motion Smoothing / Zwischenbildberechnung auf Off, sonst wirken Bewegungen unnatürlich und es entstehen Artefakte.",
           "Entfernen Sie die Testfolien vor Beginn oder lassen Sie sie am Ende.",
         ],
         cant: [

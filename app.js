@@ -448,7 +448,7 @@
     if (timerEnd && Date.now() >= timerEnd) { clearInterval(timerT); timerT = null; }
   }
   function startTimer() {
-    timerEnd = Date.now() + 10 * 60000; store.set("projectorlab.timer", timerEnd);
+    timerEnd = Date.now() + 15 * 60000; store.set("projectorlab.timer", timerEnd);
     clearInterval(timerT); timerT = setInterval(tickTimer, 1000); tickTimer();
   }
 
