@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="assets/projector-lab-icon-180.png?v=4">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#000000">
-<meta name="color-scheme" content="dark light">
+<meta name="color-scheme" content="dark">
 <!-- Office.js: in PowerPoint collega il pannello alla presentazione. Nel browser il pannello funziona come guida con i pattern a schermo intero. -->
 <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
 <style>/* Champagne & Limousines (Brand Book The Ultraspeaker, p. 17): Regular, Italic, Bold, Bold Italic dalla cartella fonts */
@@ -20,26 +20,12 @@
 @font-face{font-family:"Champagne & Limousines";font-weight:550 900;font-style:italic;font-display:swap;src:url(fonts/champagne-limousines-bolditalic.woff2) format("woff2")}
 /* Palette del Brand Book (p. 16): Stage Black, Backstage, Curtain, Graphite, Ash, Silver, House Lights, Spotlight.
    Colori funzionali solo nei Lab: ambra #FFCF80 per gli avvisi, blu #4F8DFF per il focus. Angoli 10 px, niente ombre.
-   Tema chiaro e scuro come gli altri Lab: segue l'impostazione del sistema; la fascia del logo resta nera. */
+   Sempre su fondo nero (Stage Black), come gli altri Lab, qualunque sia il tema del sistema. */
 :root{
-  --bg:#F3F3F3; --surface:#FFFFFF; --surface-2:#F3F3F3; --ink:#000000; --ink-2:#3A3A3A; --ink-3:#767676;
-  --line:#D0D0D0; --line-2:#D0D0D0; --line-3:#8E8E8E; --accent:#000000; --accent-ink:#FFFFFF;
-  --field:#FFFFFF; --page:#E9E9E9; --warn:#7A4A00; --warn-soft:#FFF3DE; --warn-line:#FFCF80;
-  --focus:#4F8DFF; --mute:#8E8E8E; --r:10px;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#000000; --surface:#111111; --surface-2:#1B1B1B; --ink:#FFFFFF; --ink-2:#D0D0D0; --ink-3:#8E8E8E;
-    --line:#1B1B1B; --line-2:#2A2A2A; --line-3:#3A3A3A; --accent:#FFFFFF; --accent-ink:#000000;
-    --field:#111111; --page:#0A0A0A; --warn:#FFCF80; --warn-soft:#2D230F; --warn-line:rgba(255,207,128,.55);
-    --mute:#3A3A3A; color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
   --bg:#000000; --surface:#111111; --surface-2:#1B1B1B; --ink:#FFFFFF; --ink-2:#D0D0D0; --ink-3:#8E8E8E;
   --line:#1B1B1B; --line-2:#2A2A2A; --line-3:#3A3A3A; --accent:#FFFFFF; --accent-ink:#000000;
   --field:#111111; --page:#0A0A0A; --warn:#FFCF80; --warn-soft:#2D230F; --warn-line:rgba(255,207,128,.55);
-  --mute:#3A3A3A; color-scheme:dark;
+  --focus:#4F8DFF; --mute:#3A3A3A; --r:10px; color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{scrollbar-gutter:stable}
