@@ -56,8 +56,6 @@ body.web .app{width:100%;max-width:760px;margin:0 auto;background:var(--bg);bord
 .h{font-size:10.5px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:var(--ink-3)}
 .note{font-size:11.5px;line-height:1.5;color:var(--ink-3);margin:0}
 .hint{font-size:11.5px;line-height:1.45;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line-2);border-radius:var(--r);padding:8px 10px}
-.hint.warn{border-color:var(--warn-line);background:var(--warn-soft);color:var(--ink)}
-.sep{height:1px;background:var(--line);flex:none}
 [hidden]{display:none!important}
 
 /* Scheda Screen Test */
@@ -154,26 +152,10 @@ details.issue p{margin:0;padding:0 11px 11px;font-size:12.5px;color:var(--ink-2)
 
 .toast{position:fixed;left:50%;bottom:86px;transform:translate(-50%,12px);background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:12.5px;padding:9px 14px;border-radius:var(--r);opacity:0;pointer-events:none;transition:.2s;max-width:calc(100% - 32px);text-align:center;z-index:30}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-.spinner{width:14px;height:14px;border-radius:50%;border:2px solid var(--ink-3);border-top-color:var(--ink);animation:sp .8s linear infinite}
-@keyframes sp{to{transform:rotate(360deg)}}
-.links{margin:0}
 @media (max-width:340px){.field{grid-template-columns:1fr}.result{grid-template-columns:1fr}}
 
-/* Vista pattern integrata */
-.viewer{position:fixed;inset:0;z-index:50;background:#000000}
-.viewer .stage{position:absolute;inset:0}
-.viewer .stage svg{display:block;width:100%;height:100%}
-.viewer .vphoto{position:absolute;inset:0;background:#000000}
-.viewer .vphoto img{width:100%;height:100%;object-fit:contain;display:block}
-.viewer.idle{cursor:none}
-.vbar{position:absolute;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:6px;border-radius:var(--r);background:rgba(17,17,17,.92);border:1px solid #2A2A2A;color:#FFFFFF;transition:opacity .3s;max-width:calc(100% - 24px)}
-.vhelp{position:absolute;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);font-size:12px;color:#D0D0D0;background:rgba(17,17,17,.88);border:1px solid #2A2A2A;padding:6px 12px;border-radius:var(--r);transition:opacity .3s;white-space:nowrap;max-width:calc(100% - 24px);overflow:hidden;text-overflow:ellipsis}
-.viewer.idle .vbar,.viewer.idle .vhelp{opacity:0;pointer-events:none}
-.vbar button{height:34px;min-width:34px;padding:0 10px;border-radius:var(--r);border:1px solid #3A3A3A;background:transparent;color:#FFFFFF;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
-.vbar svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2}
-.vname{padding:0 8px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-.vcount{color:#8E8E8E;font-variant-numeric:tabular-nums;padding-right:4px}
-@media (max-width:520px){#vFsLabel{display:none}.vhelp{display:none}}
+/* Pattern dentro la pagina (show.html) */
+.viewer{position:fixed;inset:0;z-index:50;width:100%;height:100%;border:0;background:#000000}
 /* Domande "Cosa vedi?" */
 .dx .note{margin-top:-2px}
 .dxq{display:flex;flex-direction:column;gap:8px;padding:12px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface)}
@@ -239,8 +221,6 @@ details.issue p{margin:0;padding:0 11px 11px;font-size:12.5px;color:var(--ink-2)
   </header>
 
   <main class="scroll" id="main">
-    <div class="hint warn" id="unsupported" hidden><b data-i18n="unsupported.title"></b><br><span data-i18n="unsupported.text"></span></div>
-
     <!-- Screen Test: inserimento nella presentazione (PowerPoint) o finestra / download (browser) -->
     <section class="card" id="setup">
       <div class="card-head">
@@ -271,7 +251,7 @@ details.issue p{margin:0;padding:0 11px 11px;font-size:12.5px;color:var(--ink-2)
           <button type="button" class="btn sec small" id="windowBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span id="windowLabel" data-i18n="window"></span></button>
           <button type="button" class="btn sec small web-only" id="downloadBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M4 20h16"/></svg><span data-i18n="download"></span></button>
         </div>
-        <p class="note" id="windowHint" data-i18n="windowHint"></p>
+        <p class="note office-only" id="windowHint" data-i18n="windowHint"></p>
       </div>
     </section>
 
@@ -289,18 +269,7 @@ details.issue p{margin:0;padding:0 11px 11px;font-size:12.5px;color:var(--ink-2)
     <button type="button" class="fb pri" id="nextBtn" data-i18n="next"></button>
   </footer>
 </div>
-<div class="viewer" id="viewer" hidden>
-  <div class="stage" id="vStage"></div>
-  <div class="vphoto" id="vPhoto" hidden><img alt=""></div>
-  <div class="vhelp" id="vHelp"></div>
-  <div class="vbar" role="toolbar">
-    <button type="button" id="vPrev" aria-label="←"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-    <div class="vname" id="vName"></div><div class="vcount" id="vCount"></div>
-    <button type="button" id="vNext" aria-label="→"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-    <button type="button" id="vFs"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span id="vFsLabel"></span></button>
-    <button type="button" id="vClose" aria-label="Esc"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-  </div>
-</div>
+<iframe class="viewer" id="viewer" title="Projector Lab" allow="fullscreen" hidden></iframe>
 <input type="file" id="photoIn" accept="image/jpeg,image/png" hidden>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 

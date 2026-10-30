@@ -31,34 +31,26 @@
   Scene.prototype.pie = function (cx, cy, r, a0, a1, fill) { this.items.push({ k: "pie", cx, cy, r, a0, a1, fill }); return this; };
   // Triangolo isoscele con la punta in alto, poi ruotato in senso orario attorno al centro
   Scene.prototype.tri = function (cx, cy, w, h, rot, fill, line, lw) { this.items.push({ k: "tri", x: cx - w / 2, y: cy - h / 2, w, h, rot, fill, line, lw }); return this; };
-  Scene.prototype.text = function (x, y, w, h, text, size, color, o) {
-    this.items.push(Object.assign({ k: "text", x, y, w, h, text, size, color, align: "left", valign: "middle", bold: false }, o || {}));
-    return this;
-  };
+  // Testo centrato in verticale nel riquadro; o: { bold, align: "center", spacing }
+  Scene.prototype.text = function (x, y, w, h, text, size, color, o) { this.items.push(Object.assign({ k: "text", x, y, w, h, text, size, color }, o)); return this; };
   Scene.prototype.image = function (x, y, w, h, data) { this.items.push({ k: "image", x, y, w, h, data }); return this; };
   // Linea orizzontale o verticale disegnata come rettangolo sottile (spessore in punti)
   Scene.prototype.hline = function (x, y, w, pt, color) { const t = pt * PT; return this.rect(x, y - t / 2, w, t, color); };
   Scene.prototype.vline = function (x, y, h, pt, color) { const t = pt * PT; return this.rect(x - t / 2, y, t, h, color); };
 
   // Titolo piccolo in alto e suggerimento in basso: stanno nei margini e non toccano le aree di misura
-  function labels(sc, W, L, key, color, opt) {
-    const o = opt || {};
+  function labels(sc, W, L, key, color, o = {}) {
     const tt = L["p." + key + ".title"], hh = L["p." + key + ".hint"];
-    if (tt && !o.noTitle) sc.text(0.35, o.titleY != null ? o.titleY : 0.18, W - 0.7, 0.34, tt, 12, color, { bold: true, align: o.titleAlign || "left", spacing: 2 });
-    if (hh && !o.noHint) sc.text(0.35, o.hintY != null ? o.hintY : H - 0.52, W - 0.7, 0.34, hh, 12, color, { align: o.hintAlign || "left" });
+    if (tt) sc.text(0.35, o.titleY || 0.18, W - 0.7, 0.34, tt, 12, color, { bold: true, align: o.titleAlign, spacing: 2 });
+    if (hh && !o.noHint) sc.text(0.35, o.hintY || H - 0.52, W - 0.7, 0.34, hh, 12, color);
   }
 
   // Arena di The Ultraspeaker piccola e semitrasparente, come un watermark (brand book: Arena in basso a destra; cx, cy = centro)
   const WM_RATIO = 1747 / 2503;
-  function wm(sc, cx, cy, w, dark) {
-    const src = root.PL_WM && (dark ? root.PL_WM.dark : root.PL_WM.light);
-    if (!src) return;
-    const h = w * WM_RATIO;
-    sc.image(cx - w / 2, cy - h / 2, w, h, src);
-  }
-  const WM_W = 0.55;
+  const WM_W = 0.55, WM_H = WM_W * WM_RATIO;
+  const wm = (sc, cx, cy, dark) => sc.image(cx - WM_W / 2, cy - WM_H / 2, WM_W, WM_H, dark ? root.PL_WM.dark : root.PL_WM.light);
   // Posizione standard: in basso a destra, sulla riga del suggerimento
-  const wmCorner = (sc, W, dark) => wm(sc, W - 0.35 - WM_W / 2, H - 0.4, WM_W, dark);
+  const wmCorner = (sc, W, dark) => wm(sc, W - 0.35 - WM_W / 2, H - 0.4, dark);
 
   /* ---------- Pattern ---------- */
   const P = {};
@@ -86,7 +78,7 @@
     // Riquadro RGB centrale
     const B = 3.543 * s, cyM = 3.754;
     sc.rect(W / 2 - B / 2, cyM - B / 2, B, B, bg, fg, 3);
-    if (root.PL_VENN) sc.image(W / 2 - B * 0.46, cyM - B * 0.46, B * 0.92, B * 0.92, root.PL_VENN);
+    sc.image(W / 2 - B * 0.46, cyM - B * 0.46, B * 0.92, B * 0.92, root.PL_VENN);
     // Triangoli laterali e in basso
     const tw = 2.876 * s, th2 = 2.479 * s, k = 0.657, off = 0.0655;
     const cxL = 0.396 + th2 / 2, gray = dark ? "595959" : "A6A6A6";
@@ -155,29 +147,29 @@
     const tx = Math.max(1.75, W / 2 - 3.1);
     [12, 16, 20, 24, 32].forEach((pt) => {
       const h = (pt * 1.3) / 72;
-      sc.text(tx, y, 0.8, h, pt + " pt", 11, "7F7F7F", { valign: "middle" });
-      sc.text(tx + 0.8, y, W - 2 * tx - 0.8 + 0.4, h, sample, pt, "000000", { valign: "middle" });
+      sc.text(tx, y, 0.8, h, pt + " pt", 11, "7F7F7F");
+      sc.text(tx + 0.8, y, W - 2 * tx - 0.8 + 0.4, h, sample, pt, "000000");
       y += h + 0.02;
     });
     labels(sc, W, L, "focus", "595959", { titleAlign: "center", noHint: true });
-    wm(sc, W / 2, H - 0.32, WM_W, false);
+    wm(sc, W / 2, H - 0.32, false);
     return sc;
   };
 
   // Fila di riquadri numerati
-  function patches(sc, W, values, bg, y, h, labelColor, colorOf) {
+  function patches(sc, W, values, y, h, labelColor) {
     const n = values.length, x0 = 0.6, gap = 0.08;
     const pw = (W - 2 * x0 - gap * (n - 1)) / n;
     values.forEach((v, i) => {
       const x = x0 + i * (pw + gap);
-      sc.rect(x, y, pw, h, colorOf ? colorOf(v) : grayHex(v));
-      sc.text(x, y + h + 0.08, pw, 0.3, String(v).replace(".", ",") + "%", 13, labelColor, { align: "center" });
+      sc.rect(x, y, pw, h, grayHex(v));
+      sc.text(x, y + h + 0.08, pw, 0.3, v + "%", 13, labelColor, { align: "center" });
     });
   }
   // 5. Livello del nero (LUMINOSITÀ)
   P.black = (W, L) => {
     const sc = new Scene("000000");
-    patches(sc, W, [0, 1, 2, 3, 4, 5, 6, 8, 10, 15, 20], "000000", 2.3, 2.5, "8C8C8C");
+    patches(sc, W, [0, 1, 2, 3, 4, 5, 6, 8, 10, 15, 20], 2.3, 2.5, "8C8C8C");
     labels(sc, W, L, "black", "8C8C8C");
     wmCorner(sc, W, true);
     return sc;
@@ -185,7 +177,7 @@
   // 6. Livello del bianco (CONTRASTO)
   P.white = (W, L) => {
     const sc = new Scene("FFFFFF");
-    patches(sc, W, [80, 85, 88, 90, 92, 94, 95, 96, 97, 98, 99], "FFFFFF", 2.3, 2.5, "595959");
+    patches(sc, W, [80, 85, 88, 90, 92, 94, 95, 96, 97, 98, 99], 2.3, 2.5, "595959");
     labels(sc, W, L, "white", "595959");
     wmCorner(sc, W, false);
     return sc;
@@ -210,8 +202,7 @@
     wmCorner(sc, W, true);
     return sc;
   };
-  // 8. Barre colore SMPTE (75%)
-  // 7b. Grigi a confronto ("ring-around"): in ogni gruppo 9 grigi, il centro è neutro,
+  // 8. Grigi a confronto ("ring-around"): in ogni gruppo 9 grigi, il centro è neutro,
   // gli altri sono spostati verso giallo/blu (orizzontale) e magenta/verde (verticale).
   // Il riquadro che sul proiettore sembra neutro rivela la dominante opposta.
   const CAST_LEVELS = [["low", 25], ["mid", 50], ["high", 75]];
@@ -243,6 +234,7 @@
     return sc;
   };
 
+  // 9. Barre colore SMPTE (75%)
   P.smpte = (W) => {
     const sc = new Scene("000000");
     const top = ["C0C0C0", "C0C000", "00C0C0", "00C000", "C000C0", "C00000", "0000C0"];
@@ -254,10 +246,9 @@
     sc.rect(0, y3, qw, h3, "00214C").rect(qw, y3, qw, h3, "FFFFFF").rect(2 * qw, y3, qw, h3, "32006A").rect(3 * qw, y3, W - 3 * qw, h3, "131313");
     const px = 5 * bw, pw = bw / 3;
     sc.rect(px, y3, pw, h3, "090909").rect(px + pw, y3, pw, h3, "131313").rect(px + 2 * pw, y3, pw + 0.005, h3, "1D1D1D");
-    // Watermark nel riquadro nero in basso a destra
     return sc;
   };
-  // 9. Rampe colore a 32 gradini (saturazione e colori che si "impastano")
+  // 10. Rampe colore a 32 gradini (saturazione e colori che si "impastano")
   P.ramps = (W, L) => {
     const sc = new Scene("000000");
     const x0 = Math.max(0.6, W * 0.09), x1 = W - 0.6, w = x1 - x0, bw = w / 32;
@@ -275,7 +266,7 @@
     wmCorner(sc, W, true);
     return sc;
   };
-  // 10. Riferimenti clinici: bianchi dello smalto, tessuti molli, ombre del cavo orale
+  // 11. Riferimenti clinici: bianchi dello smalto, tessuti molli, ombre del cavo orale
   P.dental = (W, L) => {
     const sc = new Scene("000000");
     const x0 = 0.6, w = W - 1.2, n = 13, gap = 0.06, pw = (w - gap * (n - 1)) / n;
@@ -298,7 +289,7 @@
     wmCorner(sc, W, true);
     return sc;
   };
-  // 11. Spazio per una foto clinica dell'utente
+  // 12. Spazio per una foto clinica dell'utente
   P.photo = (W, L) => {
     const sc = new Scene("000000");
     sc.rect(W * 0.08, 0.9, W * 0.84, H - 1.8, null, "404040", 1.5);
@@ -307,7 +298,7 @@
     wmCorner(sc, W, true);
     return sc;
   };
-  // 12–14. Campi pieni per uniformità, macchie, pixel difettosi
+  // 13–15. Campi pieni per uniformità, macchie, pixel difettosi
   const flat = (bg, lc, dark) => (W, L, key) => {
     const sc = new Scene(bg);
     sc.text(0.35, H - 0.49, 4.0, 0.28, L["p." + key + ".title"] || "", 9, lc);
@@ -318,18 +309,9 @@
   P.flatGray = flat("808080", "999999", true);
   P.flatBlack = flat("000000", "262626", true);
 
-  /* Ordine delle slide e passo della procedura a cui appartengono */
-  const ORDER = [
-    ["screenLight", "geometry"], ["screenDark", "geometry"], ["grid", "geometry"],
-    ["focus", "focus"],
-    ["black", "black"], ["white", "white"],
-    ["gray", "gray"], ["cast", "gray"],
-    ["smpte", "color"], ["ramps", "color"],
-    ["dental", "clinical"], ["photo", "clinical"],
-    ["flatWhite", "uniform"], ["flatGray", "uniform"], ["flatBlack", "uniform"],
-  ];
-
-  function build(key, W, L) { return P[key](W, L || {}, key); }
+  /* Ordine delle slide (i passi della guida in i18n.js indicano quali pattern usano) */
+  const ORDER = Object.keys(P);
+  const build = (key, W, L) => P[key](W, L, key);
 
   /* ---------- Disegno SVG ---------- */
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -354,11 +336,10 @@
       } else if (it.k === "image") out += `<image x="${f(it.x)}" y="${f(it.y)}" width="${f(it.w)}" height="${f(it.h)}" href="${it.data}" preserveAspectRatio="xMidYMid meet"/>`;
       else if (it.k === "text") {
         const fs = it.size * PT;
-        const x = it.align === "center" ? it.x + it.w / 2 : it.align === "right" ? it.x + it.w : it.x;
-        const anchor = it.align === "center" ? "middle" : it.align === "right" ? "end" : "start";
+        const c = it.align === "center", x = c ? it.x + it.w / 2 : it.x;
         const lines = String(it.text).split("\n"), lh = fs * 1.25;
-        const y = it.valign === "top" ? it.y + fs * 0.9 : it.y + it.h / 2 + fs * 0.35 - ((lines.length - 1) * lh) / 2;
-        out += `<text x="${f(x)}" y="${f(y)}" font-family="Arial, Helvetica, sans-serif" font-size="${f(fs)}" fill="#${it.color}" text-anchor="${anchor}"${it.bold ? ' font-weight="700"' : ""}${it.spacing ? ` letter-spacing="${f(it.spacing * PT)}"` : ""}>` +
+        const y = it.y + it.h / 2 + fs * 0.35 - ((lines.length - 1) * lh) / 2;
+        out += `<text x="${f(x)}" y="${f(y)}" font-family="Arial, Helvetica, sans-serif" font-size="${f(fs)}" fill="#${it.color}" text-anchor="${c ? "middle" : "start"}"${it.bold ? ' font-weight="700"' : ""}${it.spacing ? ` letter-spacing="${f(it.spacing * PT)}"` : ""}>` +
           lines.map((l, i) => `<tspan x="${f(x)}" dy="${i ? f(lh) : 0}">${esc(l)}</tspan>`).join("") + `</text>`;
       }
     });
@@ -369,35 +350,34 @@
   function lineOpt(it) { return it.line ? { color: it.line, width: it.lw || 1 } : { type: "none" }; }
   function fillOpt(c) { return c ? { color: c } : { type: "none" }; }
   function addToSlide(pres, slide, sc, key) {
-    const S = pres.ShapeType || pres.shapes;
+    const S = pres.ShapeType;
     slide.background = { color: sc.bg };
     // Forma invisibile con il nome "USPL:<pattern>": serve a ritrovare le slide di test in qualsiasi presentazione
-    if (key) slide.addShape(S.rect, { x: 0, y: 0, w: 0.01, h: 0.01, fill: { type: "none" }, line: { type: "none" }, objectName: MARK + key });
+    slide.addShape(S.rect, { x: 0, y: 0, w: 0.01, h: 0.01, fill: { type: "none" }, line: { type: "none" }, objectName: MARK + key });
     sc.items.forEach((it) => {
       if (it.k === "rect") slide.addShape(S.rect, { x: it.x, y: it.y, w: it.w, h: it.h, fill: fillOpt(it.fill), line: lineOpt(it) });
       else if (it.k === "ellipse") slide.addShape(S.ellipse, { x: it.x, y: it.y, w: it.w, h: it.h, fill: fillOpt(it.fill), line: lineOpt(it) });
       else if (it.k === "pie") slide.addShape(S.pie, { x: it.cx - it.r, y: it.cy - it.r, w: 2 * it.r, h: 2 * it.r, angleRange: [it.a0, it.a1], fill: { color: it.fill }, line: { type: "none" } });
       else if (it.k === "tri") slide.addShape(S.triangle, { x: it.x, y: it.y, w: it.w, h: it.h, rotate: it.rot || 0, fill: fillOpt(it.fill), line: lineOpt(it) });
       else if (it.k === "image") slide.addImage({ data: it.data.replace(/^data:/, ""), x: it.x, y: it.y, w: it.w, h: it.h });
-      else if (it.k === "text") slide.addText(it.text, { x: it.x, y: it.y, w: it.w, h: it.h, fontFace: "Arial", fontSize: it.size, color: it.color, bold: !!it.bold, align: it.align, valign: it.valign, margin: 0, charSpacing: it.spacing || 0, fit: "none", wrap: String(it.text).indexOf("\n") >= 0 });
+      else if (it.k === "text") slide.addText(it.text, { x: it.x, y: it.y, w: it.w, h: it.h, fontFace: "Arial", fontSize: it.size, color: it.color, bold: !!it.bold, align: it.align || "left", valign: "middle", margin: 0, charSpacing: it.spacing || 0, fit: "none", wrap: String(it.text).indexOf("\n") >= 0 });
     });
   }
-  /* Crea la presentazione di test. keys: elenco dei pattern; notes(key) restituisce il testo delle note */
-  function buildDeck(PptxGen, W, L, keys, notes) {
+  /* Crea la presentazione di test; notes(key) restituisce il testo delle note del relatore */
+  function buildDeck(PptxGen, W, L, notes) {
     const pres = new PptxGen();
     pres.defineLayout({ name: "PL", width: W, height: H });
     pres.layout = "PL";
     pres.author = "The Ultraspeaker Projector Lab";
     pres.title = "The Ultraspeaker Projector Lab – Screen Test";
-    (keys || ORDER.map((o) => o[0])).forEach((key) => {
+    ORDER.forEach((key) => {
       const slide = pres.addSlide();
       addToSlide(pres, slide, build(key, W, L), key);
-      const n = notes && notes(key);
+      const n = notes(key);
       if (n) slide.addNotes(n);
     });
     return pres;
   }
 
-  root.PL_PATTERNS = { H, MARK, FORMATS, ORDER, formatFromRatio, build, toSVG, buildDeck, grayHex, castOffset };
-  if (typeof module !== "undefined") module.exports = root.PL_PATTERNS;
-})(typeof self !== "undefined" ? self : globalThis);
+  root.PL_PATTERNS = { H, MARK, FORMATS, ORDER, formatFromRatio, build, toSVG, buildDeck, castOffset };
+})(self);

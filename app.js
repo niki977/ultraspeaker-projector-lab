@@ -21,22 +21,19 @@
 
   /* ---------- Lingua ---------- */
   const I18N = window.PL_I18N;
-  const LANGS = I18N.langs.map((l) => l[0]).filter((l) => I18N[l]);
+  const LANGS = I18N.langs.map((l) => l[0]);
   let LANG = "it";
-  const pack = () => I18N[LANG] || I18N.it;
+  // Tutte le lingue hanno le stesse chiavi (stesso elenco dell'italiano)
   const t = (k, vars) => {
-    let s = (pack()[k] != null ? pack()[k] : I18N.it[k] != null ? I18N.it[k] : k);
+    let s = I18N[LANG][k] ?? k;
     if (vars) Object.keys(vars).forEach((v) => { s = s.replace("{" + v + "}", vars[v]); });
     return s;
   };
-  const STEPS = () => pack().steps || I18N.it.steps;
+  const STEPS = () => I18N[LANG].steps;
   function detectLang() {
     const saved = store.get("projectorlab.lang", null);
-    if (saved && LANGS.includes(saved)) return saved;
-    let l = "";
-    try { if (inOffice && Office.context && Office.context.displayLanguage) l = Office.context.displayLanguage; } catch (e) { /* ignora */ }
-    if (!l) l = (navigator.languages && navigator.languages[0]) || navigator.language || "it";
-    l = l.slice(0, 2).toLowerCase();
+    if (LANGS.includes(saved)) return saved;
+    const l = ((office && Office.context.displayLanguage) || navigator.language || "it").slice(0, 2).toLowerCase();
     return LANGS.includes(l) ? l : "en";
   }
   // Etichette per i pattern nella lingua corrente
@@ -47,8 +44,9 @@
   }
 
   /* ---------- Stato ---------- */
-  let inOffice = false, mode = "boot"; // web | office
-  let api = { tags: false, select: false, image: false, insert: false, dialog2: false, create: false };
+  let office = false; // true dentro PowerPoint, false nel browser
+  // Funzioni opzionali di PowerPoint: il manifest richiede già PowerPointApi 1.2 (inserimento slide e nuova presentazione)
+  const api = { shapes: false, select: false, image: false, dialog2: false };
   const saved = store.get("projectorlab.state", {});
   const S = {
     step: saved.step || 0,
@@ -70,7 +68,7 @@
 
   const fmtKey = () => (S.fmt === "auto" ? S.detected || "16:9" : S.fmt);
   // Formato scelto diverso da quello della presentazione: lo Screen Test va in una nuova presentazione
-  const needsNewPres = () => mode === "office" && api.create && !!S.presFmt && fmtKey() !== S.presFmt;
+  const needsNewPres = () => office && !!S.presFmt && fmtKey() !== S.presFmt;
   const fmtW = () => PLP.FORMATS[fmtKey()];
   const hasTests = () => Object.keys(S.map).length > 0;
   const stepOfPattern = (key) => STEPS().findIndex((s) => (s.slides || []).includes(key));
@@ -78,21 +76,20 @@
   /* ---------- Stato in alto ---------- */
   function setStatus(kind) {
     const el = $("#status");
-    el.className = "status" + (kind === "busy" ? " busy" : mode === "office" ? "" : " off");
-    $("#statusText").textContent = kind === "busy" ? t("status.busy") : mode === "office" ? t("status.office") : t("status.web");
+    el.className = "status" + (kind === "busy" ? " busy" : office ? "" : " off");
+    $("#statusText").textContent = t(kind === "busy" ? "status.busy" : office ? "status.office" : "status.web");
   }
   function setBusy(b) {
     busy = b; setStatus(b ? "busy" : "");
-    ["#insertBtn", "#removeBtn", "#downloadBtn"].forEach((s) => { const e = $(s); if (e) e.disabled = b; });
+    ["#insertBtn", "#removeBtn", "#downloadBtn"].forEach((s) => { $(s).disabled = b; });
   }
 
   /* ---------- Scheda Screen Test ---------- */
   function renderSetup() {
-    $("#setupText").textContent = mode === "office" ? t("setup.text") : t("setup.textWeb");
-    $$(".office-only").forEach((e) => { e.hidden = mode !== "office"; });
-    $$(".web-only").forEach((e) => { e.hidden = mode === "office"; });
-    $("#windowLabel").textContent = mode === "office" ? t("window") : t("fullscreen");
-    $("#windowHint").hidden = mode !== "office";
+    $("#setupText").textContent = t(office ? "setup.text" : "setup.textWeb");
+    $$(".office-only").forEach((e) => { e.hidden = !office; });
+    $$(".web-only").forEach((e) => { e.hidden = office; });
+    $("#windowLabel").textContent = t(office ? "window" : "fullscreen");
     // Formati
     const seg = $("#fmtSeg"); seg.innerHTML = "";
     const opts = ["auto"].concat(Object.keys(PLP.FORMATS));
@@ -111,8 +108,8 @@
     $("#insertLabel").textContent = np ? t("newPres", { f: fmtKey() }) : n ? t("update") : t("insert");
     $("#newPresHint").hidden = !np;
     $("#newPresHint").textContent = np ? t("newPresHint", { p: S.presFmt, f: fmtKey() }) : "";
-    $("#whereRow").hidden = mode !== "office" || np;
-    $("#removeBtn").hidden = !n || mode !== "office";
+    $("#whereRow").hidden = !office || np;
+    $("#removeBtn").hidden = !n || !office;
     $("#setupDone").hidden = !n;
     $("#setupDoneText").textContent = t("insertedN", { n });
   }
@@ -153,36 +150,24 @@
     } catch (e) { /* formato non rilevabile: resta 16:9 o la scelta manuale */ }
   }
 
-  // Ritrova le slide di test: dai tag (se disponibili) o dalle impostazioni salvate nel documento
+  // Ritrova le slide di test: la prima forma di ogni slide di test si chiama "USPL:<pattern>"
+  // (vale anche per un file scaricato o una nuova presentazione). Senza PowerPointApi 1.3 le forme
+  // non sono leggibili: si usano gli id salvati nelle impostazioni del documento al momento dell'inserimento.
   async function loadMap() {
-    if (mode !== "office") return;
     const map = {};
     try {
       await PowerPoint.run(async (ctx) => {
         const slides = ctx.presentation.slides; slides.load("items/id"); await ctx.sync();
-        const ids = new Set(slides.items.map((s) => s.id));
-        if (api.tags) {
-          const tags = slides.items.map((s) => { const tg = s.tags.getItemOrNullObject("USPL"); tg.load("value"); return tg; });
-          await ctx.sync();
-          tags.forEach((tg, i) => { if (!tg.isNullObject && tg.value) map[tg.value.toLowerCase()] = slides.items[i].id; });
-          // i tag vengono salvati in maiuscolo: riporta le chiavi ai nomi dei pattern
-          Object.keys(map).forEach((k) => {
-            const real = PLP.ORDER.map((o) => o[0]).find((o) => o.toLowerCase() === k);
-            if (real && real !== k) { map[real] = map[k]; delete map[k]; }
-          });
-        }
-        if (!Object.keys(map).length) {
-          const saved = (Office.context.document.settings.get("uspl") || {});
-          Object.keys(saved).forEach((k) => { if (ids.has(saved[k])) map[k] = saved[k]; });
-        }
-        // Slide create in una nuova presentazione o da un file scaricato: la prima forma si chiama "USPL:<pattern>"
-        if (!Object.keys(map).length && api.tags) {
+        if (api.shapes) {
           const firsts = slides.items.map((s) => { const c = s.shapes; c.load({ select: "name", top: 1 }); return c; });
           await ctx.sync();
           firsts.forEach((c, i) => {
             const nm = c.items[0] && c.items[0].name;
-            if (nm && nm.indexOf(PLP.MARK) === 0) map[nm.slice(PLP.MARK.length)] = slides.items[i].id;
+            if (nm && nm.startsWith(PLP.MARK)) map[nm.slice(PLP.MARK.length)] = slides.items[i].id;
           });
+        } else {
+          const ids = new Set(slides.items.map((s) => s.id)), saved = Office.context.document.settings.get("uspl") || {};
+          Object.keys(saved).forEach((k) => { if (ids.has(saved[k])) map[k] = saved[k]; });
         }
       });
     } catch (e) { /* nessuna slide di test */ }
@@ -210,12 +195,10 @@
 
   async function insertTests() {
     if (busy) return;
-    if (typeof PptxGenJS === "undefined") { toast(t("err", { m: "PptxGenJS" })); return; }
     setBusy(true);
     try {
       if (S.fmt === "auto") await detectFormat();
-      const W = fmtW();
-      const pres = PLP.buildDeck(PptxGenJS, W, labels(), null, notesFor);
+      const pres = PLP.buildDeck(PptxGenJS, fmtW(), labels(), notesFor);
       const b64 = await pres.write({ outputType: "base64" });
       if (needsNewPres()) {
         await PowerPoint.createPresentation(b64);
@@ -223,7 +206,6 @@
         return;
       }
       await deleteTests();
-      const keys = PLP.ORDER.map((o) => o[0]);
       const map = {};
       await PowerPoint.run(async (ctx) => {
         const slides = ctx.presentation.slides; slides.load("items/id"); await ctx.sync();
@@ -234,12 +216,7 @@
         await ctx.sync();
         const after = ctx.presentation.slides; after.load("items/id"); await ctx.sync();
         const fresh = after.items.filter((s) => !before.has(s.id));
-        fresh.forEach((s, i) => {
-          const key = keys[i]; if (!key) return;
-          map[key] = s.id;
-          if (api.tags) s.tags.add("USPL", key);
-        });
-        await ctx.sync();
+        fresh.forEach((s, i) => { if (PLP.ORDER[i]) map[PLP.ORDER[i]] = s.id; });
       });
       S.map = map; saveMapSetting();
       renderSetup(); renderStep();
@@ -284,77 +261,42 @@
     if (S.fmt !== "auto") u.searchParams.set("f", S.fmt);
     return u.toString();
   }
-  /* ---------- Vista pattern integrata (browser senza popup, anteprima) ---------- */
-  const inl = { open: false, key: "screenLight", photo: null, fixed: "" };
-  const KEYS = PLP.ORDER.map((o) => o[0]);
-  function inlineRender() {
-    const box = $("#viewer"); if (!box) return;
-    const r = Math.min(3, Math.max(1, innerWidth / Math.max(1, innerHeight)));
-    const W = inl.fixed ? PLP.FORMATS[inl.fixed] : r * PLP.H;
-    $("#vStage").innerHTML = PLP.toSVG(PLP.build(inl.key, W, labels()), W, { par: inl.fixed ? "xMidYMid meet" : "none" });
-    const ph = $("#vPhoto"); ph.hidden = !(inl.key === "photo" && inl.photo);
-    if (inl.photo) ph.querySelector("img").src = inl.photo;
-    $("#vName").textContent = t("p." + inl.key + ".name");
-    $("#vCount").textContent = (KEYS.indexOf(inl.key) + 1) + "/" + KEYS.length;
-    $("#vHelp").textContent = t("win.hint");
-    $("#vFsLabel").textContent = t("win.fs");
-  }
-  let vIdle;
-  function vWake() { const v = $("#viewer"); v.classList.remove("idle"); clearTimeout(vIdle); vIdle = setTimeout(() => v.classList.add("idle"), 2500); }
-  function vGo(d) { inl.key = KEYS[(KEYS.indexOf(inl.key) + d + KEYS.length) % KEYS.length]; inlineRender(); vWake(); followPattern(inl.key); }
-  function vFs() {
-    const d = document;
-    if (d.fullscreenElement || d.webkitFullscreenElement) { (d.exitFullscreen || d.webkitExitFullscreen).call(d); return; }
-    const e = $("#viewer"), f = e.requestFullscreen || e.webkitRequestFullscreen;
-    if (f) { try { const p = f.call(e); if (p && p.catch) p.catch(() => {}); } catch (x) { /* tutto schermo non disponibile */ } }
-  }
-  function closeInline() {
-    const d = document;
-    if (d.fullscreenElement) { try { d.exitFullscreen(); } catch (x) { /* niente */ } }
-    inl.open = false; $("#viewer").hidden = true; document.body.style.overflow = "";
+  /* ---------- Pattern dentro la pagina (anteprima, o popup bloccato): show.html in un riquadro a tutto schermo ---------- */
+  const frame = () => $("#viewer");
+  let frameLoaded = false;
+  const inlineOpen = () => !frame().hidden;
+  const winOpen = () => !!dialog || inlineOpen() || (showWin && !showWin.closed);
+  const target = location.origin === "null" ? "*" : location.origin;
+  function toggleFs() {
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    else frame().requestFullscreen().catch(() => { /* tutto schermo non disponibile */ });
   }
   function openInline(key) {
-    inl.key = key || inl.key; inl.fixed = S.fmt === "auto" ? "" : S.fmt; inl.open = true;
-    $("#viewer").hidden = false; document.body.style.overflow = "hidden";
-    inlineRender(); vWake(); vFs();
+    const v = frame();
+    v.hidden = false; document.body.style.overflow = "hidden";
+    // Già caricato (dopo una chiusura): riprende con la foto eventualmente inserita
+    if (frameLoaded) v.contentWindow.postMessage({ uspl: 1, k: key, f: S.fmt === "auto" ? "" : S.fmt, lang: LANG }, target);
+    else { frameLoaded = true; v.onload = () => v.contentWindow.focus(); v.src = showUrl(key); }
+    v.contentWindow.focus(); toggleFs();
   }
-  function wireInline() {
-    $("#vPrev").onclick = () => vGo(-1);
-    $("#vNext").onclick = () => vGo(1);
-    $("#vFs").onclick = vFs;
-    $("#vClose").onclick = closeInline;
-    $("#vStage").ondblclick = vFs;
-    $("#viewer").onmousemove = vWake;
-    addEventListener("resize", () => { if (inl.open) inlineRender(); });
-    addEventListener("keydown", (e) => {
-      if (!inl.open) return;
-      if (["ArrowRight", "PageDown", " ", "Enter"].includes(e.key)) { e.preventDefault(); vGo(1); }
-      else if (["ArrowLeft", "PageUp", "Backspace"].includes(e.key)) { e.preventDefault(); vGo(-1); }
-      else if (e.key === "f" || e.key === "F") vFs();
-      else if (e.key === "Escape" && !document.fullscreenElement) closeInline();
-    });
+  function closeInline() {
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    frame().hidden = true; document.body.style.overflow = "";
   }
 
   function sendToWindow(msg) {
-    if (inl.open) {
-      if (msg.f != null) inl.fixed = PLP.FORMATS[msg.f] ? msg.f : "";
-      if (msg.photo) inl.photo = msg.photo;
-      if (msg.k) inl.key = msg.k;
-      inlineRender(); return true;
-    }
-    if (dialog) {
-      if (api.dialog2) { try { dialog.messageChild(JSON.stringify(msg)); return true; } catch (e) { /* riapri */ } }
+    if (inlineOpen()) frame().contentWindow.postMessage(Object.assign({ uspl: 1 }, msg), target);
+    else if (dialog) {
+      // Senza DialogApi 1.2 la finestra non riceve messaggi: si chiude e si riapre sul pattern giusto
+      if (api.dialog2) { try { dialog.messageChild(JSON.stringify(msg)); return; } catch (e) { /* riapri */ } }
       try { dialog.close(); } catch (e) { /* già chiusa */ }
       dialog = null;
       openWindow(msg.k);
-      return true;
-    }
-    if (showWin && !showWin.closed) { showWin.postMessage(Object.assign({ uspl: 1 }, msg), location.origin === "null" ? "*" : location.origin); return true; }
-    return false;
+    } else if (showWin && !showWin.closed) showWin.postMessage(Object.assign({ uspl: 1 }, msg), target);
   }
   function openWindow(key) {
     key = key || (STEPS()[S.step].slides || [])[0] || "screenLight";
-    if (mode === "office") {
+    if (office) {
       if (dialog) { sendToWindow({ k: key }); return; }
       try {
         Office.context.ui.displayDialogAsync(showUrl(key), { height: 60, width: 60, displayInIframe: false, promptBeforeOpen: false }, (res) => {
@@ -373,9 +315,13 @@
       if (!showWin) openInline(key); // popup bloccato: vista integrata nella pagina
     }
   }
+  // Messaggi da show.html (finestra o riquadro): pattern cambiato, chiudi, tutto schermo
   window.addEventListener("message", (e) => {
     const m = e.data;
-    if (m && m.uspl && m.from === "show" && m.k) followPattern(m.k);
+    if (!m || !m.uspl || m.from !== "show") return;
+    if (m.k) followPattern(m.k);
+    if (m.close) closeInline();
+    if (m.fs) toggleFs();
   });
   // La finestra dei pattern ha cambiato pattern: il pannello si porta al passo giusto
   function followPattern(key) {
@@ -387,11 +333,11 @@
   // Mostra un pattern: slide nella presentazione, finestra dei pattern o anteprima
   async function goPattern(key) {
     S.current = key; markThumbs();
-    const winOpen = !!dialog || inl.open || (showWin && !showWin.closed);
-    if (winOpen) sendToWindow({ k: key });
-    if (mode === "office" && S.map[key]) { await selectSlide(S.map[key]); return; }
-    if (!winOpen && mode !== "office") openWindow(key);
-    else if (!winOpen && mode === "office" && !hasTests()) toast(t("notInserted"));
+    const open = winOpen();
+    if (open) sendToWindow({ k: key });
+    if (office && S.map[key]) { await selectSlide(S.map[key]); return; }
+    if (!open && !office) openWindow(key);
+    else if (!open && office && !hasTests()) toast(t("notInserted"));
   }
 
   /* ---------- Foto clinica ---------- */
@@ -405,9 +351,8 @@
   async function onPhoto(file) {
     if (!file) return;
     const url = await readFile(file);
-    if (mode !== "office") {
-      if (!inl.open && !(showWin && !showWin.closed)) openWindow("photo");
-      await wait(showWin && !inl.open ? 700 : 0);
+    if (!office) {
+      if (!winOpen()) { openWindow("photo"); await wait(700); } // tempo per caricare la finestra
       sendToWindow({ k: "photo", photo: url });
       return;
     }
@@ -426,10 +371,9 @@
 
   /* ---------- Download (versione browser) ---------- */
   async function download() {
-    if (typeof PptxGenJS === "undefined") return;
     setBusy(true);
     try {
-      const pres = PLP.buildDeck(PptxGenJS, fmtW(), labels(), null, notesFor);
+      const pres = PLP.buildDeck(PptxGenJS, fmtW(), labels(), notesFor);
       await pres.writeFile({ fileName: `The Ultraspeaker Projector Lab - Screen Test ${fmtKey().replace(":", "x")}.pptx` });
     } catch (e) { toast(t("err", { m: e.message })); } finally { setBusy(false); }
   }
@@ -662,52 +606,40 @@
     });
   }
 
-  /* ---------- Ricomincia da capo (due tocchi: il primo chiede conferma) ---------- */
-  let restartT = null;
+  /* ---------- Ricomincia e Azzera tutto: due tocchi, il primo chiede conferma per 4 secondi ---------- */
+  function twoTaps(b, label, action) {
+    clearTimeout(b.disarm);
+    if (b.classList.toggle("armed")) b.disarm = setTimeout(() => { b.classList.remove("armed"); label(); }, 4000);
+    else action();
+    label();
+  }
+  function clearRun() {
+    S.results = {}; S.checks = {}; S.answers = {}; S.values = {}; S.venue = ""; S.note = ""; S.step = 0;
+    timerEnd = 0; clearInterval(timerT); timerT = null;
+  }
   function restartLabel() {
-    const b = $("#restartBtn"); if (!b) return;
-    const armed = b.classList.contains("armed");
+    const armed = $("#restartBtn").classList.contains("armed");
     $("#restartLabel").textContent = armed ? t("reset.confirm") : t("reset");
     $$(".restart-final").forEach((x) => { x.classList.toggle("armed", armed); x.querySelector("span").textContent = armed ? t("reset.confirm") : t("reset"); });
   }
-  function restart() {
-    const b = $("#restartBtn");
-    if (!b.classList.contains("armed")) {
-      b.classList.add("armed"); restartLabel();
-      clearTimeout(restartT); restartT = setTimeout(() => { b.classList.remove("armed"); restartLabel(); }, 4000);
-      return;
-    }
-    clearTimeout(restartT); b.classList.remove("armed");
-    // Le sale salvate, la lingua, il formato e le slide di test restano
-    S.results = {}; S.checks = {}; S.answers = {}; S.values = {}; S.venue = ""; S.note = ""; S.step = 0;
-    timerEnd = 0; store.set("projectorlab.timer", 0); clearInterval(timerT); timerT = null;
-    persist(); renderStep(); restartLabel(); window.scrollTo({ top: 0, behavior: "smooth" });
+  // Ricomincia: le sale salvate, la lingua, il formato e le slide di test restano
+  const restart = () => twoTaps($("#restartBtn"), restartLabel, () => {
+    clearRun(); store.set("projectorlab.timer", 0);
+    persist(); renderStep(); window.scrollTo({ top: 0, behavior: "smooth" });
     toast(t("reset.done"));
-  }
-
-  /* ---------- Azzera tutto (solo versione browser): cancella tutto ciò che la pagina ha salvato ---------- */
-  let resetAllT = null;
+  });
+  // Azzera tutto (solo versione browser): cancella tutto ciò che la pagina ha salvato
   function resetAllLabel() {
-    const b = $("#resetAllBtn"); if (!b) return;
-    $("#resetAllLabel").textContent = b.classList.contains("armed") ? t("resetAll.confirm") : t("resetAll");
+    $("#resetAllLabel").textContent = t($("#resetAllBtn").classList.contains("armed") ? "resetAll.confirm" : "resetAll");
   }
-  function resetAll() {
-    const b = $("#resetAllBtn");
-    if (!b.classList.contains("armed")) {
-      b.classList.add("armed"); resetAllLabel();
-      clearTimeout(resetAllT); resetAllT = setTimeout(() => { b.classList.remove("armed"); resetAllLabel(); }, 4000);
-      return;
-    }
-    clearTimeout(resetAllT); b.classList.remove("armed");
-    try { Object.keys(localStorage).filter((k) => k.indexOf("projectorlab.") === 0).forEach((k) => localStorage.removeItem(k)); } catch (e) { /* archiviazione non disponibile */ }
-    S.results = {}; S.checks = {}; S.answers = {}; S.values = {}; S.venue = ""; S.note = ""; S.step = 0;
-    S.fmt = "auto"; S.where = "end"; inl.photo = null;
-    timerEnd = 0; clearInterval(timerT); timerT = null;
-    if (inl.open) closeInline();
+  const resetAll = () => twoTaps($("#resetAllBtn"), resetAllLabel, () => {
+    try { Object.keys(localStorage).filter((k) => k.startsWith("projectorlab.")).forEach((k) => localStorage.removeItem(k)); } catch (e) { /* archiviazione non disponibile */ }
+    clearRun(); S.fmt = "auto"; S.where = "end";
+    closeInline(); frameLoaded = false; // al prossimo uso il riquadro riparte da zero (senza foto)
     LANG = detectLang(); $("#lang").value = LANG;
-    applyStatic(); resetAllLabel(); window.scrollTo({ top: 0, behavior: "smooth" });
+    applyStatic(); window.scrollTo({ top: 0, behavior: "smooth" });
     toast(t("resetAll.done"));
-  }
+  });
 
   /* ---------- Registro delle sale ---------- */
   const venues = () => store.get("projectorlab.venues", []);
@@ -780,12 +712,12 @@
       h += renderVenues();
     }
     if (s.slides) {
-      const tests = mode === "office" && hasTests();
+      const tests = office && hasTests();
       h += `<div class="thumbs" style="--ar:${W}/7.5">` + s.slides.map((k) => {
         const svg = PLP.toSVG(PLP.build(k, W, labels()), W, { attrs: ' width="100%" height="100%" aria-hidden="true"' });
         return `<button type="button" class="thumb" data-k="${k}"><div class="img">${svg}</div><span>${ICON_PLAY}${esc(t("p." + k + ".name"))}</span></button>`;
       }).join("") + `</div>`;
-      if (mode === "office") h += `<p class="note">${esc(tests ? t("startShow") : t("notInserted"))}</p>`;
+      if (office) h += `<p class="note">${esc(tests ? t("startShow") : t("notInserted"))}</p>`;
     }
     if (s.checks) {
       const done = S.checks[s.id] || [];
@@ -801,7 +733,7 @@
     if (s.adjust) h += `<section class="sec-block"><div class="h">${esc(t("adjust"))}</div>${list(s.adjust, "adj")}</section>`;
     if (STEP_SET[s.id]) h += renderSettings(STEP_SET[s.id]);
     if (s.id === "clinical") {
-      h += `<button type="button" class="btn sec" id="photoBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg><span>${esc(mode === "office" ? t("photo") : t("photoWeb"))}</span></button>`;
+      h += `<button type="button" class="btn sec" id="photoBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg><span>${esc(t(office ? "photo" : "photoWeb"))}</span></button>`;
     }
     if (s.issues) {
       h += `<section class="sec-block"><div class="h">${esc(t("issues"))}</div><div>` +
@@ -820,7 +752,7 @@
         <div class="btns"><button type="button" class="btn sec small" id="copyBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg><span>${esc(t("report.copy"))}</span></button>` +
         `<button type="button" class="btn sec small restart-final"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg><span>${esc(t("reset"))}</span></button>` +
         `<button type="button" class="btn sec small" id="saveVenueBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6"/></svg><span>${esc(t("venue.save"))}</span></button>` +
-        (mode === "office" && hasTests() ? `<button type="button" class="btn sec small danger" id="removeBtn2"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span>${esc(t("remove"))}</span></button>` : "") +
+        (office && hasTests() ? `<button type="button" class="btn sec small danger" id="removeBtn2"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span>${esc(t("remove"))}</span></button>` : "") +
         `</div></section>`;
     }
     const art = $("#step"); art.innerHTML = h;
@@ -862,8 +794,7 @@
     renderStep();
     window.scrollTo({ top: 0, behavior: "smooth" });
     const first = (steps[S.step].slides || [])[0];
-    const winOpen = !!dialog || inl.open || (showWin && !showWin.closed);
-    if (first && (winOpen || (mode === "office" && S.map[first]))) goPattern(first);
+    if (first && (winOpen() || (office && S.map[first]))) goPattern(first);
   }
 
   /* ---------- Avvio ---------- */
@@ -877,8 +808,8 @@
     renderSetup(); renderStep(); resetAllLabel();
   }
   function buildLang() {
-    const sel = $("#lang"); sel.innerHTML = "";
-    I18N.langs.filter(([k]) => LANGS.includes(k)).forEach(([k, name]) => {
+    const sel = $("#lang");
+    I18N.langs.forEach(([k, name]) => {
       const o = document.createElement("option"); o.value = k; o.textContent = name; sel.appendChild(o);
     });
     sel.value = LANG;
@@ -898,36 +829,24 @@
     $("#photoIn").onchange = (e) => onPhoto(e.target.files && e.target.files[0]);
     // In PowerPoint i link si aprono nel browser di sistema
     $$(".links a, .brand-link").forEach((el) => el.addEventListener("click", (e) => {
-      if (!inOffice) return;
-      try {
-        if (Office.context.requirements.isSetSupported("OpenBrowserWindowApi", "1.1")) { e.preventDefault(); Office.context.ui.openBrowserWindow(el.href); }
-      } catch (x) { /* resta il link normale */ }
+      if (office && supported("OpenBrowserWindowApi", "1.1")) { e.preventDefault(); Office.context.ui.openBrowserWindow(el.href); }
     }));
   }
 
-  async function start(office) {
-    inOffice = office;
-    mode = office ? "office" : "web";
+  async function start(inPowerPoint) {
+    office = inPowerPoint;
     document.body.classList.toggle("web", !office);
     LANG = detectLang();
-    buildLang(); wire(); wireInline();
+    buildLang(); wire();
     if (office) {
-      api.insert = supported("PowerPointApi", "1.2");
-      api.tags = supported("PowerPointApi", "1.3");
+      api.shapes = supported("PowerPointApi", "1.3");
       api.select = supported("PowerPointApi", "1.5");
       api.image = supported("PowerPointApi", "1.8");
       api.dialog2 = supported("DialogApi", "1.2");
-      api.create = typeof PowerPoint !== "undefined" && typeof PowerPoint.createPresentation === "function";
-      if (!api.insert) {
-        $("#unsupported").hidden = false;
-        mode = "web"; // guida e finestra dei pattern restano disponibili
-      }
-    }
+    } else S.detected = PLP.formatFromRatio(screen.width / screen.height); // nel browser "automatico" = formato dello schermo
     if (S.step >= STEPS().length) S.step = 0;
-    // Nel browser il formato "automatico" è quello dello schermo
-    if (mode !== "office") { try { S.detected = PLP.formatFromRatio(screen.width / screen.height); } catch (e) { S.detected = "16:9"; } }
     applyStatic();
-    if (mode === "office") {
+    if (office) {
       setBusy(true);
       await Promise.all([detectFormat(), loadMap()]);
       setBusy(false);
@@ -936,9 +855,6 @@
     }
   }
 
-  let started = false;
-  const go = (office) => { if (!started) { started = true; start(office); } };
-  if (window.Office && Office.onReady) {
-    Office.onReady((info) => go(!!(info && info.host === Office.HostType.PowerPoint)));
-  } else go(false);
+  if (window.Office) Office.onReady((info) => start(info.host === Office.HostType.PowerPoint));
+  else start(false);
 })();

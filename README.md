@@ -56,14 +56,14 @@ nel gruppo «The Ultraspeaker», accanto a QR Lab e Image Lab.
 |---|---|
 | `index.html` | Il pannello (struttura e stile) |
 | `app.js` | Procedura, collegamento con PowerPoint (inserimento, navigazione, rimozione, foto), report |
-| `patterns.js` | I 14 pattern, descritti una volta e disegnati in SVG (anteprime e finestra) e in PowerPoint (PptxGenJS) |
-| `show.html` | Finestra dei pattern a schermo intero |
+| `patterns.js` | I 15 pattern, descritti una volta e disegnati in SVG (anteprime e finestra) e in PowerPoint (PptxGenJS) |
+| `show.html` | Pattern a schermo intero: finestra di PowerPoint, finestra del browser o riquadro dentro il pannello |
 | `i18n.js` | Testi e procedura nelle 5 lingue |
 | `venn-data.js` | Immagine del cerchio RGB del Screen Test |
 | `wm-data.js` | Arena di The Ultraspeaker semitrasparente (watermark dei pattern) |
 | `vendor/pptxgen.bundle.js` | PptxGenJS 3.12 (licenza MIT) per creare le slide |
 | `projector-lab-manifest.xml` | Manifest dell’add-in per PowerPoint |
-| `assets/` | Lockup Projector Lab (bianco/nero), logetto mirino, logo The Ultraspeaker, icone PNG (16–512 px) |
+| `assets/` | Lockup Projector Lab, Arena (chiusura delle pagine), favicon e icone PNG usate da manifest e browser |
 | `fonts/` | Champagne & Limousines in woff2 (carattere del brand book) |
 | `support.html`, `privacy.html`, `terms.html`, `GUIDA-INSTALLAZIONE.html` | Supporto, privacy, condizioni d’uso e guida, in 5 lingue con selettore come nel pannello |
 | `legal.css`, `legal.js` | Stile e cambio lingua di queste pagine |
