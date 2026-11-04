@@ -4,280 +4,99 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Ultraspeaker Projector Lab</title>
-<link rel="icon" type="image/png" sizes="32x32" href="assets/projector-lab-icon-32.png?v=5">
-<link rel="icon" type="image/png" sizes="16x16" href="assets/projector-lab-icon-16.png?v=5">
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=5">
-<link rel="apple-touch-icon" href="assets/projector-lab-icon-180.png?v=5">
-<link rel="manifest" href="site.webmanifest">
+<meta name="description" content="Set up the projector before you speak: a 10-step guide with test patterns for format, focus, black, white, colour and clinical references.">
 <meta name="theme-color" content="#000000">
 <meta name="color-scheme" content="dark">
-<!-- Office.js: in PowerPoint collega il pannello alla presentazione. Nel browser il pannello funziona come guida con i pattern a schermo intero. -->
+<meta name="apple-mobile-web-app-title" content="Projector Lab">
+<meta name="application-name" content="Projector Lab">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=5">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/projector-lab-icon-32.png?v=5">
+<link rel="apple-touch-icon" href="assets/projector-lab-icon-180.png?v=5">
+<link rel="manifest" href="site.webmanifest">
+<link rel="stylesheet" href="shared/ultraspeaker-lab.css?v=20261102">
+<link rel="stylesheet" href="css/app.css?v=20261102">
+<!-- Office.js: in PowerPoint collega il pannello alla presentazione; nel browser la pagina funziona anche senza -->
 <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
-<style>/* Champagne & Limousines (Brand Book The Ultraspeaker, p. 17): Regular, Italic, Bold, Bold Italic dalla cartella fonts */
-@font-face{font-family:"Champagne & Limousines";font-weight:100 549;font-style:normal;font-display:swap;src:url(fonts/champagne-limousines-regular.woff2) format("woff2")}
-@font-face{font-family:"Champagne & Limousines";font-weight:550 900;font-style:normal;font-display:swap;src:url(fonts/champagne-limousines-bold.woff2) format("woff2")}
-@font-face{font-family:"Champagne & Limousines";font-weight:100 549;font-style:italic;font-display:swap;src:url(fonts/champagne-limousines-italic.woff2) format("woff2")}
-@font-face{font-family:"Champagne & Limousines";font-weight:550 900;font-style:italic;font-display:swap;src:url(fonts/champagne-limousines-bolditalic.woff2) format("woff2")}
-/* Palette del Brand Book (p. 16): Stage Black, Backstage, Curtain, Graphite, Ash, Silver, House Lights, Spotlight.
-   Colori funzionali solo nei Lab: ambra #FFCF80 per gli avvisi, blu #4F8DFF per il focus. Angoli 10 px, niente ombre.
-   Sempre su fondo nero (Stage Black), come gli altri Lab, qualunque sia il tema del sistema. */
-:root{
-  --bg:#000000; --surface:#111111; --surface-2:#1B1B1B; --ink:#FFFFFF; --ink-2:#D0D0D0; --ink-3:#8E8E8E;
-  --line:#1B1B1B; --line-2:#2A2A2A; --line-3:#3A3A3A; --accent:#FFFFFF; --accent-ink:#000000;
-  --field:#111111; --page:#0A0A0A; --warn:#FFCF80; --warn-soft:#2D230F; --warn-line:rgba(255,207,128,.55);
-  --focus:#4F8DFF; --mute:#3A3A3A; --r:10px; color-scheme:dark;
-}
-*{box-sizing:border-box}
-html{scrollbar-gutter:stable}
-html,body{margin:0;min-height:100%}
-body{background:var(--bg);color:var(--ink);font:400 14px/1.45 "Champagne & Limousines","Avenir Next","Segoe UI",-apple-system,Arial,sans-serif;font-size-adjust:0.47;-webkit-font-smoothing:antialiased}
-button,select,input,textarea{font:inherit;color:inherit}
-button{cursor:pointer}
-button:disabled{cursor:default;opacity:.45}
-:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
-a{color:var(--ink-2)}
-.app{min-height:100vh;display:flex;flex-direction:column}
-body.web{background:var(--page)}
-body.web .app{width:100%;max-width:760px;margin:0 auto;background:var(--bg);border-inline:1px solid var(--line)}
-
-/* Intestazione */
-.brand{flex:none;padding:14px 18px 12px;background:#000000;color:#FFFFFF;border-bottom:1px solid #1B1B1B;display:flex;flex-direction:column;gap:10px}
-.brand-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.lockup{display:block;width:min(200px,60%);height:auto;margin-top:2px}
-.lang{display:flex;align-items:center;gap:6px;flex:none}
-.lang svg{width:16px;height:16px;stroke:#9a9a9a;fill:none;stroke-width:1.8}
-.lang select{height:30px;padding:0 6px;border-radius:var(--r);background:#111111;color:#FFFFFF;border:1px solid #3A3A3A;font-size:12px;font-weight:600;color-scheme:dark}
-.status{display:flex;align-items:center;gap:7px;font-size:11.5px;color:#D0D0D0}
-.status i{width:6px;height:6px;border-radius:50%;background:#FFFFFF;flex:none}
-.status.off i{background:#8E8E8E}
-.status.busy i{background:#FFCF80}
-
-.scroll{flex:1;padding:14px 18px 18px;display:flex;flex-direction:column;gap:16px}
-.h{font-size:10.5px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:var(--ink-3)}
-.note{font-size:11.5px;line-height:1.5;color:var(--ink-3);margin:0}
-.hint{font-size:11.5px;line-height:1.45;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line-2);border-radius:var(--r);padding:8px 10px}
-[hidden]{display:none!important}
-
-/* Scheda Screen Test */
-.card{border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface);padding:12px;display:flex;flex-direction:column;gap:10px}
-.card-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.card-head .h{white-space:nowrap}
-.card-head .done{margin-left:auto;min-width:0}
-.card-head button{background:none;border:0;color:var(--ink-3);padding:2px;display:flex}
-.card-head svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;transition:transform .2s}
-.card.closed .card-body{display:none}
-.card.closed .card-head svg{transform:rotate(-90deg)}
-.card-body{display:flex;flex-direction:column;gap:10px}
-.done{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink);font-weight:600}
-.done i{width:6px;height:6px;border-radius:50%;background:var(--ink)}
-.field{display:grid;grid-template-columns:78px minmax(0,1fr);align-items:center;gap:8px}
-.field > span{font-size:12px;font-weight:600;color:var(--ink-2)}
-.seg{display:flex;gap:4px;flex-wrap:wrap}
-.pill{height:28px;padding:0 10px;border-radius:var(--r);border:1px solid var(--line-3);background:transparent;color:var(--ink-2);font-size:11.5px;font-weight:700;letter-spacing:.02em;white-space:nowrap}
-.pill[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.pill small{font-weight:600;opacity:.7;margin-left:4px}
-.btn{min-height:38px;border-radius:var(--r);font-size:12.5px;font-weight:700;padding:7px 12px;display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;line-height:1.3;min-width:0}
-.btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;flex:none}
-.btn.pri{background:var(--accent);color:var(--accent-ink);border:1px solid var(--accent)}
-.btn.sec{background:transparent;border:1px solid var(--line-3)}
-.btn.small{min-height:32px;padding:5px 10px;font-size:12px;font-weight:600}
-.btn.danger{color:var(--warn)}
-.btns{display:flex;gap:8px;flex-wrap:wrap}
-.btns .btn{flex:1 1 auto}
-input[type=text],textarea{width:100%;background:var(--field);border:1px solid var(--line-3);border-radius:var(--r);padding:8px 10px;font-size:12.5px}
-textarea{resize:vertical;min-height:62px}
-input::placeholder,textarea::placeholder{color:var(--ink-3)}
-
-/* Passi */
-.stepper{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
-.dot{height:30px;border-radius:var(--r);border:1px solid var(--line-3);background:transparent;color:var(--ink-2);font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;position:relative;padding:0}
-.dot[aria-current="step"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.dot::after{content:"";position:absolute;right:3px;top:3px;width:5px;height:5px;border-radius:50%;background:transparent}
-.dot.ok::after{background:var(--ink)}
-.dot.ok[aria-current="step"]::after{background:var(--accent-ink)}
-.dot.fix::after{background:#FFCF80;box-shadow:0 0 0 1px var(--warn)}
-.dot.skip::after{background:var(--ink-3)}
-.progress{height:2px;background:var(--line-2);border-radius:1px;overflow:hidden}
-.progress i{display:block;height:100%;background:var(--ink);transition:width .25s}
-.step-head{display:flex;flex-direction:column;gap:4px}
-.step-head h2{margin:0;font-size:20px;line-height:1.2;font-weight:700;text-wrap:balance}
-.goal{margin:0;color:var(--ink-2);font-size:13px}
-
-/* Anteprime dei pattern del passo */
-.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
-.thumb{display:flex;flex-direction:column;gap:5px;padding:0;background:none;border:0;text-align:left}
-.thumb .img{width:100%;aspect-ratio:var(--ar,16/9);border-radius:var(--r);overflow:hidden;border:1px solid var(--line-3);background:#111111;transition:border-color .15s}
-.thumb .img svg{display:block;width:100%;height:100%}
-.thumb:hover .img,.thumb[aria-pressed="true"] .img{border-color:var(--ink)}
-.thumb span{font-size:11.5px;font-weight:600;color:var(--ink-2);display:flex;align-items:center;gap:6px}
-.thumb span svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2}
-
-ul.list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px}
-ul.list li{position:relative;padding-left:16px;font-size:13.5px;line-height:1.5;color:var(--ink)}
-ul.list li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;border-radius:50%;border:1.5px solid var(--ink-3)}
-ul.list.adj li::before{border-radius:1px;transform:rotate(45deg);width:5px;height:5px;top:.65em}
-.sec-block{display:flex;flex-direction:column;gap:8px}
-
-.checks{display:flex;flex-direction:column;gap:6px}
-.check{display:grid;grid-template-columns:20px minmax(0,1fr);gap:8px;align-items:start;font-size:13.5px;line-height:1.5;color:var(--ink);cursor:pointer;padding:6px 8px;border-radius:var(--r);border:1px solid transparent}
-.check:hover{background:var(--surface-2)}
-.check input{appearance:none;-webkit-appearance:none;width:18px;height:18px;border-radius:5px;border:1.5px solid var(--line-3);margin:1px 0 0;display:grid;place-items:center;cursor:pointer}
-.check input:checked{background:var(--accent);border-color:var(--accent)}
-.check input:checked::after{content:"";width:9px;height:5px;border:2px solid var(--accent-ink);border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
-.check input:checked + span{color:var(--ink-3)}
-
-details.issue{border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface)}
-details.issue + details.issue{margin-top:6px}
-details.issue summary{list-style:none;cursor:pointer;padding:9px 34px 9px 11px;font-size:12.5px;font-weight:700;position:relative;line-height:1.35}
-details.issue summary::-webkit-details-marker{display:none}
-details.issue summary::after{content:"";position:absolute;right:13px;top:50%;width:7px;height:7px;border-right:2px solid var(--ink-3);border-bottom:2px solid var(--ink-3);transform:translateY(-70%) rotate(45deg);transition:transform .2s}
-details.issue[open] summary::after{transform:translateY(-30%) rotate(-135deg)}
-details.issue p{margin:0;padding:0 11px 11px;font-size:12.5px;color:var(--ink-2);line-height:1.5}
-
-.result{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-.rb{height:36px;border-radius:var(--r);border:1px solid var(--line-3);background:transparent;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;padding:0 6px;white-space:nowrap}
-.rb i{width:7px;height:7px;border-radius:50%;flex:none}
-.rb.ok i{background:var(--ink)}.rb.fix i{background:#FFCF80;box-shadow:0 0 0 1px var(--warn)}.rb.skip i{background:var(--ink-3)}
-.rb[aria-pressed="true"].ok{border-color:var(--ink);background:var(--surface-2)}
-.rb[aria-pressed="true"].fix{border-color:var(--warn-line);background:var(--warn-soft)}
-.rb[aria-pressed="true"].skip{border-color:var(--ink-3);background:var(--surface-2)}
-
-.timer{font-variant-numeric:tabular-nums}
-.report{font:500 11.5px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r);padding:10px;color:var(--ink-2);margin:0;max-height:220px;overflow:auto}
-
-.foot{flex:none;position:sticky;bottom:0;z-index:5;background:var(--bg);padding:12px 18px 14px;border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:8px}
-.fb{height:42px;border-radius:var(--r);font-size:12.5px;font-weight:700;padding:0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fb.sec{background:transparent;border:1px solid var(--line-3)}
-.fb.pri{background:var(--accent);color:var(--accent-ink);border:1px solid var(--accent)}
-
-.toast{position:fixed;left:50%;bottom:86px;transform:translate(-50%,12px);background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:12.5px;padding:9px 14px;border-radius:var(--r);opacity:0;pointer-events:none;transition:.2s;max-width:calc(100% - 32px);text-align:center;z-index:30}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-@media (max-width:340px){.field{grid-template-columns:1fr}.result{grid-template-columns:1fr}}
-
-/* Pattern dentro la pagina (show.html) */
-.viewer{position:fixed;inset:0;z-index:50;width:100%;height:100%;border:0;background:#000000}
-/* Domande "Cosa vedi?" */
-.dx .note{margin-top:-2px}
-.dxq{display:flex;flex-direction:column;gap:8px;padding:12px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface)}
-.dxq-t{margin:0;font-size:13px;font-weight:700;line-height:1.4}
-.opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
-.opts.words{display:flex;flex-wrap:wrap}
-.opt{min-height:32px;padding:4px 6px;border-radius:var(--r);border:1px solid var(--line-3);background:transparent;color:var(--ink);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2}
-.opts.words .opt{padding:4px 10px}
-.opts.q-black{grid-template-columns:repeat(5,minmax(0,1fr))}
-.opts.q-black .opt[data-v="g0"]{grid-column:span 3}
-.opts.q-black .opt[data-v="none"]{grid-column:span 2}
-.opt[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.castq{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.castg{display:flex;flex-direction:column;gap:6px;min-width:0}
-.castg > span{font-size:10.5px;font-weight:700;letter-spacing:.32em;color:var(--ink-3);text-transform:uppercase}
-.pad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
-.pad .opt{min-height:34px;padding:0}
-.dxr{border-radius:var(--r);padding:9px 11px;font-size:12.5px;line-height:1.5;border:1px solid var(--line-3);background:var(--surface-2);display:flex;flex-direction:column;gap:6px}
-.dxr p{margin:0}
-.dxr.ok{border-color:var(--ink);background:var(--surface-2)}
-.dxr.fix{border-color:var(--warn-line);background:var(--warn-soft)}
-.dxr.range{border:2px solid #FFCF80;background:var(--warn-soft)}
-.dxr.info{border-color:var(--line-3)}
-.dxq .btn{align-self:flex-start}
-/* Valori prima / dopo */
-.sets{display:flex;flex-direction:column;gap:6px}
-.set-row{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 14px minmax(0,1fr);gap:6px;align-items:center}
-.set-row label{font-size:12.5px;font-weight:600;color:var(--ink-2)}
-.set-row input{padding:6px 8px;font-size:12.5px;text-align:center;font-variant-numeric:tabular-nums}
-.set-row > span{color:var(--ink-3);text-align:center;font-size:12px}
-.set-row.head span{font-size:10px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:var(--ink-3);text-align:center}
-#venuePick{width:100%;height:36px;border-radius:var(--r);background:var(--field);border:1px solid var(--line-3);padding:0 8px;font-size:12.5px}
-#venueInfo{display:flex;flex-direction:column;gap:8px}
-#venueInfo .vtitle{margin:0 0 6px;font-weight:700}
-#venueInfo .vnote{margin:6px 0 0;color:var(--ink-3)}
-@media (max-width:360px){.opts.q-white{grid-template-columns:repeat(4,minmax(0,1fr))}.castq{grid-template-columns:1fr}}
-/* Ricomincia da capo */
-.restart-row{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:4px 8px;margin-top:-8px}
-.restart.danger{margin-right:auto;text-align:left}
-.restart.danger:hover{color:var(--warn)}
-.restart{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid transparent;border-radius:var(--r);padding:5px 8px;color:var(--ink-3);font-size:11.5px;font-weight:700;text-align:right;line-height:1.3}
-.restart svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;flex:none}
-.restart:hover{color:var(--ink)}
-.restart.danger.armed{color:var(--warn);border:2px solid #FFCF80;background:var(--warn-soft)}
-.restart.armed,.btn.restart-final.armed{color:var(--warn);border-color:var(--warn-line);background:var(--warn-soft)}
-.brand-link{display:block;width:min(200px,60%);border-radius:var(--r)}
-.brand-link:focus-visible{outline-offset:4px}
-.brand-link .lockup{width:100%}
-.brand-link:hover .lockup{opacity:.85}
-</style>
+<script src="shared/ultraspeaker-lang.js?v=20261102"></script>
 </head>
 <body>
-<div class="app">
-  <header class="brand">
-    <div class="brand-row">
-      <a class="brand-link" href="https://www.theultraspeaker.com" target="_blank" rel="noopener" title="www.theultraspeaker.com"><img class="lockup" src="assets/logo-projector-lab-white.svg?v=5" alt="The Ultraspeaker Projector Lab"></a>
-      <label class="lang">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
-        <select id="lang" data-i18n-aria="lang"></select>
+<div class="us-page us-page--narrow app">
+  <header class="us-header">
+    <div>
+      <a class="us-logo" href="https://www.theultraspeaker.com" target="_blank" rel="noopener"><img src="assets/logo-projector-lab-white.svg?v=5" alt="The Ultraspeaker Projector Lab"></a>
+      <p class="us-subtitle"><span class="us-dot"></span><span id="statusText"></span></p>
+    </div>
+    <div class="us-header-tools">
+      <a class="us-btn us-guide" id="usGuide" href="guide/projector-lab-guide-en.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg><span data-i18n="us.guide"></span></a>
+      <label class="us-lang">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+        <span class="us-sr" data-i18n="us.language"></span>
+        <select id="lang"></select>
       </label>
     </div>
-    <div class="status off" id="status"><i></i><span id="statusText"></span></div>
   </header>
 
-  <main class="scroll" id="main">
+  <main id="main">
     <!-- Screen Test: inserimento nella presentazione (PowerPoint) o finestra / download (browser) -->
-    <section class="card" id="setup">
-      <div class="card-head">
-        <div class="h" data-i18n="setup.h"></div>
-        <div class="done" id="setupDone" hidden><i></i><span id="setupDoneText"></span></div>
+    <section class="us-panel pl-setup" id="setup">
+      <div class="pl-setup-head">
+        <p class="us-label" data-i18n="setup.h"></p>
+        <div class="pl-done" id="setupDone" hidden><i></i><span id="setupDoneText"></span></div>
         <button type="button" id="setupToggle" aria-expanded="true" data-i18n-aria="setup.h"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
       </div>
-      <div class="card-body">
-        <p class="note" id="setupText"></p>
-        <div class="field">
+      <div class="pl-setup-body">
+        <p class="pl-note" id="setupText"></p>
+        <div class="pl-row">
           <span data-i18n="format"></span>
-          <div class="seg" id="fmtSeg" role="group" data-i18n-aria="format"></div>
+          <div class="pl-chips" id="fmtSeg" role="group" data-i18n-aria="format"></div>
         </div>
-        <p class="note" id="fmtHint"></p>
-        <div class="field office-only" id="whereRow">
+        <p class="pl-note" id="fmtHint"></p>
+        <div class="pl-row office-only" id="whereRow">
           <span data-i18n="where"></span>
-          <div class="seg" id="whereSeg" role="group" data-i18n-aria="where">
-            <button type="button" class="pill" data-where="end" aria-pressed="true" data-i18n="where.end"></button>
-            <button type="button" class="pill" data-where="start" aria-pressed="false" data-i18n="where.start"></button>
+          <div class="pl-chips" id="whereSeg" role="group" data-i18n-aria="where">
+            <button type="button" class="us-chip" data-where="end" aria-pressed="true" data-i18n="where.end"></button>
+            <button type="button" class="us-chip" data-where="start" aria-pressed="false" data-i18n="where.start"></button>
           </div>
         </div>
-        <p class="hint office-only" id="newPresHint" hidden></p>
-        <div class="btns office-only">
-          <button type="button" class="btn pri" id="insertBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="13" rx="2"/><path d="M12 9v5M9.5 11.5h5"/></svg><span id="insertLabel" data-i18n="insert"></span></button>
-          <button type="button" class="btn sec small danger" id="removeBtn" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span data-i18n="remove"></span></button>
+        <p class="us-note office-only" id="newPresHint" hidden></p>
+        <div class="pl-btns office-only">
+          <button type="button" class="us-btn" id="insertBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="13" rx="2"/><path d="M12 9v5M9.5 11.5h5"/></svg><span id="insertLabel" data-i18n="insert"></span></button>
+          <button type="button" class="us-btn is-warn" id="removeBtn" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span data-i18n="remove"></span></button>
         </div>
-        <div class="btns">
-          <button type="button" class="btn sec small" id="windowBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span id="windowLabel" data-i18n="window"></span></button>
-          <button type="button" class="btn sec small web-only" id="downloadBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M4 20h16"/></svg><span data-i18n="download"></span></button>
+        <div class="pl-btns">
+          <button type="button" class="us-btn" id="windowBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span id="windowLabel" data-i18n="window"></span></button>
+          <button type="button" class="us-btn web-only" id="downloadBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M4 20h16"/></svg><span data-i18n="download"></span></button>
         </div>
-        <p class="note office-only" id="windowHint" data-i18n="windowHint"></p>
+        <p class="pl-note office-only" id="windowHint" data-i18n="windowHint"></p>
       </div>
     </section>
 
-    <div class="progress" aria-hidden="true"><i id="progress"></i></div>
-    <nav class="stepper" id="stepper"></nav>
-    <div class="restart-row"><button type="button" class="restart danger web-only" id="resetAllBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span id="resetAllLabel"></span></button><button type="button" class="restart" id="restartBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg><span id="restartLabel"></span></button></div>
+    <div class="pl-progress" aria-hidden="true"><i id="progress"></i></div>
+    <nav class="pl-stepper" id="stepper"></nav>
+    <div class="pl-restart-row"><button type="button" class="pl-restart is-left web-only" id="resetAllBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span id="resetAllLabel"></span></button><button type="button" class="pl-restart" id="restartBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg><span id="restartLabel"></span></button></div>
 
-    <article id="step" style="display:flex;flex-direction:column;gap:16px"></article>
-
-    <p class="note links"><a href="support.html" target="_blank" rel="noopener" data-i18n="support" data-page="support.html"></a> · <a href="privacy.html" target="_blank" rel="noopener" data-i18n="privacy" data-page="privacy.html"></a> · <a href="terms.html" target="_blank" rel="noopener" data-i18n="terms" data-page="terms.html"></a> · <a href="GUIDA-INSTALLAZIONE.html" target="_blank" rel="noopener" data-i18n="guide" data-page="GUIDA-INSTALLAZIONE.html"></a></p>
+    <article class="pl-step" id="step"></article>
   </main>
 
-  <footer class="foot">
-    <button type="button" class="fb sec" id="prevBtn" data-i18n="prev"></button>
-    <button type="button" class="fb pri" id="nextBtn" data-i18n="next"></button>
+  <footer class="us-footer">
+    <a class="us-cta" id="usCta" href="mailto:info@theultraspeaker.com"><img src="assets/arena-white.svg" alt=""><span data-i18n="us.cta"></span></a>
+    <p class="us-links"><a href="support.html" target="_blank" rel="noopener" data-i18n="us.support"></a><a href="privacy.html" target="_blank" rel="noopener" data-i18n="us.privacy"></a><a href="terms.html" target="_blank" rel="noopener" data-i18n="us.terms"></a><a href="GUIDA-INSTALLAZIONE.html" target="_blank" rel="noopener" data-i18n="us.install"></a></p>
   </footer>
-</div>
-<iframe class="viewer" id="viewer" title="Projector Lab" allow="fullscreen" hidden></iframe>
-<input type="file" id="photoIn" accept="image/jpeg,image/png" hidden>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="i18n.js"></script>
-<script src="venn-data.js"></script>
-<script src="wm-data.js"></script>
-<script src="patterns.js"></script>
-<script src="vendor/pptxgen.bundle.js" defer></script>
-<script src="app.js"></script>
+  <div class="pl-foot">
+    <button type="button" class="us-btn" id="prevBtn" data-i18n="prev"></button>
+    <button type="button" class="us-btn us-btn--primary" id="nextBtn" data-i18n="next"></button>
+  </div>
+</div>
+<iframe class="pl-viewer" id="viewer" title="Projector Lab" allow="fullscreen" hidden></iframe>
+<input type="file" id="photoIn" accept="image/jpeg,image/png" hidden>
+<div class="pl-toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="i18n.js?v=20261102"></script>
+<script src="venn-data.js?v=20261102"></script>
+<script src="wm-data.js?v=20261102"></script>
+<script src="patterns.js?v=20261102"></script>
+<script src="vendor/pptxgen.bundle.js?v=20261102" defer></script>
+<script src="app.js?v=20261102"></script>
 </body>
 </html>

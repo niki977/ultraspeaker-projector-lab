@@ -3,60 +3,63 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Guida d’installazione – The Ultraspeaker Projector Lab</title>
-<link rel="icon" type="image/png" sizes="32x32" href="assets/projector-lab-icon-32.png?v=5">
+<title>Installazione · The Ultraspeaker Projector Lab</title>
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=5">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/projector-lab-icon-32.png?v=5">
 <link rel="apple-touch-icon" href="assets/projector-lab-icon-180.png?v=5">
-<link rel="stylesheet" href="legal.css">
+<link rel="stylesheet" href="shared/ultraspeaker-lab.css?v=20261102">
+<link rel="stylesheet" href="css/app.css?v=20261102">
+<script src="shared/ultraspeaker-lang.js?v=20261102"></script>
+<!-- Lingua letta prima del disegno della pagina, così compare subito il testo giusto -->
+<script>document.documentElement.lang = UltraspeakerLang.get("projectorlab.lang");</script>
 </head>
-<body data-page="guide">
-<header><div class="in">
-  <a class="brand-link" href="https://www.theultraspeaker.com" target="_blank" rel="noopener" title="www.theultraspeaker.com"><img src="assets/logo-projector-lab-white.svg?v=5" alt="The Ultraspeaker Projector Lab"></a>
-  <label class="lang"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><select id="lang" aria-label="Lingua"></select></label>
-</div></header>
-<nav aria-label="The Ultraspeaker Projector Lab">
-  <a data-nav="support" data-href="support.html" href="support.html">Supporto</a>
-  <a data-nav="privacy" data-href="privacy.html" href="privacy.html">Privacy</a>
-  <a data-nav="terms" data-href="terms.html" href="terms.html">Condizioni d’uso</a>
-  <a data-nav="guide" data-href="GUIDA-INSTALLAZIONE.html" href="GUIDA-INSTALLAZIONE.html" aria-current="page">Guida d’installazione</a>
-</nav>
+<body data-page="install">
+<div class="us-doc">
+  <header class="us-header">
+    <a class="us-logo" href="https://www.theultraspeaker.com" target="_blank" rel="noopener"><img src="assets/logo-projector-lab-white.svg?v=5" alt="The Ultraspeaker Projector Lab"></a>
+    <div class="us-header-tools">
+      <a class="us-btn us-guide" id="usGuide" href="guide/projector-lab-guide-it.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg><span data-t="guide">Guida</span></a>
+      <label class="us-lang"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg><span class="us-sr" data-t="language">Lingua</span><select id="lang"></select></label>
+    </div>
+  </header>
+  <nav class="us-doc-nav"><a href="support.html" data-nav="support">Supporto</a><a href="privacy.html" data-nav="privacy">Privacy</a><a href="terms.html" data-nav="terms">Condizioni d’uso</a><a href="GUIDA-INSTALLAZIONE.html" data-nav="install" aria-current="page">Installazione</a></nav>
 <main>
 <div data-lang="it" lang="it">
 <h1>Installare The Ultraspeaker Projector Lab in PowerPoint</h1>
-<p class="lead">Tre passaggi, circa 10 minuti, da fare una volta sola per ogni computer (Mac o Windows). Poi il pulsante <b>Projector Lab</b> resta nella scheda <b>Home</b> di PowerPoint, nel gruppo <b>The Ultraspeaker</b>.</p>
+<p class="us-updated">Ultimo aggiornamento: 2 novembre 2026</p>
+<p><b>Titolare:</b> Nicholas D. Charles (The Ultraspeaker) · <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a></p>
+<p>Tre passaggi, circa 10 minuti, da fare una volta sola per ogni computer (Mac o Windows). Poi il pulsante <b>Projector Lab</b> resta nella scheda <b>Home</b> di PowerPoint, nel gruppo <b>The Ultraspeaker</b>.</p>
 
-<section>
-<h2><span class="n">!</span>Prima di iniziare</h2>
-<p class="muted">Projector Lab funziona con PowerPoint di <b>Microsoft 365</b>. Per riconoscere da solo il formato delle slide (4:3, 16:9, 3:1) serve una versione recente; con versioni più vecchie scegli il formato a mano:</p>
+<h2>Prima di iniziare</h2>
+<p>Projector Lab funziona con PowerPoint di <b>Microsoft 365</b>. Per riconoscere da solo il formato delle slide (4:3, 16:9, 3:1) serve una versione recente; con versioni più vecchie scegli il formato a mano:</p>
 <ol>
 <li><b>Mac</b>: aggiorna da <b>Aiuto → Controlla aggiornamenti</b>.</li>
 <li><b>Windows</b>: aggiorna da <b>File → Account → Opzioni di aggiornamento</b>.</li>
 <li><b>PowerPoint sul web</b>: sempre aggiornato.</li>
 </ol>
-<div class="note">Con versioni molto vecchie (senza le API PowerPoint 1.2) il pannello mostra <b>Aggiorna PowerPoint</b>, ma la guida e la finestra dei pattern restano utilizzabili.</div>
-</section>
+<div class="us-note">Con versioni molto vecchie (senza le API PowerPoint 1.2) il pulsante Projector Lab non compare: usa la versione web, che ha la stessa guida e gli stessi pattern.</div>
 
-<section>
-<h2><span class="n">1</span>Metti online i file (GitHub Pages, gratuito)</h2>
-<p class="muted">Gli add-in di Office si caricano sempre da un indirizzo web sicuro (https). GitHub Pages lo fornisce gratis e per sempre.</p>
+<h2>Guida d’utilizzo</h2>
+<p>La guida d’utilizzo in PDF spiega la procedura passo per passo, con le schermate del Lab. Si apre anche dal pulsante <b>Guida</b> accanto al selettore lingua.</p>
+<p><a href="guide/projector-lab-guide-it.pdf" target="_blank" rel="noopener" hreflang="it">Italiano</a> · <a href="guide/projector-lab-guide-en.pdf" target="_blank" rel="noopener" hreflang="en">English</a> · <a href="guide/projector-lab-guide-es.pdf" target="_blank" rel="noopener" hreflang="es">Español</a> · <a href="guide/projector-lab-guide-fr.pdf" target="_blank" rel="noopener" hreflang="fr">Français</a> · <a href="guide/projector-lab-guide-de.pdf" target="_blank" rel="noopener" hreflang="de">Deutsch</a></p>
+<h2>1 · Metti online i file (GitHub Pages, gratuito)</h2>
+<p>Gli add-in di Office si caricano sempre da un indirizzo web sicuro (https). GitHub Pages lo fornisce gratis e per sempre.</p>
 <ol>
 <li>Accedi a <b>github.com</b> con l'account <b>niki977</b> (lo stesso del QR Lab).</li>
 <li>In alto a destra: <b>+ → New repository</b>. Nome: <code>ultraspeaker-projector-lab</code>, visibilità <b>Public</b>, poi <b>Create repository</b>.</li>
-<li>Apri lo zip: trovi la cartella <code>ultraspeaker-projector-lab</code>. Nella pagina del repository clicca <b>uploading an existing file</b>, poi seleziona <b>tutto il contenuto</b> di quella cartella (non la cartella stessa) e trascinalo nella pagina. Devono esserci questi file: <code>index.html</code>, <code>show.html</code>, <code>app.js</code>, <code>patterns.js</code>, <code>i18n.js</code>, <code>venn-data.js</code>, <code>wm-data.js</code>, <code>legal.js</code>, <code>projector-lab-manifest.xml</code>, <code>README.md</code>, <code>GUIDA-INSTALLAZIONE.html</code>, <code>support.html</code>, <code>privacy.html</code>, <code>terms.html</code>, <code>legal.css</code>, <code>site.webmanifest</code>, e le cartelle <code>assets</code>, <code>fonts</code>, <code>vendor</code> e <code>store</code>. Poi <b>Commit changes</b>.</li>
+<li>Apri lo zip: trovi la cartella <code>ultraspeaker-projector-lab</code>. Nella pagina del repository clicca <b>uploading an existing file</b>, poi seleziona <b>tutto il contenuto</b> di quella cartella (non la cartella stessa) e trascinalo nella pagina. Devono esserci questi file: <code>index.html</code>, <code>show.html</code>, <code>app.js</code>, <code>patterns.js</code>, <code>i18n.js</code>, <code>venn-data.js</code>, <code>wm-data.js</code>, <code>legal.js</code>, <code>projector-lab-manifest.xml</code>, <code>README.md</code>, <code>GUIDA-INSTALLAZIONE.html</code>, <code>support.html</code>, <code>privacy.html</code>, <code>terms.html</code>, <code>site.webmanifest</code>, e le cartelle <code>assets</code>, <code>css</code>, <code>fonts</code>, <code>guide</code>, <code>shared</code>, <code>store</code> e <code>vendor</code>. Poi <b>Commit changes</b>.</li>
 <li>Vai su <b>Settings → Pages</b>. In “Branch” scegli <b>main</b> e <b>/ (root)</b>, poi <b>Save</b>.</li>
 <li>Dopo 1–2 minuti apri <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>: se vedi il pannello nero di Projector Lab con la guida in 10 passi, è online.</li>
 </ol>
-</section>
 
-<section>
-<h2><span class="n">2</span>Il manifest è già pronto</h2>
-<p class="muted"><code>projector-lab-manifest.xml</code> è già compilato per l'account GitHub <b>niki977</b> e punta a <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Non devi modificarlo: basta che il repository si chiami esattamente <code>ultraspeaker-projector-lab</code>.</p>
-<div class="note">Il nome del file non conta per PowerPoint: conta il codice identificativo scritto dentro, che è diverso da quello di QR Lab e Image Lab. Per questo gli add-in convivono senza problemi. Usa però nomi di file diversi, così non sovrascrivi gli altri manifest.</div>
-</section>
+<h2>2 · Il manifest è già pronto</h2>
+<p><code>projector-lab-manifest.xml</code> è già compilato per l'account GitHub <b>niki977</b> e punta a <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Non devi modificarlo: basta che il repository si chiami esattamente <code>ultraspeaker-projector-lab</code>.</p>
+<div class="us-note">Il nome del file non conta per PowerPoint: conta il codice identificativo scritto dentro, che è diverso da quello di QR Lab e Image Lab. Per questo gli add-in convivono senza problemi. Usa però nomi di file diversi, così non sovrascrivi gli altri manifest.</div>
 
-<section>
-<h2><span class="n">3</span>Installa in PowerPoint per Mac</h2>
-<p class="muted">Se usi Windows, salta alla sezione successiva.</p>
+<h2>3 · Installa in PowerPoint per Mac</h2>
+<p>Se usi Windows, salta alla sezione successiva.</p>
 <ol>
 <li>Chiudi PowerPoint.</li>
 <li>Nel Finder premi <b>⌘ + Maiusc + G</b> e incolla:<br><code>~/Library/Containers/com.microsoft.Powerpoint/Data/Documents/</code></li>
@@ -64,12 +67,10 @@
 <li>Apri PowerPoint e una presentazione. Vai su <b>Home → Componenti aggiuntivi</b> (a destra nella barra; nelle versioni meno recenti è in <b>Inserisci → Componenti aggiuntivi → I miei componenti aggiuntivi</b>) e scegli <b>The Ultraspeaker Projector Lab</b>.</li>
 <li>Da quel momento trovi il pulsante <b>Projector Lab</b> nella scheda <b>Home</b>, nel gruppo <b>The Ultraspeaker</b>.</li>
 </ol>
-<div class="note">Se il comando non compare: chiudi PowerPoint del tutto (⌘Q) e riaprilo.</div>
-</section>
+<div class="us-note">Se il comando non compare: chiudi PowerPoint del tutto (⌘Q) e riaprilo.</div>
 
-<section>
-<h2><span class="n">3</span>Installa in PowerPoint per Windows</h2>
-<p class="muted">Su Windows PowerPoint legge il manifest da una cartella condivisa. I file online su GitHub sono gli stessi del Mac.</p>
+<h2>3 · Installa in PowerPoint per Windows</h2>
+<p>Su Windows PowerPoint legge il manifest da una cartella condivisa. I file online su GitHub sono gli stessi del Mac.</p>
 <p><b>Se hai già installato QR Lab o Image Lab</b></p>
 <ol>
 <li>Copia <code>projector-lab-manifest.xml</code> nella stessa cartella condivisa degli altri add-in (per esempio <code>C:\QRLab</code>), accanto ai loro manifest.</li>
@@ -96,19 +97,15 @@
 <li>Apri la scheda <b>CARTELLA CONDIVISA</b>, seleziona <b>The Ultraspeaker Projector Lab</b> e clicca <b>Aggiungi</b>.</li>
 <li>Da quel momento trovi il pulsante <b>Projector Lab</b> nella scheda <b>Home</b>, nel gruppo <b>The Ultraspeaker</b>.</li>
 </ol>
-<div class="note">Sul PC aziendale i criteri dell'IT possono bloccare le cartelle condivise o i componenti aggiuntivi personali. In quel caso chiedi all'IT di distribuirlo dal Microsoft 365 admin center: basta il file <code>projector-lab-manifest.xml</code> (vedi sotto).</div>
-</section>
+<div class="us-note">Sul PC aziendale i criteri dell'IT possono bloccare le cartelle condivise o i componenti aggiuntivi personali. In quel caso chiedi all'IT di distribuirlo dal Microsoft 365 admin center: basta il file <code>projector-lab-manifest.xml</code> (vedi sotto).</div>
 
-<section>
-<h2><span class="n">+</span>Altri modi</h2>
+<h2>Altri modi</h2>
 <ol>
 <li><b>PowerPoint sul web</b> (office.com): <b>Home → Componenti aggiuntivi → Altri componenti aggiuntivi → I miei componenti aggiuntivi → Carica il mio componente aggiuntivo</b> e seleziona <code>projector-lab-manifest.xml</code>.</li>
 <li><b>Per tutto il team aziendale</b>: l'IT può caricare <code>projector-lab-manifest.xml</code> dal Microsoft 365 admin center (<b>Impostazioni → App integrate → Carica app personalizzate</b>) e distribuirlo a chi vuole, senza passaggi manuali per le singole persone.</li>
 </ol>
-</section>
 
-<section>
-<h2><span class="n">?</span>Buono a sapersi</h2>
+<h2>Buono a sapersi</h2>
 <ol>
 <li><b>Come si usa</b>: apri <b>Home → Projector Lab</b> e premi <b>Inserisci le slide di test</b>. Le 15 slide vengono create nel formato della tua presentazione (o in quello dello schermo che scegli a mano: se è diverso si aprono in una nuova presentazione), in fondo o all’inizio, con le istruzioni di ogni passo nelle note del relatore.</li>
 <li><b>Durante la prova</b>: collega il proiettore in modalità <b>Estendi</b> e avvia la presentazione dalla prima slide di test (<b>Maiusc+F5</b> su Windows, <b>⌘+Maiusc+Invio</b> su Mac). Il proiettore mostra il pattern, tu leggi le istruzioni nella Visualizzazione Relatore. Nel pannello segni l’esito di ogni passo.</li>
@@ -117,50 +114,47 @@
 <li><b>Senza toccare la presentazione</b>: <b>Apri i pattern in una finestra</b> mostra gli stessi pattern in una finestra separata. Trascinala sullo schermo del proiettore e fai doppio clic: i pattern si adattano al formato reale dello schermo e cambiano da soli quando passi al passo successivo nel pannello.</li>
 <li><b>Prima del talk</b>: <b>Rimuovi le slide di test</b> (in alto o al passo 10) le cancella tutte in un clic. Il report con gli esiti e le tue note si copia negli appunti.</li>
 <li><b>Foto clinica</b>: al passo 8 puoi inserire una tua foto nella slide dedicata, per vedere come la rende quel proiettore.</li>
-<li><b>Versione browser</b> (senza installare nulla): <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Guida completa, pattern a schermo intero e download dello Screen Test in <b>.pptx</b> (si apre anche in Keynote). Il link è pubblico: chi lo riceve può usarlo.</li>
+<li><b>Versione web</b> (senza installare nulla): <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Guida completa, pattern a schermo intero e download dello Screen Test in <b>.pptx</b> (si apre anche in Keynote). Il link è pubblico: chi lo riceve può usarlo.</li>
 <li><b>Privacy</b>: nulla esce dal computer. Pattern e slide vengono creati nel pannello, senza server esterni.</li>
 <li>Per aggiornare l’add-in basta ricaricare i file nuovi su GitHub: PowerPoint userà la nuova versione alla prossima apertura. Solo se cambia <code>projector-lab-manifest.xml</code> va ricopiato anche nella cartella <code>wef</code> (Mac) o nella cartella condivisa (Windows).</li>
 <li><b>Lingue:</b> l’add-in è in italiano, inglese, spagnolo, francese e tedesco. Parte nella lingua di PowerPoint e si cambia dal menu in alto a destra del pannello; anche le etichette e le note delle slide di test escono nella lingua scelta.</li>
 </ol>
-</section>
-<p class="muted">Il carattere è Champagne &amp; Limousines di Lauren Thompson (Nymphont), indicato dal brand book di The Ultraspeaker. L’autrice lo concede gratis per uso personale e chiede una donazione per l’uso commerciale e per l’inserimento in siti web.</p>
+<p>Il carattere è Champagne &amp; Limousines di Lauren Thompson (Nymphont), indicato dal brand book di The Ultraspeaker. L’autrice lo concede gratis per uso personale e chiede una donazione per l’uso commerciale e per l’inserimento in siti web.</p>
 </div>
-<div data-lang="en" lang="en" hidden>
+<div data-lang="en" lang="en">
 <h1>Installing The Ultraspeaker Projector Lab in PowerPoint</h1>
-<p class="lead">Three steps, about 10 minutes, done once per computer (Mac or Windows). After that the <b>Projector Lab</b> button stays on PowerPoint’s <b>Home</b> tab, in the <b>The Ultraspeaker</b> group.</p>
+<p class="us-updated">Last updated: 2 November 2026</p>
+<p><b>Owner:</b> Nicholas D. Charles (The Ultraspeaker) · <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a></p>
+<p>Three steps, about 10 minutes, done once per computer (Mac or Windows). After that the <b>Projector Lab</b> button stays on PowerPoint’s <b>Home</b> tab, in the <b>The Ultraspeaker</b> group.</p>
 
-<section>
-<h2><span class="n">!</span>Before you start</h2>
-<p class="muted">Projector Lab works with <b>Microsoft 365</b> PowerPoint. Automatic detection of the slide format (4:3, 16:9, 3:1) needs a recent version; with older versions you choose the format by hand:</p>
+<h2>Before you start</h2>
+<p>Projector Lab works with <b>Microsoft 365</b> PowerPoint. Automatic detection of the slide format (4:3, 16:9, 3:1) needs a recent version; with older versions you choose the format by hand:</p>
 <ol>
 <li><b>Mac</b>: update from <b>Help → Check for Updates</b>.</li>
 <li><b>Windows</b>: update from <b>File → Account → Update Options</b>.</li>
 <li><b>PowerPoint on the web</b>: always up to date.</li>
 </ol>
-<div class="note">With very old versions (without PowerPoint API 1.2) the pane shows <b>Update PowerPoint</b>, but the guide and the pattern window still work.</div>
-</section>
+<div class="us-note">With very old versions (without PowerPoint API 1.2) the Projector Lab button does not appear: use the web version, which has the same guide and patterns.</div>
 
-<section>
-<h2><span class="n">1</span>Put the files online (GitHub Pages, free)</h2>
-<p class="muted">Office add-ins always load from a secure web address (https). GitHub Pages provides one for free.</p>
+<h2>User guide</h2>
+<p>The PDF user guide explains the procedure step by step, with screenshots of the Lab. It also opens from the <b>Guide</b> button next to the language menu.</p>
+<p><a href="guide/projector-lab-guide-it.pdf" target="_blank" rel="noopener" hreflang="it">Italiano</a> · <a href="guide/projector-lab-guide-en.pdf" target="_blank" rel="noopener" hreflang="en">English</a> · <a href="guide/projector-lab-guide-es.pdf" target="_blank" rel="noopener" hreflang="es">Español</a> · <a href="guide/projector-lab-guide-fr.pdf" target="_blank" rel="noopener" hreflang="fr">Français</a> · <a href="guide/projector-lab-guide-de.pdf" target="_blank" rel="noopener" hreflang="de">Deutsch</a></p>
+<h2>1 · Put the files online (GitHub Pages, free)</h2>
+<p>Office add-ins always load from a secure web address (https). GitHub Pages provides one for free.</p>
 <ol>
 <li>Sign in to <b>github.com</b> with the <b>niki977</b> account (the same as QR Lab).</li>
 <li>Top right: <b>+ → New repository</b>. Name: <code>ultraspeaker-projector-lab</code>, visibility <b>Public</b>, then <b>Create repository</b>.</li>
-<li>Open the zip: it contains the <code>ultraspeaker-projector-lab</code> folder. On the repository page click <b>uploading an existing file</b>, then select <b>everything inside</b> that folder (not the folder itself) and drag it onto the page. These files must be there: <code>index.html</code>, <code>show.html</code>, <code>app.js</code>, <code>patterns.js</code>, <code>i18n.js</code>, <code>venn-data.js</code>, <code>wm-data.js</code>, <code>legal.js</code>, <code>projector-lab-manifest.xml</code>, <code>README.md</code>, <code>GUIDA-INSTALLAZIONE.html</code>, <code>support.html</code>, <code>privacy.html</code>, <code>terms.html</code>, <code>legal.css</code>, <code>site.webmanifest</code>, and the <code>assets</code>, <code>fonts</code>, <code>vendor</code> and <code>store</code> folders. Then <b>Commit changes</b>.</li>
+<li>Open the zip: it contains the <code>ultraspeaker-projector-lab</code> folder. On the repository page click <b>uploading an existing file</b>, then select <b>everything inside</b> that folder (not the folder itself) and drag it onto the page. These files must be there: <code>index.html</code>, <code>show.html</code>, <code>app.js</code>, <code>patterns.js</code>, <code>i18n.js</code>, <code>venn-data.js</code>, <code>wm-data.js</code>, <code>legal.js</code>, <code>projector-lab-manifest.xml</code>, <code>README.md</code>, <code>GUIDA-INSTALLAZIONE.html</code>, <code>support.html</code>, <code>privacy.html</code>, <code>terms.html</code>, <code>site.webmanifest</code>, and the <code>assets</code>, <code>css</code>, <code>fonts</code>, <code>guide</code>, <code>shared</code>, <code>store</code> and <code>vendor</code> folders. Then <b>Commit changes</b>.</li>
 <li>Go to <b>Settings → Pages</b>. Under “Branch” choose <b>main</b> and <b>/ (root)</b>, then <b>Save</b>.</li>
 <li>After 1–2 minutes open <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>: if you see the black Projector Lab pane with the 10-step guide, it is online.</li>
 </ol>
-</section>
 
-<section>
-<h2><span class="n">2</span>The manifest is ready</h2>
-<p class="muted"><code>projector-lab-manifest.xml</code> is already set up for the <b>niki977</b> GitHub account and points to <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. You don’t need to edit it, as long as the repository is named exactly <code>ultraspeaker-projector-lab</code>.</p>
-<div class="note">The file name doesn’t matter to PowerPoint: the identifier written inside does, and it differs from those of QR Lab and Image Lab. That is why the add-ins live side by side. Still, keep the file names different so you don’t overwrite the other manifests.</div>
-</section>
+<h2>2 · The manifest is ready</h2>
+<p><code>projector-lab-manifest.xml</code> is already set up for the <b>niki977</b> GitHub account and points to <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. You don’t need to edit it, as long as the repository is named exactly <code>ultraspeaker-projector-lab</code>.</p>
+<div class="us-note">The file name doesn’t matter to PowerPoint: the identifier written inside does, and it differs from those of QR Lab and Image Lab. That is why the add-ins live side by side. Still, keep the file names different so you don’t overwrite the other manifests.</div>
 
-<section>
-<h2><span class="n">3</span>Install in PowerPoint for Mac</h2>
-<p class="muted">If you use Windows, skip to the next section.</p>
+<h2>3 · Install in PowerPoint for Mac</h2>
+<p>If you use Windows, skip to the next section.</p>
 <ol>
 <li>Quit PowerPoint.</li>
 <li>In Finder press <b>⌘ + Shift + G</b> and paste:<br><code>~/Library/Containers/com.microsoft.Powerpoint/Data/Documents/</code></li>
@@ -168,12 +162,10 @@
 <li>Open PowerPoint and a presentation. Go to <b>Home → Add-ins</b> (on the right of the ribbon; in older versions <b>Insert → Add-ins → My Add-ins</b>) and choose <b>The Ultraspeaker Projector Lab</b>.</li>
 <li>From then on the <b>Projector Lab</b> button is on the <b>Home</b> tab, in the <b>The Ultraspeaker</b> group.</li>
 </ol>
-<div class="note">If the command doesn’t appear, quit PowerPoint completely (⌘Q) and open it again.</div>
-</section>
+<div class="us-note">If the command doesn’t appear, quit PowerPoint completely (⌘Q) and open it again.</div>
 
-<section>
-<h2><span class="n">3</span>Install in PowerPoint for Windows</h2>
-<p class="muted">On Windows, PowerPoint reads the manifest from a shared folder. The files online on GitHub are the same as for the Mac.</p>
+<h2>3 · Install in PowerPoint for Windows</h2>
+<p>On Windows, PowerPoint reads the manifest from a shared folder. The files online on GitHub are the same as for the Mac.</p>
 <p><b>If you have already installed QR Lab or Image Lab</b></p>
 <ol>
 <li>Copy <code>projector-lab-manifest.xml</code> into the same shared folder as the other add-ins (for example <code>C:\QRLab</code>), next to their manifests.</li>
@@ -200,19 +192,15 @@
 <li>Open the <b>SHARED FOLDER</b> tab, select <b>The Ultraspeaker Projector Lab</b> and click <b>Add</b>.</li>
 <li>From then on the <b>Projector Lab</b> button is on the <b>Home</b> tab, in the <b>The Ultraspeaker</b> group.</li>
 </ol>
-<div class="note">On a company PC, IT policies may block shared folders or personal add-ins. In that case ask IT to deploy it from the Microsoft 365 admin center: the <code>projector-lab-manifest.xml</code> file is all they need (see below).</div>
-</section>
+<div class="us-note">On a company PC, IT policies may block shared folders or personal add-ins. In that case ask IT to deploy it from the Microsoft 365 admin center: the <code>projector-lab-manifest.xml</code> file is all they need (see below).</div>
 
-<section>
-<h2><span class="n">+</span>Other ways</h2>
+<h2>Other ways</h2>
 <ol>
 <li><b>PowerPoint on the web</b> (office.com): <b>Home → Add-ins → More Add-ins → My Add-ins → Upload My Add-in</b> and select <code>projector-lab-manifest.xml</code>.</li>
 <li><b>For a whole company team</b>: IT can upload <code>projector-lab-manifest.xml</code> in the Microsoft 365 admin center (<b>Settings → Integrated apps → Upload custom apps</b>) and deploy it to whoever needs it, with no manual steps for each person.</li>
 </ol>
-</section>
 
-<section>
-<h2><span class="n">?</span>Good to know</h2>
+<h2>Good to know</h2>
 <ol>
 <li><b>How to use it</b>: open <b>Home → Projector Lab</b> and click <b>Insert the test slides</b>. The 15 slides are built in your presentation’s format (or in the screen format you pick by hand: if it differs they open in a new presentation), at the end or at the start, with each step’s instructions in the speaker notes.</li>
 <li><b>During the check</b>: connect the projector in <b>Extend</b> mode and start the slide show from the first test slide (<b>Shift+F5</b> on Windows, <b>⌘+Shift+Return</b> on Mac). The projector shows the pattern, you read the instructions in Presenter View. In the pane you mark the result of each step.</li>
@@ -221,50 +209,47 @@
 <li><b>Without touching the presentation</b>: <b>Open the patterns in a window</b> shows the same patterns in a separate window. Drag it onto the projector screen and double-click: the patterns fit the real screen format and change by themselves when you move to the next step in the pane.</li>
 <li><b>Before the talk</b>: <b>Remove the test slides</b> (at the top or in step 10) deletes them all in one click. The report with the results and your notes copies to the clipboard.</li>
 <li><b>Clinical photo</b>: in step 8 you can place one of your photos on its dedicated slide, to see how that projector renders it.</li>
-<li><b>Browser version</b> (nothing to install): <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Full guide, full-screen patterns and download of the Screen Test as <b>.pptx</b> (it also opens in Keynote). The link is public: anyone who receives it can use it.</li>
+<li><b>Web version</b> (nothing to install): <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Full guide, full-screen patterns and download of the Screen Test as <b>.pptx</b> (it also opens in Keynote). The link is public: anyone who receives it can use it.</li>
 <li><b>Privacy</b>: nothing leaves the computer. Patterns and slides are built in the pane, with no external servers.</li>
 <li>To update the add-in just upload the new files to GitHub: PowerPoint uses the new version the next time it opens. Only if <code>projector-lab-manifest.xml</code> changes does it need copying again into the <code>wef</code> folder (Mac) or the shared folder (Windows).</li>
 <li><b>Languages:</b> the add-in is in Italian, English, Spanish, French and German. It starts in PowerPoint’s language and you change it from the menu at the top right of the pane; the labels and notes of the test slides follow the chosen language too.</li>
 </ol>
-</section>
-<p class="muted">The typeface is Champagne &amp; Limousines by Lauren Thompson (Nymphont), as specified in The Ultraspeaker brand book. The author offers it free for personal use and asks for a donation for commercial use and web embedding.</p>
+<p>The typeface is Champagne &amp; Limousines by Lauren Thompson (Nymphont), as specified in The Ultraspeaker brand book. The author offers it free for personal use and asks for a donation for commercial use and web embedding.</p>
 </div>
-<div data-lang="es" lang="es" hidden>
+<div data-lang="es" lang="es">
 <h1>Instalar The Ultraspeaker Projector Lab en PowerPoint</h1>
-<p class="lead">Tres pasos, unos 10 minutos, una sola vez por ordenador (Mac o Windows). Después el botón <b>Projector Lab</b> queda en la pestaña <b>Inicio</b> de PowerPoint, en el grupo <b>The Ultraspeaker</b>.</p>
+<p class="us-updated">Última actualización: 2 de noviembre de 2026</p>
+<p><b>Titular:</b> Nicholas D. Charles (The Ultraspeaker) · <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a></p>
+<p>Tres pasos, unos 10 minutos, una sola vez por ordenador (Mac o Windows). Después el botón <b>Projector Lab</b> queda en la pestaña <b>Inicio</b> de PowerPoint, en el grupo <b>The Ultraspeaker</b>.</p>
 
-<section>
-<h2><span class="n">!</span>Antes de empezar</h2>
-<p class="muted">Projector Lab funciona con PowerPoint de <b>Microsoft 365</b>. Para detectar solo el formato de las diapositivas (4:3, 16:9, 3:1) hace falta una versión reciente; con versiones más antiguas eliges el formato a mano:</p>
+<h2>Antes de empezar</h2>
+<p>Projector Lab funciona con PowerPoint de <b>Microsoft 365</b>. Para detectar solo el formato de las diapositivas (4:3, 16:9, 3:1) hace falta una versión reciente; con versiones más antiguas eliges el formato a mano:</p>
 <ol>
 <li><b>Mac</b>: actualiza desde <b>Ayuda → Buscar actualizaciones</b>.</li>
 <li><b>Windows</b>: actualiza desde <b>Archivo → Cuenta → Opciones de actualización</b>.</li>
 <li><b>PowerPoint en la web</b>: siempre actualizado.</li>
 </ol>
-<div class="note">Con versiones muy antiguas (sin las API de PowerPoint 1.2) el panel muestra <b>Actualiza PowerPoint</b>, pero la guía y la ventana de patrones siguen funcionando.</div>
-</section>
+<div class="us-note">Con versiones muy antiguas (sin las API de PowerPoint 1.2) el botón Projector Lab no aparece: usa la versión web, que tiene la misma guía y los mismos patrones.</div>
 
-<section>
-<h2><span class="n">1</span>Publica los archivos (GitHub Pages, gratis)</h2>
-<p class="muted">Los complementos de Office siempre se cargan desde una dirección web segura (https). GitHub Pages la ofrece gratis.</p>
+<h2>Guía de uso</h2>
+<p>La guía de uso en PDF explica el procedimiento paso a paso, con capturas del Lab. También se abre con el botón <b>Guía</b> junto al selector de idioma.</p>
+<p><a href="guide/projector-lab-guide-it.pdf" target="_blank" rel="noopener" hreflang="it">Italiano</a> · <a href="guide/projector-lab-guide-en.pdf" target="_blank" rel="noopener" hreflang="en">English</a> · <a href="guide/projector-lab-guide-es.pdf" target="_blank" rel="noopener" hreflang="es">Español</a> · <a href="guide/projector-lab-guide-fr.pdf" target="_blank" rel="noopener" hreflang="fr">Français</a> · <a href="guide/projector-lab-guide-de.pdf" target="_blank" rel="noopener" hreflang="de">Deutsch</a></p>
+<h2>1 · Publica los archivos (GitHub Pages, gratis)</h2>
+<p>Los complementos de Office siempre se cargan desde una dirección web segura (https). GitHub Pages la ofrece gratis.</p>
 <ol>
 <li>Entra en <b>github.com</b> con la cuenta <b>niki977</b> (la misma de QR Lab).</li>
 <li>Arriba a la derecha: <b>+ → New repository</b>. Nombre: <code>ultraspeaker-projector-lab</code>, visibilidad <b>Public</b>, luego <b>Create repository</b>.</li>
-<li>Abre el zip: contiene la carpeta <code>ultraspeaker-projector-lab</code>. En la página del repositorio haz clic en <b>uploading an existing file</b>, selecciona <b>todo el contenido</b> de esa carpeta (no la carpeta en sí) y arrástralo a la página. Deben estar estos archivos: <code>index.html</code>, <code>show.html</code>, <code>app.js</code>, <code>patterns.js</code>, <code>i18n.js</code>, <code>venn-data.js</code>, <code>wm-data.js</code>, <code>legal.js</code>, <code>projector-lab-manifest.xml</code>, <code>README.md</code>, <code>GUIDA-INSTALLAZIONE.html</code>, <code>support.html</code>, <code>privacy.html</code>, <code>terms.html</code>, <code>legal.css</code>, <code>site.webmanifest</code>, y las carpetas <code>assets</code>, <code>fonts</code>, <code>vendor</code> y <code>store</code>. Luego <b>Commit changes</b>.</li>
+<li>Abre el zip: contiene la carpeta <code>ultraspeaker-projector-lab</code>. En la página del repositorio haz clic en <b>uploading an existing file</b>, selecciona <b>todo el contenido</b> de esa carpeta (no la carpeta en sí) y arrástralo a la página. Deben estar estos archivos: <code>index.html</code>, <code>show.html</code>, <code>app.js</code>, <code>patterns.js</code>, <code>i18n.js</code>, <code>venn-data.js</code>, <code>wm-data.js</code>, <code>legal.js</code>, <code>projector-lab-manifest.xml</code>, <code>README.md</code>, <code>GUIDA-INSTALLAZIONE.html</code>, <code>support.html</code>, <code>privacy.html</code>, <code>terms.html</code>, <code>site.webmanifest</code>, y las carpetas <code>assets</code>, <code>css</code>, <code>fonts</code>, <code>guide</code>, <code>shared</code>, <code>store</code> y <code>vendor</code>. Luego <b>Commit changes</b>.</li>
 <li>Ve a <b>Settings → Pages</b>. En “Branch” elige <b>main</b> y <b>/ (root)</b>, luego <b>Save</b>.</li>
 <li>Tras 1–2 minutos abre <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>: si ves el panel negro de Projector Lab con la guía en 10 pasos, ya está en línea.</li>
 </ol>
-</section>
 
-<section>
-<h2><span class="n">2</span>El manifiesto ya está listo</h2>
-<p class="muted"><code>projector-lab-manifest.xml</code> ya está configurado para la cuenta de GitHub <b>niki977</b> y apunta a <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. No tienes que modificarlo: basta con que el repositorio se llame exactamente <code>ultraspeaker-projector-lab</code>.</p>
-<div class="note">A PowerPoint no le importa el nombre del archivo, sino el identificador escrito dentro, que es distinto del de QR Lab e Image Lab. Por eso los complementos conviven sin problemas. Aun así usa nombres de archivo distintos para no sobrescribir los otros manifiestos.</div>
-</section>
+<h2>2 · El manifiesto ya está listo</h2>
+<p><code>projector-lab-manifest.xml</code> ya está configurado para la cuenta de GitHub <b>niki977</b> y apunta a <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. No tienes que modificarlo: basta con que el repositorio se llame exactamente <code>ultraspeaker-projector-lab</code>.</p>
+<div class="us-note">A PowerPoint no le importa el nombre del archivo, sino el identificador escrito dentro, que es distinto del de QR Lab e Image Lab. Por eso los complementos conviven sin problemas. Aun así usa nombres de archivo distintos para no sobrescribir los otros manifiestos.</div>
 
-<section>
-<h2><span class="n">3</span>Instalar en PowerPoint para Mac</h2>
-<p class="muted">Si usas Windows, pasa a la sección siguiente.</p>
+<h2>3 · Instalar en PowerPoint para Mac</h2>
+<p>Si usas Windows, pasa a la sección siguiente.</p>
 <ol>
 <li>Cierra PowerPoint.</li>
 <li>En el Finder pulsa <b>⌘ + Mayús + G</b> y pega:<br><code>~/Library/Containers/com.microsoft.Powerpoint/Data/Documents/</code></li>
@@ -272,12 +257,10 @@
 <li>Abre PowerPoint y una presentación. Ve a <b>Inicio → Complementos</b> (a la derecha de la cinta; en versiones anteriores <b>Insertar → Complementos → Mis complementos</b>) y elige <b>The Ultraspeaker Projector Lab</b>.</li>
 <li>A partir de ahí tienes el botón <b>Projector Lab</b> en la pestaña <b>Inicio</b>, en el grupo <b>The Ultraspeaker</b>.</li>
 </ol>
-<div class="note">Si el comando no aparece, cierra PowerPoint por completo (⌘Q) y vuelve a abrirlo.</div>
-</section>
+<div class="us-note">Si el comando no aparece, cierra PowerPoint por completo (⌘Q) y vuelve a abrirlo.</div>
 
-<section>
-<h2><span class="n">3</span>Instalar en PowerPoint para Windows</h2>
-<p class="muted">En Windows PowerPoint lee el manifiesto desde una carpeta compartida. Los archivos en GitHub son los mismos que en Mac.</p>
+<h2>3 · Instalar en PowerPoint para Windows</h2>
+<p>En Windows PowerPoint lee el manifiesto desde una carpeta compartida. Los archivos en GitHub son los mismos que en Mac.</p>
 <p><b>Si ya instalaste QR Lab o Image Lab</b></p>
 <ol>
 <li>Copia <code>projector-lab-manifest.xml</code> en la misma carpeta compartida de los otros complementos (por ejemplo <code>C:\QRLab</code>), junto a sus manifiestos.</li>
@@ -304,19 +287,15 @@
 <li>Abre la pestaña <b>CARPETA COMPARTIDA</b>, selecciona <b>The Ultraspeaker Projector Lab</b> y haz clic en <b>Agregar</b>.</li>
 <li>A partir de ahí tienes el botón <b>Projector Lab</b> en la pestaña <b>Inicio</b>, en el grupo <b>The Ultraspeaker</b>.</li>
 </ol>
-<div class="note">En un PC de empresa las políticas de TI pueden bloquear las carpetas compartidas o los complementos personales. En ese caso pide a TI que lo distribuya desde el Centro de administración de Microsoft 365: solo necesitan el archivo <code>projector-lab-manifest.xml</code> (ver abajo).</div>
-</section>
+<div class="us-note">En un PC de empresa las políticas de TI pueden bloquear las carpetas compartidas o los complementos personales. En ese caso pide a TI que lo distribuya desde el Centro de administración de Microsoft 365: solo necesitan el archivo <code>projector-lab-manifest.xml</code> (ver abajo).</div>
 
-<section>
-<h2><span class="n">+</span>Otras formas</h2>
+<h2>Otras formas</h2>
 <ol>
 <li><b>PowerPoint en la web</b> (office.com): <b>Inicio → Complementos → Más complementos → Mis complementos → Cargar mi complemento</b> y selecciona <code>projector-lab-manifest.xml</code>.</li>
 <li><b>Para todo el equipo de la empresa</b>: TI puede cargar <code>projector-lab-manifest.xml</code> en el Centro de administración de Microsoft 365 (<b>Configuración → Aplicaciones integradas → Cargar aplicaciones personalizadas</b>) y distribuirlo a quien lo necesite, sin pasos manuales para cada persona.</li>
 </ol>
-</section>
 
-<section>
-<h2><span class="n">?</span>Conviene saber</h2>
+<h2>Conviene saber</h2>
 <ol>
 <li><b>Cómo se usa</b>: abre <b>Inicio → Projector Lab</b> y pulsa <b>Insertar diapositivas de prueba</b>. Las 15 diapositivas se crean en el formato de tu presentación (o en el de la pantalla que eliges a mano: si es distinto se abren en una presentación nueva), al final o al principio, con las instrucciones de cada paso en las notas del orador.</li>
 <li><b>Durante la prueba</b>: conecta el proyector en modo <b>Extender</b> e inicia la presentación desde la primera diapositiva de prueba (<b>Mayús+F5</b> en Windows, <b>⌘+Mayús+Intro</b> en Mac). El proyector muestra el patrón y tú lees las instrucciones en la Vista del moderador. En el panel marcas el resultado de cada paso.</li>
@@ -325,50 +304,47 @@
 <li><b>Sin tocar la presentación</b>: <b>Abrir los patrones en una ventana</b> muestra los mismos patrones en una ventana aparte. Arrástrala a la pantalla del proyector y haz doble clic: los patrones se adaptan al formato real de la pantalla y cambian solos cuando pasas al paso siguiente en el panel.</li>
 <li><b>Antes de la charla</b>: <b>Quitar diapositivas de prueba</b> (arriba o en el paso 10) las borra todas con un clic. El informe con los resultados y tus notas se copia al portapapeles.</li>
 <li><b>Foto clínica</b>: en el paso 8 puedes colocar una foto tuya en su diapositiva, para ver cómo la reproduce ese proyector.</li>
-<li><b>Versión de navegador</b> (sin instalar nada): <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Guía completa, patrones a pantalla completa y descarga del Screen Test en <b>.pptx</b> (también se abre en Keynote). El enlace es público: quien lo reciba puede usarlo.</li>
+<li><b>Versión web</b> (sin instalar nada): <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Guía completa, patrones a pantalla completa y descarga del Screen Test en <b>.pptx</b> (también se abre en Keynote). El enlace es público: quien lo reciba puede usarlo.</li>
 <li><b>Privacidad</b>: nada sale del ordenador. Patrones y diapositivas se crean en el panel, sin servidores externos.</li>
 <li>Para actualizar el complemento basta con subir los archivos nuevos a GitHub: PowerPoint usará la nueva versión la próxima vez que se abra. Solo si cambia <code>projector-lab-manifest.xml</code> hay que copiarlo de nuevo en la carpeta <code>wef</code> (Mac) o en la carpeta compartida (Windows).</li>
 <li><b>Idiomas:</b> el complemento está en italiano, inglés, español, francés y alemán. Empieza en el idioma de PowerPoint y se cambia desde el menú arriba a la derecha del panel; las etiquetas y las notas de las diapositivas de prueba también salen en el idioma elegido.</li>
 </ol>
-</section>
-<p class="muted">La fuente es Champagne &amp; Limousines de Lauren Thompson (Nymphont), indicada en el brand book de The Ultraspeaker. La autora la ofrece gratis para uso personal y pide una donación para el uso comercial y la inserción en sitios web.</p>
+<p>La fuente es Champagne &amp; Limousines de Lauren Thompson (Nymphont), indicada en el brand book de The Ultraspeaker. La autora la ofrece gratis para uso personal y pide una donación para el uso comercial y la inserción en sitios web.</p>
 </div>
-<div data-lang="fr" lang="fr" hidden>
+<div data-lang="fr" lang="fr">
 <h1>Installer The Ultraspeaker Projector Lab dans PowerPoint</h1>
-<p class="lead">Trois étapes, environ 10 minutes, à faire une seule fois par ordinateur (Mac ou Windows). Ensuite le bouton <b>Projector Lab</b> reste dans l’onglet <b>Accueil</b> de PowerPoint, dans le groupe <b>The Ultraspeaker</b>.</p>
+<p class="us-updated">Dernière mise à jour : 2 novembre 2026</p>
+<p><b>Titulaire:</b> Nicholas D. Charles (The Ultraspeaker) · <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a></p>
+<p>Trois étapes, environ 10 minutes, à faire une seule fois par ordinateur (Mac ou Windows). Ensuite le bouton <b>Projector Lab</b> reste dans l’onglet <b>Accueil</b> de PowerPoint, dans le groupe <b>The Ultraspeaker</b>.</p>
 
-<section>
-<h2><span class="n">!</span>Avant de commencer</h2>
-<p class="muted">Projector Lab fonctionne avec PowerPoint pour <b>Microsoft 365</b>. La détection automatique du format des diapositives (4:3, 16:9, 3:1) nécessite une version récente ; avec des versions plus anciennes, vous choisissez le format à la main :</p>
+<h2>Avant de commencer</h2>
+<p>Projector Lab fonctionne avec PowerPoint pour <b>Microsoft 365</b>. La détection automatique du format des diapositives (4:3, 16:9, 3:1) nécessite une version récente ; avec des versions plus anciennes, vous choisissez le format à la main :</p>
 <ol>
 <li><b>Mac</b> : mettez à jour via <b>Aide → Rechercher les mises à jour</b>.</li>
 <li><b>Windows</b> : mettez à jour via <b>Fichier → Compte → Options de mise à jour</b>.</li>
 <li><b>PowerPoint pour le web</b> : toujours à jour.</li>
 </ol>
-<div class="note">Avec des versions très anciennes (sans les API PowerPoint 1.2), le volet affiche <b>Mettez PowerPoint à jour</b>, mais le guide et la fenêtre des mires restent utilisables.</div>
-</section>
+<div class="us-note">Avec des versions très anciennes (sans les API PowerPoint 1.2), le bouton Projector Lab n’apparaît pas : utilisez la version web, qui a le même guide et les mêmes mires.</div>
 
-<section>
-<h2><span class="n">1</span>Mettez les fichiers en ligne (GitHub Pages, gratuit)</h2>
-<p class="muted">Les compléments Office se chargent toujours depuis une adresse web sécurisée (https). GitHub Pages la fournit gratuitement.</p>
+<h2>Guide d’utilisation</h2>
+<p>Le guide d’utilisation en PDF explique la procédure étape par étape, avec des captures du Lab. Il s’ouvre aussi avec le bouton <b>Guide</b> à côté du sélecteur de langue.</p>
+<p><a href="guide/projector-lab-guide-it.pdf" target="_blank" rel="noopener" hreflang="it">Italiano</a> · <a href="guide/projector-lab-guide-en.pdf" target="_blank" rel="noopener" hreflang="en">English</a> · <a href="guide/projector-lab-guide-es.pdf" target="_blank" rel="noopener" hreflang="es">Español</a> · <a href="guide/projector-lab-guide-fr.pdf" target="_blank" rel="noopener" hreflang="fr">Français</a> · <a href="guide/projector-lab-guide-de.pdf" target="_blank" rel="noopener" hreflang="de">Deutsch</a></p>
+<h2>1 · Mettez les fichiers en ligne (GitHub Pages, gratuit)</h2>
+<p>Les compléments Office se chargent toujours depuis une adresse web sécurisée (https). GitHub Pages la fournit gratuitement.</p>
 <ol>
 <li>Connectez-vous à <b>github.com</b> avec le compte <b>niki977</b> (le même que pour QR Lab).</li>
 <li>En haut à droite : <b>+ → New repository</b>. Nom : <code>ultraspeaker-projector-lab</code>, visibilité <b>Public</b>, puis <b>Create repository</b>.</li>
-<li>Ouvrez le zip : il contient le dossier <code>ultraspeaker-projector-lab</code>. Sur la page du dépôt, cliquez sur <b>uploading an existing file</b>, puis sélectionnez <b>tout le contenu</b> de ce dossier (pas le dossier lui-même) et faites-le glisser sur la page. Ces fichiers doivent être présents : <code>index.html</code>, <code>show.html</code>, <code>app.js</code>, <code>patterns.js</code>, <code>i18n.js</code>, <code>venn-data.js</code>, <code>wm-data.js</code>, <code>legal.js</code>, <code>projector-lab-manifest.xml</code>, <code>README.md</code>, <code>GUIDA-INSTALLAZIONE.html</code>, <code>support.html</code>, <code>privacy.html</code>, <code>terms.html</code>, <code>legal.css</code>, <code>site.webmanifest</code>, ainsi que les dossiers <code>assets</code>, <code>fonts</code>, <code>vendor</code> et <code>store</code>. Puis <b>Commit changes</b>.</li>
+<li>Ouvrez le zip : il contient le dossier <code>ultraspeaker-projector-lab</code>. Sur la page du dépôt, cliquez sur <b>uploading an existing file</b>, puis sélectionnez <b>tout le contenu</b> de ce dossier (pas le dossier lui-même) et faites-le glisser sur la page. Ces fichiers doivent être présents : <code>index.html</code>, <code>show.html</code>, <code>app.js</code>, <code>patterns.js</code>, <code>i18n.js</code>, <code>venn-data.js</code>, <code>wm-data.js</code>, <code>legal.js</code>, <code>projector-lab-manifest.xml</code>, <code>README.md</code>, <code>GUIDA-INSTALLAZIONE.html</code>, <code>support.html</code>, <code>privacy.html</code>, <code>terms.html</code>, <code>site.webmanifest</code>, ainsi que les dossiers <code>assets</code>, <code>css</code>, <code>fonts</code>, <code>guide</code>, <code>shared</code>, <code>store</code> et <code>vendor</code>. Puis <b>Commit changes</b>.</li>
 <li>Allez dans <b>Settings → Pages</b>. Sous « Branch », choisissez <b>main</b> et <b>/ (root)</b>, puis <b>Save</b>.</li>
 <li>Après 1–2 minutes, ouvrez <code>https://niki977.github.io/ultraspeaker-projector-lab/</code> : si vous voyez le volet noir de Projector Lab avec le guide en 10 étapes, c’est en ligne.</li>
 </ol>
-</section>
 
-<section>
-<h2><span class="n">2</span>Le manifeste est prêt</h2>
-<p class="muted"><code>projector-lab-manifest.xml</code> est déjà configuré pour le compte GitHub <b>niki977</b> et pointe vers <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Vous n’avez pas à le modifier, à condition que le dépôt s’appelle exactement <code>ultraspeaker-projector-lab</code>.</p>
-<div class="note">Pour PowerPoint, le nom du fichier ne compte pas : c’est l’identifiant écrit à l’intérieur qui compte, et il diffère de ceux de QR Lab et Image Lab. C’est pourquoi les compléments cohabitent sans problème. Gardez tout de même des noms de fichiers différents pour ne pas écraser les autres manifestes.</div>
-</section>
+<h2>2 · Le manifeste est prêt</h2>
+<p><code>projector-lab-manifest.xml</code> est déjà configuré pour le compte GitHub <b>niki977</b> et pointe vers <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Vous n’avez pas à le modifier, à condition que le dépôt s’appelle exactement <code>ultraspeaker-projector-lab</code>.</p>
+<div class="us-note">Pour PowerPoint, le nom du fichier ne compte pas : c’est l’identifiant écrit à l’intérieur qui compte, et il diffère de ceux de QR Lab et Image Lab. C’est pourquoi les compléments cohabitent sans problème. Gardez tout de même des noms de fichiers différents pour ne pas écraser les autres manifestes.</div>
 
-<section>
-<h2><span class="n">3</span>Installer dans PowerPoint pour Mac</h2>
-<p class="muted">Si vous utilisez Windows, passez à la section suivante.</p>
+<h2>3 · Installer dans PowerPoint pour Mac</h2>
+<p>Si vous utilisez Windows, passez à la section suivante.</p>
 <ol>
 <li>Quittez PowerPoint.</li>
 <li>Dans le Finder, appuyez sur <b>⌘ + Maj + G</b> et collez :<br><code>~/Library/Containers/com.microsoft.Powerpoint/Data/Documents/</code></li>
@@ -376,12 +352,10 @@
 <li>Ouvrez PowerPoint et une présentation. Allez dans <b>Accueil → Compléments</b> (à droite du ruban ; dans les versions plus anciennes <b>Insertion → Compléments → Mes compléments</b>) et choisissez <b>The Ultraspeaker Projector Lab</b>.</li>
 <li>Dès lors, le bouton <b>Projector Lab</b> se trouve dans l’onglet <b>Accueil</b>, dans le groupe <b>The Ultraspeaker</b>.</li>
 </ol>
-<div class="note">Si la commande n’apparaît pas, quittez complètement PowerPoint (⌘Q) et rouvrez-le.</div>
-</section>
+<div class="us-note">Si la commande n’apparaît pas, quittez complètement PowerPoint (⌘Q) et rouvrez-le.</div>
 
-<section>
-<h2><span class="n">3</span>Installer dans PowerPoint pour Windows</h2>
-<p class="muted">Sous Windows, PowerPoint lit le manifeste depuis un dossier partagé. Les fichiers en ligne sur GitHub sont les mêmes que pour le Mac.</p>
+<h2>3 · Installer dans PowerPoint pour Windows</h2>
+<p>Sous Windows, PowerPoint lit le manifeste depuis un dossier partagé. Les fichiers en ligne sur GitHub sont les mêmes que pour le Mac.</p>
 <p><b>Si vous avez déjà installé QR Lab ou Image Lab</b></p>
 <ol>
 <li>Copiez <code>projector-lab-manifest.xml</code> dans le même dossier partagé que les autres compléments (par exemple <code>C:\QRLab</code>), à côté de leurs manifestes.</li>
@@ -408,19 +382,15 @@
 <li>Ouvrez l’onglet <b>DOSSIER PARTAGÉ</b>, sélectionnez <b>The Ultraspeaker Projector Lab</b> et cliquez sur <b>Ajouter</b>.</li>
 <li>Dès lors, le bouton <b>Projector Lab</b> se trouve dans l’onglet <b>Accueil</b>, dans le groupe <b>The Ultraspeaker</b>.</li>
 </ol>
-<div class="note">Sur un PC d’entreprise, les stratégies informatiques peuvent bloquer les dossiers partagés ou les compléments personnels. Dans ce cas, demandez au service informatique de le déployer depuis le Centre d’administration Microsoft 365 : le fichier <code>projector-lab-manifest.xml</code> suffit (voir ci-dessous).</div>
-</section>
+<div class="us-note">Sur un PC d’entreprise, les stratégies informatiques peuvent bloquer les dossiers partagés ou les compléments personnels. Dans ce cas, demandez au service informatique de le déployer depuis le Centre d’administration Microsoft 365 : le fichier <code>projector-lab-manifest.xml</code> suffit (voir ci-dessous).</div>
 
-<section>
-<h2><span class="n">+</span>Autres méthodes</h2>
+<h2>Autres méthodes</h2>
 <ol>
 <li><b>PowerPoint pour le web</b> (office.com) : <b>Accueil → Compléments → Plus de compléments → Mes compléments → Charger mon complément</b> et sélectionnez <code>projector-lab-manifest.xml</code>.</li>
 <li><b>Pour toute une équipe</b> : le service informatique peut charger <code>projector-lab-manifest.xml</code> dans le Centre d’administration Microsoft 365 (<b>Paramètres → Applications intégrées → Charger des applications personnalisées</b>) et le déployer auprès des personnes concernées, sans manipulation individuelle.</li>
 </ol>
-</section>
 
-<section>
-<h2><span class="n">?</span>Bon à savoir</h2>
+<h2>Bon à savoir</h2>
 <ol>
 <li><b>Utilisation</b> : ouvrez <b>Accueil → Projector Lab</b> et cliquez sur <b>Insérer les diapositives de test</b>. Les 15 diapositives sont créées au format de votre présentation (ou au format d’écran choisi à la main : s’il est différent, elles s’ouvrent dans une nouvelle présentation), à la fin ou au début, avec les instructions de chaque étape dans les notes de l’orateur.</li>
 <li><b>Pendant le contrôle</b> : branchez le projecteur en mode <b>Étendre</b> et lancez le diaporama depuis la première diapositive de test (<b>Maj+F5</b> sous Windows, <b>⌘+Maj+Entrée</b> sur Mac). Le projecteur affiche la mire, vous lisez les instructions en mode Présentateur. Dans le volet, vous notez le résultat de chaque étape.</li>
@@ -429,50 +399,47 @@
 <li><b>Sans toucher à la présentation</b> : <b>Ouvrir les mires dans une fenêtre</b> affiche les mêmes mires dans une fenêtre séparée. Faites-la glisser sur l’écran du projecteur et double-cliquez : les mires s’adaptent au format réel de l’écran et changent toutes seules quand vous passez à l’étape suivante dans le volet.</li>
 <li><b>Avant l’intervention</b> : <b>Supprimer les diapositives de test</b> (en haut ou à l’étape 10) les efface toutes en un clic. Le rapport avec les résultats et vos notes se copie dans le presse-papiers.</li>
 <li><b>Photo clinique</b> : à l’étape 8, vous pouvez placer une de vos photos sur sa diapositive dédiée, pour voir comment ce projecteur la restitue.</li>
-<li><b>Version navigateur</b> (rien à installer) : <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Guide complet, mires en plein écran et téléchargement du Screen Test en <b>.pptx</b> (il s’ouvre aussi dans Keynote). Le lien est public : toute personne qui le reçoit peut l’utiliser.</li>
+<li><b>Version web</b> (rien à installer) : <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Guide complet, mires en plein écran et téléchargement du Screen Test en <b>.pptx</b> (il s’ouvre aussi dans Keynote). Le lien est public : toute personne qui le reçoit peut l’utiliser.</li>
 <li><b>Confidentialité</b> : rien ne quitte l’ordinateur. Mires et diapositives sont créées dans le volet, sans serveur externe.</li>
 <li>Pour mettre à jour le complément, il suffit d’envoyer les nouveaux fichiers sur GitHub : PowerPoint utilisera la nouvelle version à la prochaine ouverture. Seulement si <code>projector-lab-manifest.xml</code> change, il faut le recopier dans le dossier <code>wef</code> (Mac) ou dans le dossier partagé (Windows).</li>
 <li><b>Langues :</b> le complément est en italien, anglais, espagnol, français et allemand. Il démarre dans la langue de PowerPoint et se change depuis le menu en haut à droite du volet ; les étiquettes et les notes des diapositives de test suivent aussi la langue choisie.</li>
 </ol>
-</section>
-<p class="muted">La police est Champagne &amp; Limousines de Lauren Thompson (Nymphont), indiquée par le brand book de The Ultraspeaker. L’autrice l’offre gratuitement pour un usage personnel et demande un don pour l’usage commercial et l’intégration web.</p>
+<p>La police est Champagne &amp; Limousines de Lauren Thompson (Nymphont), indiquée par le brand book de The Ultraspeaker. L’autrice l’offre gratuitement pour un usage personnel et demande un don pour l’usage commercial et l’intégration web.</p>
 </div>
-<div data-lang="de" lang="de" hidden>
+<div data-lang="de" lang="de">
 <h1>The Ultraspeaker Projector Lab in PowerPoint installieren</h1>
-<p class="lead">Drei Schritte, etwa 10 Minuten, einmal pro Computer (Mac oder Windows). Danach bleibt die Schaltfläche <b>Projector Lab</b> auf der Registerkarte <b>Start</b> von PowerPoint, in der Gruppe <b>The Ultraspeaker</b>.</p>
+<p class="us-updated">Zuletzt aktualisiert: 2. November 2026</p>
+<p><b>Inhaber:</b> Nicholas D. Charles (The Ultraspeaker) · <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a></p>
+<p>Drei Schritte, etwa 10 Minuten, einmal pro Computer (Mac oder Windows). Danach bleibt die Schaltfläche <b>Projector Lab</b> auf der Registerkarte <b>Start</b> von PowerPoint, in der Gruppe <b>The Ultraspeaker</b>.</p>
 
-<section>
-<h2><span class="n">!</span>Bevor Sie beginnen</h2>
-<p class="muted">Projector Lab funktioniert mit PowerPoint für <b>Microsoft 365</b>. Für die automatische Erkennung des Folienformats (4:3, 16:9, 3:1) ist eine aktuelle Version nötig; bei älteren Versionen wählen Sie das Format von Hand:</p>
+<h2>Bevor Sie beginnen</h2>
+<p>Projector Lab funktioniert mit PowerPoint für <b>Microsoft 365</b>. Für die automatische Erkennung des Folienformats (4:3, 16:9, 3:1) ist eine aktuelle Version nötig; bei älteren Versionen wählen Sie das Format von Hand:</p>
 <ol>
 <li><b>Mac</b>: aktualisieren über <b>Hilfe → Nach Updates suchen</b>.</li>
 <li><b>Windows</b>: aktualisieren über <b>Datei → Konto → Updateoptionen</b>.</li>
 <li><b>PowerPoint im Web</b>: immer aktuell.</li>
 </ol>
-<div class="note">Bei sehr alten Versionen (ohne PowerPoint-API 1.2) zeigt der Aufgabenbereich <b>PowerPoint aktualisieren</b>; die Anleitung und das Testbild-Fenster funktionieren trotzdem.</div>
-</section>
+<div class="us-note">Bei sehr alten Versionen (ohne PowerPoint-API 1.2) erscheint die Schaltfläche Projector Lab nicht: Nutzen Sie die Webversion mit derselben Anleitung und denselben Testbildern.</div>
 
-<section>
-<h2><span class="n">1</span>Dateien online stellen (GitHub Pages, kostenlos)</h2>
-<p class="muted">Office-Add-Ins werden immer von einer sicheren Webadresse (https) geladen. GitHub Pages stellt sie kostenlos bereit.</p>
+<h2>Bedienungsanleitung</h2>
+<p>Die PDF-Bedienungsanleitung erklärt den Ablauf Schritt für Schritt, mit Bildschirmfotos des Lab. Sie öffnet sich auch über die Schaltfläche <b>Anleitung</b> neben der Sprachauswahl.</p>
+<p><a href="guide/projector-lab-guide-it.pdf" target="_blank" rel="noopener" hreflang="it">Italiano</a> · <a href="guide/projector-lab-guide-en.pdf" target="_blank" rel="noopener" hreflang="en">English</a> · <a href="guide/projector-lab-guide-es.pdf" target="_blank" rel="noopener" hreflang="es">Español</a> · <a href="guide/projector-lab-guide-fr.pdf" target="_blank" rel="noopener" hreflang="fr">Français</a> · <a href="guide/projector-lab-guide-de.pdf" target="_blank" rel="noopener" hreflang="de">Deutsch</a></p>
+<h2>1 · Dateien online stellen (GitHub Pages, kostenlos)</h2>
+<p>Office-Add-Ins werden immer von einer sicheren Webadresse (https) geladen. GitHub Pages stellt sie kostenlos bereit.</p>
 <ol>
 <li>Melden Sie sich bei <b>github.com</b> mit dem Konto <b>niki977</b> an (dasselbe wie für QR Lab).</li>
 <li>Oben rechts: <b>+ → New repository</b>. Name: <code>ultraspeaker-projector-lab</code>, Sichtbarkeit <b>Public</b>, dann <b>Create repository</b>.</li>
-<li>Öffnen Sie die ZIP-Datei: Sie enthält den Ordner <code>ultraspeaker-projector-lab</code>. Klicken Sie auf der Repository-Seite auf <b>uploading an existing file</b>, markieren Sie <b>den gesamten Inhalt</b> dieses Ordners (nicht den Ordner selbst) und ziehen Sie ihn auf die Seite. Diese Dateien müssen vorhanden sein: <code>index.html</code>, <code>show.html</code>, <code>app.js</code>, <code>patterns.js</code>, <code>i18n.js</code>, <code>venn-data.js</code>, <code>wm-data.js</code>, <code>legal.js</code>, <code>projector-lab-manifest.xml</code>, <code>README.md</code>, <code>GUIDA-INSTALLAZIONE.html</code>, <code>support.html</code>, <code>privacy.html</code>, <code>terms.html</code>, <code>legal.css</code>, <code>site.webmanifest</code> sowie die Ordner <code>assets</code>, <code>fonts</code>, <code>vendor</code> und <code>store</code>. Dann <b>Commit changes</b>.</li>
+<li>Öffnen Sie die ZIP-Datei: Sie enthält den Ordner <code>ultraspeaker-projector-lab</code>. Klicken Sie auf der Repository-Seite auf <b>uploading an existing file</b>, markieren Sie <b>den gesamten Inhalt</b> dieses Ordners (nicht den Ordner selbst) und ziehen Sie ihn auf die Seite. Diese Dateien müssen vorhanden sein: <code>index.html</code>, <code>show.html</code>, <code>app.js</code>, <code>patterns.js</code>, <code>i18n.js</code>, <code>venn-data.js</code>, <code>wm-data.js</code>, <code>legal.js</code>, <code>projector-lab-manifest.xml</code>, <code>README.md</code>, <code>GUIDA-INSTALLAZIONE.html</code>, <code>support.html</code>, <code>privacy.html</code>, <code>terms.html</code>, <code>site.webmanifest</code> sowie die Ordner <code>assets</code>, <code>css</code>, <code>fonts</code>, <code>guide</code>, <code>shared</code>, <code>store</code> und <code>vendor</code>. Dann <b>Commit changes</b>.</li>
 <li>Gehen Sie zu <b>Settings → Pages</b>. Wählen Sie unter „Branch“ <b>main</b> und <b>/ (root)</b>, dann <b>Save</b>.</li>
 <li>Öffnen Sie nach 1–2 Minuten <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>: Sehen Sie den schwarzen Aufgabenbereich von Projector Lab mit der 10-Schritte-Anleitung, ist er online.</li>
 </ol>
-</section>
 
-<section>
-<h2><span class="n">2</span>Das Manifest ist fertig</h2>
-<p class="muted"><code>projector-lab-manifest.xml</code> ist bereits für das GitHub-Konto <b>niki977</b> eingerichtet und verweist auf <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Sie müssen es nicht bearbeiten, solange das Repository genau <code>ultraspeaker-projector-lab</code> heißt.</p>
-<div class="note">Für PowerPoint zählt nicht der Dateiname, sondern die darin eingetragene Kennung, und die unterscheidet sich von QR Lab und Image Lab. Deshalb laufen die Add-Ins problemlos nebeneinander. Verwenden Sie trotzdem unterschiedliche Dateinamen, damit Sie die anderen Manifeste nicht überschreiben.</div>
-</section>
+<h2>2 · Das Manifest ist fertig</h2>
+<p><code>projector-lab-manifest.xml</code> ist bereits für das GitHub-Konto <b>niki977</b> eingerichtet und verweist auf <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Sie müssen es nicht bearbeiten, solange das Repository genau <code>ultraspeaker-projector-lab</code> heißt.</p>
+<div class="us-note">Für PowerPoint zählt nicht der Dateiname, sondern die darin eingetragene Kennung, und die unterscheidet sich von QR Lab und Image Lab. Deshalb laufen die Add-Ins problemlos nebeneinander. Verwenden Sie trotzdem unterschiedliche Dateinamen, damit Sie die anderen Manifeste nicht überschreiben.</div>
 
-<section>
-<h2><span class="n">3</span>In PowerPoint für Mac installieren</h2>
-<p class="muted">Wenn Sie Windows verwenden, springen Sie zum nächsten Abschnitt.</p>
+<h2>3 · In PowerPoint für Mac installieren</h2>
+<p>Wenn Sie Windows verwenden, springen Sie zum nächsten Abschnitt.</p>
 <ol>
 <li>Beenden Sie PowerPoint.</li>
 <li>Drücken Sie im Finder <b>⌘ + Umschalt + G</b> und fügen Sie ein:<br><code>~/Library/Containers/com.microsoft.Powerpoint/Data/Documents/</code></li>
@@ -480,12 +447,10 @@
 <li>Öffnen Sie PowerPoint und eine Präsentation. Gehen Sie zu <b>Start → Add-Ins</b> (rechts im Menüband; in älteren Versionen <b>Einfügen → Add-Ins → Meine Add-Ins</b>) und wählen Sie <b>The Ultraspeaker Projector Lab</b>.</li>
 <li>Ab dann finden Sie die Schaltfläche <b>Projector Lab</b> auf der Registerkarte <b>Start</b>, in der Gruppe <b>The Ultraspeaker</b>.</li>
 </ol>
-<div class="note">Erscheint der Befehl nicht, beenden Sie PowerPoint vollständig (⌘Q) und öffnen Sie es erneut.</div>
-</section>
+<div class="us-note">Erscheint der Befehl nicht, beenden Sie PowerPoint vollständig (⌘Q) und öffnen Sie es erneut.</div>
 
-<section>
-<h2><span class="n">3</span>In PowerPoint für Windows installieren</h2>
-<p class="muted">Unter Windows liest PowerPoint das Manifest aus einem freigegebenen Ordner. Die Dateien auf GitHub sind dieselben wie für den Mac.</p>
+<h2>3 · In PowerPoint für Windows installieren</h2>
+<p>Unter Windows liest PowerPoint das Manifest aus einem freigegebenen Ordner. Die Dateien auf GitHub sind dieselben wie für den Mac.</p>
 <p><b>Wenn Sie QR Lab oder Image Lab bereits installiert haben</b></p>
 <ol>
 <li>Kopieren Sie <code>projector-lab-manifest.xml</code> in denselben freigegebenen Ordner wie die anderen Add-Ins (z. B. <code>C:\QRLab</code>), neben deren Manifeste.</li>
@@ -512,19 +477,15 @@
 <li>Öffnen Sie die Registerkarte <b>FREIGEGEBENER ORDNER</b>, wählen Sie <b>The Ultraspeaker Projector Lab</b> und klicken Sie auf <b>Hinzufügen</b>.</li>
 <li>Ab dann finden Sie die Schaltfläche <b>Projector Lab</b> auf der Registerkarte <b>Start</b>, in der Gruppe <b>The Ultraspeaker</b>.</li>
 </ol>
-<div class="note">Auf Firmen-PCs können IT-Richtlinien freigegebene Ordner oder persönliche Add-Ins sperren. Bitten Sie dann die IT, es über das Microsoft 365 Admin Center bereitzustellen: Die Datei <code>projector-lab-manifest.xml</code> genügt (siehe unten).</div>
-</section>
+<div class="us-note">Auf Firmen-PCs können IT-Richtlinien freigegebene Ordner oder persönliche Add-Ins sperren. Bitten Sie dann die IT, es über das Microsoft 365 Admin Center bereitzustellen: Die Datei <code>projector-lab-manifest.xml</code> genügt (siehe unten).</div>
 
-<section>
-<h2><span class="n">+</span>Weitere Wege</h2>
+<h2>Weitere Wege</h2>
 <ol>
 <li><b>PowerPoint im Web</b> (office.com): <b>Start → Add-Ins → Weitere Add-Ins → Meine Add-Ins → Mein Add-In hochladen</b> und <code>projector-lab-manifest.xml</code> auswählen.</li>
 <li><b>Für ein ganzes Team</b>: Die IT kann <code>projector-lab-manifest.xml</code> im Microsoft 365 Admin Center hochladen (<b>Einstellungen → Integrierte Apps → Benutzerdefinierte Apps hochladen</b>) und an alle Beteiligten verteilen, ohne manuelle Schritte für jede Person.</li>
 </ol>
-</section>
 
-<section>
-<h2><span class="n">?</span>Gut zu wissen</h2>
+<h2>Gut zu wissen</h2>
 <ol>
 <li><b>So funktioniert es</b>: Öffnen Sie <b>Start → Projector Lab</b> und klicken Sie auf <b>Testfolien einfügen</b>. Die 15 Folien werden im Format Ihrer Präsentation erstellt (oder im Leinwandformat, das Sie von Hand wählen: weicht es ab, öffnen sie sich in einer neuen Präsentation), am Ende oder am Anfang, mit der Anleitung jedes Schritts in den Referentennotizen.</li>
 <li><b>Während der Prüfung</b>: Schließen Sie den Projektor im Modus <b>Erweitern</b> an und starten Sie die Bildschirmpräsentation ab der ersten Testfolie (<b>Umschalt+F5</b> unter Windows, <b>⌘+Umschalt+Eingabe</b> auf dem Mac). Der Projektor zeigt das Testbild, Sie lesen die Anleitung in der Referentenansicht. Im Aufgabenbereich halten Sie das Ergebnis jedes Schritts fest.</li>
@@ -533,16 +494,19 @@
 <li><b>Ohne die Präsentation zu verändern</b>: <b>Testbilder in einem Fenster öffnen</b> zeigt dieselben Testbilder in einem eigenen Fenster. Ziehen Sie es auf den Projektorbildschirm und doppelklicken Sie: Die Testbilder passen sich dem tatsächlichen Format an und wechseln von selbst, wenn Sie im Aufgabenbereich zum nächsten Schritt gehen.</li>
 <li><b>Vor dem Vortrag</b>: <b>Testfolien entfernen</b> (oben oder in Schritt 10) löscht alle mit einem Klick. Der Bericht mit den Ergebnissen und Ihren Notizen wird in die Zwischenablage kopiert.</li>
 <li><b>Klinisches Foto</b>: In Schritt 8 können Sie ein eigenes Foto auf die dafür vorgesehene Folie setzen, um zu sehen, wie dieser Projektor es wiedergibt.</li>
-<li><b>Browser-Version</b> (ohne Installation): <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Vollständige Anleitung, Testbilder im Vollbild und Download des Screen Test als <b>.pptx</b> (öffnet sich auch in Keynote). Der Link ist öffentlich: Wer ihn erhält, kann ihn nutzen.</li>
+<li><b>Webversion</b> (ohne Installation): <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Vollständige Anleitung, Testbilder im Vollbild und Download des Screen Test als <b>.pptx</b> (öffnet sich auch in Keynote). Der Link ist öffentlich: Wer ihn erhält, kann ihn nutzen.</li>
 <li><b>Datenschutz</b>: Nichts verlässt den Computer. Testbilder und Folien werden im Aufgabenbereich erstellt, ohne externe Server.</li>
 <li>Zum Aktualisieren genügt es, die neuen Dateien auf GitHub hochzuladen: PowerPoint verwendet beim nächsten Öffnen die neue Version. Nur wenn sich <code>projector-lab-manifest.xml</code> ändert, muss es erneut in den Ordner <code>wef</code> (Mac) oder den freigegebenen Ordner (Windows) kopiert werden.</li>
 <li><b>Sprachen:</b> Das Add-In ist auf Italienisch, Englisch, Spanisch, Französisch und Deutsch verfügbar. Es startet in der Sprache von PowerPoint und lässt sich über das Menü oben rechts im Aufgabenbereich umstellen; auch Beschriftungen und Notizen der Testfolien folgen der gewählten Sprache.</li>
 </ol>
-</section>
-<p class="muted">Die Schrift ist Champagne &amp; Limousines von Lauren Thompson (Nymphont), wie im Brand Book von The Ultraspeaker vorgesehen. Die Autorin stellt sie für den privaten Gebrauch kostenlos zur Verfügung und bittet bei kommerzieller Nutzung und Einbindung in Websites um eine Spende.</p>
+<p>Die Schrift ist Champagne &amp; Limousines von Lauren Thompson (Nymphont), wie im Brand Book von The Ultraspeaker vorgesehen. Die Autorin stellt sie für den privaten Gebrauch kostenlos zur Verfügung und bittet bei kommerzieller Nutzung und Einbindung in Websites um eine Spende.</p>
 </div>
-<p class="tag"><a class="brand-link" href="https://www.theultraspeaker.com" target="_blank" rel="noopener" title="www.theultraspeaker.com"><picture><source srcset="assets/arena-white.svg" media="(prefers-color-scheme: dark)"><img src="assets/arena-black.svg" alt="The Ultraspeaker"></picture></a><a href="https://www.theultraspeaker.com" target="_blank" rel="noopener">theultraspeaker.com</a> · <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a></p>
 </main>
-<script src="legal.js"></script>
+  <footer class="us-footer">
+    <a class="us-cta" id="usCta" href="mailto:info@theultraspeaker.com?subject=Richiedi%20un%20consiglio"><img src="assets/arena-white.svg" alt=""><span data-t="cta">Richiedi un consiglio</span></a>
+    <p class="us-links"><a href="support.html" data-nav="support">Supporto</a><a href="privacy.html" data-nav="privacy">Privacy</a><a href="terms.html" data-nav="terms">Condizioni d’uso</a><a href="GUIDA-INSTALLAZIONE.html" data-nav="install">Installazione</a></p>
+  </footer>
+</div>
+<script src="legal.js?v=20261102"></script>
 </body>
 </html>

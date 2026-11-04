@@ -13,7 +13,7 @@ Sale diverse, proiettori diversi: colori slavati, bordi tagliati, foto cliniche 
 - Riferimenti clinici per odontoiatria: bianchi dello smalto, tessuti molli, ombre del cavo orale, e la tua foto clinica
 - Finestra dei pattern a schermo intero, senza modificare la presentazione
 - Report finale con le impostazioni usate; rimozione delle slide di test in un clic
-- Logo The Ultraspeaker discreto su ogni pattern, come un watermark
+- Arena di The Ultraspeaker piccola e discreta sui pattern, come un watermark
 - Nessun dato inviato: tutto avviene sul tuo computer. Italiano, English, Español, Français, Deutsch.
 
 ## English
@@ -29,7 +29,7 @@ Different rooms, different projectors: washed-out colours, cropped edges, unreco
 - Clinical references for dentistry: enamel whites, soft tissue, oral cavity shadows, and your own clinical photo
 - Full-screen pattern window, without touching your presentation
 - Final report with the settings used; remove the test slides in one click
-- A discreet The Ultraspeaker logo on every pattern, like a watermark
+- A small, discreet The Ultraspeaker Arena on the patterns, like a watermark
 - No data sent anywhere: everything happens on your computer. Italiano, English, Español, Français, Deutsch.
 
 **Categorie / Categories**: Productivity, Utilities

@@ -6,10 +6,22 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  // Memoria del browser: chiavi ultraspeaker.projector.<cosa> (linea guida §10), valori in JSON
+  const PREFIX = "ultraspeaker.projector.", OLD = "projectorlab.";
   const store = {
-    get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
-    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* archiviazione non disponibile */ } },
+    get(k, d) { try { const v = localStorage.getItem(PREFIX + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(PREFIX + k, JSON.stringify(v)); } catch (e) { /* memoria non disponibile */ } },
   };
+  // Le versioni precedenti salvavano in projectorlab.*: si copia nella chiave nuova (se manca) e si cancella la vecchia,
+  // così nessuno perde sale salvate o procedura in corso
+  try {
+    ["state", "timer", "venues"].forEach((k) => {
+      const old = localStorage.getItem(OLD + k);
+      if (old == null) return;
+      if (localStorage.getItem(PREFIX + k) == null) localStorage.setItem(PREFIX + k, old);
+      localStorage.removeItem(OLD + k);
+    });
+  } catch (e) { /* memoria non disponibile */ }
   let toastT;
   function toast(msg) {
     const el = $("#toast"); el.textContent = msg; el.classList.add("show");
@@ -20,9 +32,8 @@
   const ICON_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>';
 
   /* ---------- Lingua ---------- */
-  const I18N = window.PL_I18N;
-  const LANGS = I18N.langs.map((l) => l[0]);
-  let LANG = "it";
+  const I18N = window.PL_I18N, L = window.UltraspeakerLang;
+  let LANG = "en";
   // Tutte le lingue hanno le stesse chiavi (stesso elenco dell'italiano)
   const t = (k, vars) => {
     let s = I18N[LANG][k] ?? k;
@@ -30,11 +41,11 @@
     return s;
   };
   const STEPS = () => I18N[LANG].steps;
+  // Lingua comune a tutti i Lab: ?lang=, scelta salvata, vecchia chiave del Lab, lingua di Office, sistema, inglese
   function detectLang() {
-    const saved = store.get("projectorlab.lang", null);
-    if (LANGS.includes(saved)) return saved;
-    const l = ((office && Office.context.displayLanguage) || navigator.language || "it").slice(0, 2).toLowerCase();
-    return LANGS.includes(l) ? l : "en";
+    const lang = L.set(L.get(OLD + "lang", office ? Office.context.displayLanguage : null));
+    try { localStorage.removeItem(OLD + "lang"); } catch (e) { /* memoria non disponibile */ }
+    return lang;
   }
   // Etichette per i pattern nella lingua corrente
   function labels() {
@@ -47,7 +58,7 @@
   let office = false; // true dentro PowerPoint, false nel browser
   // Funzioni opzionali di PowerPoint: il manifest richiede già PowerPointApi 1.2 (inserimento slide e nuova presentazione)
   const api = { shapes: false, select: false, image: false, dialog2: false };
-  const saved = store.get("projectorlab.state", {});
+  const saved = store.get("state", {});
   const S = {
     step: saved.step || 0,
     results: saved.results || {},
@@ -62,7 +73,7 @@
     map: {},          // pattern -> id della slide inserita
     current: null,    // pattern mostrato ora
   };
-  const persist = () => store.set("projectorlab.state", { step: S.step, results: S.results, checks: S.checks, venue: S.venue, note: S.note, answers: S.answers, values: S.values });
+  const persist = () => store.set("state", { step: S.step, results: S.results, checks: S.checks, venue: S.venue, note: S.note, answers: S.answers, values: S.values });
   let busy = false;
   let dialog = null, showWin = null;
 
@@ -75,9 +86,7 @@
 
   /* ---------- Stato in alto ---------- */
   function setStatus(kind) {
-    const el = $("#status");
-    el.className = "status" + (kind === "busy" ? " busy" : office ? "" : " off");
-    $("#statusText").textContent = t(kind === "busy" ? "status.busy" : office ? "status.office" : "status.web");
+    $("#statusText").textContent = t(kind === "busy" ? "status.busy" : office ? "status.office" : "us.web");
   }
   function setBusy(b) {
     busy = b; setStatus(b ? "busy" : "");
@@ -95,13 +104,13 @@
     const opts = ["auto"].concat(Object.keys(PLP.FORMATS));
     opts.forEach((o) => {
       const b = document.createElement("button");
-      b.type = "button"; b.className = "pill"; b.dataset.fmt = o;
+      b.type = "button"; b.className = "us-chip"; b.dataset.fmt = o;
       b.setAttribute("aria-pressed", String(S.fmt === o));
       b.innerHTML = o === "auto" ? `${esc(S.detected || "16:9")}<small>${esc(t("format.auto"))}</small>` : esc(o);
       b.onclick = () => { S.fmt = o; renderSetup(); renderStep(); sendToWindow({ f: o === "auto" ? "" : o }); };
       seg.appendChild(b);
     });
-    $$("#whereSeg .pill").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.where === S.where)));
+    $$("#whereSeg .us-chip").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.where === S.where)));
     $("#fmtHint").textContent = t("fmtHint");
     const n = Object.keys(S.map).length;
     const np = needsNewPres();
@@ -379,7 +388,7 @@
   }
 
   /* ---------- Timer di riscaldamento ---------- */
-  let timerEnd = store.get("projectorlab.timer", 0), timerT = null;
+  let timerEnd = store.get("timer", 0), timerT = null;
   function timerLabel() {
     const left = timerEnd - Date.now();
     if (!timerEnd) return t("timer.start");
@@ -392,7 +401,7 @@
     if (timerEnd && Date.now() >= timerEnd) { clearInterval(timerT); timerT = null; }
   }
   function startTimer() {
-    timerEnd = Date.now() + 15 * 60000; store.set("projectorlab.timer", timerEnd);
+    timerEnd = Date.now() + 15 * 60000; store.set("timer", timerEnd);
     clearInterval(timerT); timerT = setInterval(tickTimer, 1000); tickTimer();
   }
 
@@ -542,48 +551,49 @@
 
   function resultBox(d) {
     if (!d) return "";
-    let h = `<div class="dxr ${d.sev}" role="status">` + d.lines.map((x) => `<p>${esc(x)}</p>`).join("") + `</div>`;
-    if (d.range) h += `<div class="dxr range"><p><b>${esc(t("dx.range.h"))}</b></p><p>${esc(t("dx.range.crush"))}</p></div>`;
-    if (d.recheck) h += `<p class="note">${esc(t("dx.recheckNote"))}</p><button type="button" class="btn sec small dx-go" data-go="3">${esc(t("dx.recheckBlack"))}</button>`;
-    if (d.back) h += `<button type="button" class="btn sec small dx-go" data-go="${d.back - 1}">${esc(t("dx.backTo", { n: d.back }))}</button>`;
+    const NOTE = { ok: "us-note--ok", fix: "us-note--warn", info: "" };
+    let h = `<div class="us-note ${NOTE[d.sev]} pl-dxr" role="status">` + d.lines.map((x) => `<p>${esc(x)}</p>`).join("") + `</div>`;
+    if (d.range) h += `<div class="us-note us-note--warn pl-dxr"><p><b>${esc(t("dx.range.h"))}</b></p><p>${esc(t("dx.range.crush"))}</p></div>`;
+    if (d.recheck) h += `<p class="pl-note">${esc(t("dx.recheckNote"))}</p><button type="button" class="us-btn dx-go" data-go="3">${esc(t("dx.recheckBlack"))}</button>`;
+    if (d.back) h += `<button type="button" class="us-btn dx-go" data-go="${d.back - 1}">${esc(t("dx.backTo", { n: d.back }))}</button>`;
     return h;
   }
   function renderQuestion(q) {
     const v = S.answers[q];
-    let h = `<div class="dxq" data-q="${q}">`;
+    let h = `<div class="us-panel pl-dxq dxq" data-q="${q}">`;
     if (q === "black" || q === "white" || PICK[q]) {
       const opts = q === "black" ? BLACK_OPTS : q === "white" ? WHITE_OPTS : PICK[q];
-      h += `<p class="dxq-t">${esc(t("dx." + q + ".q"))}</p><div class="opts q-${q}${PICK[q] ? " words" : ""}" role="group">` +
-        opts.map((o) => `<button type="button" class="opt" data-v="${o}" aria-pressed="${v === o}">${esc(optLabel(q, o))}</button>`).join("") + `</div>`;
+      h += `<p class="pl-dxq-t">${esc(t("dx." + q + ".q"))}</p><div class="pl-opts q-${q}${PICK[q] ? " words" : ""}" role="group">` +
+        opts.map((o) => `<button type="button" class="us-chip" data-v="${o}" aria-pressed="${v === o}">${esc(optLabel(q, o))}</button>`).join("") + `</div>`;
     } else if (q === "cast") {
       const cur = v || {};
-      h += `<p class="dxq-t">${esc(t("dx.cast.q"))}</p><div class="castq">` + CAST_GROUPS.map((g) =>
-        `<div class="castg"><span>${esc(t("dx.cast." + g))}</span><div class="pad" role="group" aria-label="${esc(t("dx.cast." + g))}">` +
-        [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => `<button type="button" class="opt" data-g="${g}" data-v="${i}" aria-pressed="${String(cur[g]) === String(i)}">${i}</button>`).join("") +
+      h += `<p class="pl-dxq-t">${esc(t("dx.cast.q"))}</p><div class="pl-castq">` + CAST_GROUPS.map((g) =>
+        `<div class="pl-castg"><span class="us-label">${esc(t("dx.cast." + g))}</span><div class="pl-pad" role="group" aria-label="${esc(t("dx.cast." + g))}">` +
+        [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => `<button type="button" class="us-chip" data-g="${g}" data-v="${i}" aria-pressed="${String(cur[g]) === String(i)}">${i}</button>`).join("") +
         `</div></div>`).join("") + `</div>`;
     } else if (q === "ramps") {
       const cur = v || [];
-      h += `<p class="dxq-t">${esc(t("dx.ramps.q"))}</p><div class="opts words" role="group">` +
-        RAMP_KEYS.map((k) => `<button type="button" class="opt" data-m="${k}" aria-pressed="${cur.includes(k)}">${esc(t("c." + k))}</button>`).join("") +
-        `<button type="button" class="opt" data-m="none" aria-pressed="${cur.includes("none")}">${esc(t("dx.ramps.none"))}</button></div>`;
+      h += `<p class="pl-dxq-t">${esc(t("dx.ramps.q"))}</p><div class="pl-opts words" role="group">` +
+        RAMP_KEYS.map((k) => `<button type="button" class="us-chip" data-m="${k}" aria-pressed="${cur.includes(k)}">${esc(t("c." + k))}</button>`).join("") +
+        `<button type="button" class="us-chip" data-m="none" aria-pressed="${cur.includes("none")}">${esc(t("dx.ramps.none"))}</button></div>`;
     }
     return h + resultBox(diagnose(q)) + `</div>`;
   }
   function renderSettings(keys) {
-    return `<section class="sec-block"><div class="h">${esc(t("set.h"))}</div><div class="sets">` +
-      `<div class="set-row head"><span></span><span>${esc(t("set.before"))}</span><span></span><span>${esc(t("set.after"))}</span></div>` +
+    return `<section class="pl-block"><p class="us-label">${esc(t("set.h"))}</p><div class="pl-sets">` +
+      `<div class="pl-set-row head"><span></span><span class="us-label">${esc(t("set.before"))}</span><span></span><span class="us-label">${esc(t("set.after"))}</span></div>` +
       keys.map((k) => {
         const val = S.values[k] || {};
-        return `<div class="set-row"><label for="set-${k}-a">${esc(t("set." + k))}</label>` +
-          `<input type="text" id="set-${k}-a" data-set="${k}" data-side="a" value="${esc(val.a || "")}" inputmode="text" autocomplete="off">` +
+        return `<div class="pl-set-row"><label for="set-${k}-a">${esc(t("set." + k))}</label>` +
+          `<input type="text" class="us-field" id="set-${k}-a" data-set="${k}" data-side="a" value="${esc(val.a || "")}" inputmode="text" autocomplete="off">` +
           `<span aria-hidden="true">→</span>` +
-          `<input type="text" id="set-${k}-b" data-set="${k}" data-side="b" value="${esc(val.b || "")}" inputmode="text" autocomplete="off" aria-label="${esc(t("set." + k) + " " + t("set.after"))}"></div>`;
+          `<input type="text" class="us-field" id="set-${k}-b" data-set="${k}" data-side="b" value="${esc(val.b || "")}" inputmode="text" autocomplete="off" aria-label="${esc(t("set." + k) + " " + t("set.after"))}"></div>`;
       }).join("") + `</div></section>`;
   }
   function wireDx(art) {
     $$(".dxq", art).forEach((box) => {
       const q = box.dataset.q;
-      $$(".opt", box).forEach((b) => {
+      $$(".us-chip", box).forEach((b) => {
         b.onclick = () => {
           if (q === "cast") { const cur = Object.assign({}, S.answers.cast || {}); cur[b.dataset.g] = +b.dataset.v; answer("cast", cur); return; }
           if (q === "ramps") {
@@ -624,31 +634,31 @@
   }
   // Ricomincia: le sale salvate, la lingua, il formato e le slide di test restano
   const restart = () => twoTaps($("#restartBtn"), restartLabel, () => {
-    clearRun(); store.set("projectorlab.timer", 0);
+    clearRun(); store.set("timer", 0);
     persist(); renderStep(); window.scrollTo({ top: 0, behavior: "smooth" });
     toast(t("reset.done"));
   });
-  // Azzera tutto (solo versione browser): cancella tutto ciò che la pagina ha salvato
+  // Azzera tutto (solo versione browser): cancella le chiavi di questo Lab (anche le vecchie, finché esistono);
+  // la lingua è comune a tutti i Lab e resta
   function resetAllLabel() {
     $("#resetAllLabel").textContent = t($("#resetAllBtn").classList.contains("armed") ? "resetAll.confirm" : "resetAll");
   }
   const resetAll = () => twoTaps($("#resetAllBtn"), resetAllLabel, () => {
-    try { Object.keys(localStorage).filter((k) => k.startsWith("projectorlab.")).forEach((k) => localStorage.removeItem(k)); } catch (e) { /* archiviazione non disponibile */ }
+    try { Object.keys(localStorage).filter((k) => k.startsWith(PREFIX) || k.startsWith(OLD)).forEach((k) => localStorage.removeItem(k)); } catch (e) { /* memoria non disponibile */ }
     clearRun(); S.fmt = "auto"; S.where = "end";
     closeInline(); frameLoaded = false; // al prossimo uso il riquadro riparte da zero (senza foto)
-    LANG = detectLang(); $("#lang").value = LANG;
     applyStatic(); window.scrollTo({ top: 0, behavior: "smooth" });
     toast(t("resetAll.done"));
   });
 
   /* ---------- Registro delle sale ---------- */
-  const venues = () => store.get("projectorlab.venues", []);
+  const venues = () => store.get("venues", []);
   function saveVenue() {
     const name = (S.venue || "").trim();
     if (!name) { toast(t("venue.need")); return; }
     const list = venues().filter((x) => x.venue.toLowerCase() !== name.toLowerCase());
     list.unshift({ venue: name, date: new Date().toISOString(), fmt: fmtKey(), values: S.values, answers: S.answers, note: S.note });
-    store.set("projectorlab.venues", list.slice(0, 40));
+    store.set("venues", list.slice(0, 40));
     toast(t("venue.saved"));
   }
   function valueLines(values) {
@@ -660,8 +670,8 @@
   function renderVenues() {
     const list = venues();
     if (!list.length) return "";
-    return `<section class="sec-block"><div class="h">${esc(t("venue.past"))}</div>
-      <select id="venuePick"><option value="">${esc(t("venue.pick"))}</option>` +
+    return `<section class="pl-block"><p class="us-label">${esc(t("venue.past"))}</p>
+      <select class="us-field" id="venuePick"><option value="">${esc(t("venue.pick"))}</option>` +
       list.map((x, i) => `<option value="${i}">${esc(x.venue)} · ${esc(new Date(x.date).toLocaleDateString(LANG))}</option>`).join("") +
       `</select><div id="venueInfo"></div></section>`;
   }
@@ -670,17 +680,17 @@
     const x = venues()[i];
     if (!x) { box.innerHTML = ""; return; }
     const lines = valueLines(x.values || {});
-    box.innerHTML = `<div class="hint"><p class="vtitle">${esc(t("venue.last", { d: new Date(x.date).toLocaleDateString(LANG) }))}</p>` +
-      (lines.length ? `<ul class="list adj">${lines.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>` : `<p>${esc(t("venue.empty"))}</p>`) +
+    box.innerHTML = `<div class="us-note"><p class="vtitle">${esc(t("venue.last", { d: new Date(x.date).toLocaleDateString(LANG) }))}</p>` +
+      (lines.length ? `<ul class="pl-list adj">${lines.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>` : `<p>${esc(t("venue.empty"))}</p>`) +
       (x.note ? `<p class="vnote">${esc(x.note)}</p>` : "") + `</div>` +
-      `<div class="btns">` + (lines.length ? `<button type="button" class="btn sec small" id="venueUse">${esc(t("venue.use"))}</button>` : "") +
-      `<button type="button" class="btn sec small danger" id="venueDel">${esc(t("venue.del"))}</button></div>`;
+      `<div class="pl-btns">` + (lines.length ? `<button type="button" class="us-btn" id="venueUse">${esc(t("venue.use"))}</button>` : "") +
+      `<button type="button" class="us-btn is-warn" id="venueDel">${esc(t("venue.del"))}</button></div>`;
     const use = $("#venueUse");
     if (use) use.onclick = () => {
       Object.keys(x.values || {}).forEach((k) => { const v = x.values[k]; const start = v.b || v.a; if (start) S.values[k] = { a: start, b: "" }; });
       S.venue = x.venue; persist(); toast(t("venue.used")); renderStep();
     };
-    $("#venueDel").onclick = () => { const l = venues(); l.splice(i, 1); store.set("projectorlab.venues", l); renderStep(); };
+    $("#venueDel").onclick = () => { const l = venues(); l.splice(i, 1); store.set("venues", l); renderStep(); };
   }
 
   /* ---------- Passi ---------- */
@@ -688,7 +698,7 @@
     const box = $("#stepper"); box.innerHTML = "";
     STEPS().forEach((s, i) => {
       const b = document.createElement("button");
-      b.type = "button"; b.className = "dot " + (S.results[s.id] || "");
+      b.type = "button"; b.className = "pl-dot " + (S.results[s.id] || "");
       b.textContent = String(i + 1);
       b.title = s.title; b.setAttribute("aria-label", `${t("step")} ${i + 1}: ${s.title}`);
       if (i === S.step) b.setAttribute("aria-current", "step");
@@ -697,73 +707,73 @@
     });
     $("#progress").style.width = ((S.step + 1) / STEPS().length) * 100 + "%";
   }
-  function markThumbs() { $$(".thumb").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.k === S.current))); }
+  function markThumbs() { $$(".pl-thumb").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.k === S.current))); }
 
-  function list(items, cls) { return `<ul class="list ${cls || ""}">${items.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`; }
+  function list(items, cls) { return `<ul class="pl-list ${cls || ""}">${items.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`; }
   function renderStep() {
     renderStepper();
     const steps = STEPS(), s = steps[S.step], n = S.step + 1;
     const W = fmtW();
-    let h = `<header class="step-head"><div class="h">${esc(t("step"))} ${n} ${esc(t("of"))} ${steps.length}</div><h2>${esc(s.title)}</h2><p class="goal">${esc(s.goal)}</p></header>`;
+    let h = `<header class="pl-step-head"><p class="us-label">${esc(t("step"))} ${n} ${esc(t("of"))} ${steps.length}</p><h2 class="us-title">${esc(s.title)}</h2><p class="pl-goal">${esc(s.goal)}</p></header>`;
 
     if (s.id === "prep") {
-      h += `<div class="field" style="grid-template-columns:1fr"><span class="h" style="font-size:10.5px">${esc(t("venue"))}</span><input type="text" id="venue" value="${esc(S.venue)}" placeholder="${esc(t("venue.ph"))}"></div>`;
-      h += `<button type="button" class="btn sec small" id="timerBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg><span class="timer"></span></button>`;
+      h += `<label class="pl-block"><span class="us-label">${esc(t("venue"))}</span><input type="text" class="us-field" id="venue" value="${esc(S.venue)}" placeholder="${esc(t("venue.ph"))}"></label>`;
+      h += `<button type="button" class="us-btn us-btn--block" id="timerBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg><span class="pl-timer"></span></button>`;
       h += renderVenues();
     }
     if (s.slides) {
       const tests = office && hasTests();
-      h += `<div class="thumbs" style="--ar:${W}/7.5">` + s.slides.map((k) => {
+      h += `<div class="pl-thumbs" style="--ar:${W}/7.5">` + s.slides.map((k) => {
         const svg = PLP.toSVG(PLP.build(k, W, labels()), W, { attrs: ' width="100%" height="100%" aria-hidden="true"' });
-        return `<button type="button" class="thumb" data-k="${k}"><div class="img">${svg}</div><span>${ICON_PLAY}${esc(t("p." + k + ".name"))}</span></button>`;
+        return `<button type="button" class="pl-thumb" data-k="${k}"><div class="img">${svg}</div><span>${ICON_PLAY}${esc(t("p." + k + ".name"))}</span></button>`;
       }).join("") + `</div>`;
-      if (office) h += `<p class="note">${esc(tests ? t("startShow") : t("notInserted"))}</p>`;
+      if (office) h += `<p class="pl-note">${esc(tests ? t("startShow") : t("notInserted"))}</p>`;
     }
     if (s.checks) {
       const done = S.checks[s.id] || [];
-      h += `<section class="sec-block"><div class="h">${esc(t("checklist"))}</div><div class="checks">` +
-        s.checks.map((c, i) => `<label class="check"><input type="checkbox" data-ci="${i}"${done[i] ? " checked" : ""}><span>${esc(c)}</span></label>`).join("") + `</div></section>`;
+      h += `<section class="pl-block"><p class="us-label">${esc(t("checklist"))}</p><div class="pl-checks">` +
+        s.checks.map((c, i) => `<label class="pl-check"><input type="checkbox" data-ci="${i}"${done[i] ? " checked" : ""}><span>${esc(c)}</span></label>`).join("") + `</div></section>`;
     }
-    if (s.tips) h += s.tips.map((x) => `<p class="hint">${esc(x)}</p>`).join("");
-    if (s.look) h += `<section class="sec-block"><div class="h">${esc(t("look"))}</div>${list(s.look)}</section>`;
+    if (s.tips) h += s.tips.map((x) => `<p class="us-note">${esc(x)}</p>`).join("");
+    if (s.look) h += `<section class="pl-block"><p class="us-label">${esc(t("look"))}</p>${list(s.look)}</section>`;
     if (STEP_Q[s.id]) {
-      h += `<section class="sec-block dx"><div class="h">${esc(t("dx.h"))}</div><p class="note">${esc(t("dx.hint"))}</p>` +
+      h += `<section class="pl-block"><p class="us-label">${esc(t("dx.h"))}</p><p class="pl-note">${esc(t("dx.hint"))}</p>` +
         STEP_Q[s.id].map(renderQuestion).join("") + `</section>`;
     }
-    if (s.adjust) h += `<section class="sec-block"><div class="h">${esc(t("adjust"))}</div>${list(s.adjust, "adj")}</section>`;
+    if (s.adjust) h += `<section class="pl-block"><p class="us-label">${esc(t("adjust"))}</p>${list(s.adjust, "adj")}</section>`;
     if (STEP_SET[s.id]) h += renderSettings(STEP_SET[s.id]);
     if (s.id === "clinical") {
-      h += `<button type="button" class="btn sec" id="photoBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg><span>${esc(t(office ? "photo" : "photoWeb"))}</span></button>`;
+      h += `<button type="button" class="us-btn us-btn--block" id="photoBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg><span>${esc(t(office ? "photo" : "photoWeb"))}</span></button>`;
     }
     if (s.issues) {
-      h += `<section class="sec-block"><div class="h">${esc(t("issues"))}</div><div>` +
-        s.issues.map(([q, a]) => `<details class="issue"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("") + `</div></section>`;
+      h += `<section class="pl-block"><p class="us-label">${esc(t("issues"))}</p><div>` +
+        s.issues.map(([q, a]) => `<details class="pl-issue"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("") + `</div></section>`;
     }
     if (s.id !== "prep" && s.id !== "final") {
       const r = S.results[s.id];
-      h += `<section class="sec-block"><div class="h">${esc(t("result"))}</div><div class="result">` +
-        ["ok", "fix", "skip"].map((k) => `<button type="button" class="rb ${k}" data-r="${k}" aria-pressed="${r === k}"><i></i>${esc(t("res." + k))}</button>`).join("") + `</div></section>`;
+      h += `<section class="pl-block"><p class="us-label">${esc(t("result"))}</p><div class="pl-result">` +
+        ["ok", "fix", "skip"].map((k) => `<button type="button" class="us-btn pl-res ${k}" data-r="${k}" aria-pressed="${r === k}"><i></i>${esc(t("res." + k))}</button>`).join("") + `</div></section>`;
     }
-    if (s.cant) h += `<section class="sec-block"><div class="h">${esc(t("cant.h"))}</div>${list(s.cant, "adj")}</section>`;
+    if (s.cant) h += `<section class="pl-block"><p class="us-label">${esc(t("cant.h"))}</p>${list(s.cant, "adj")}</section>`;
     if (s.id === "final") {
-      h += `<section class="sec-block"><div class="h">${esc(t("report"))}</div>
-        <textarea id="note" placeholder="${esc(t("report.note.ph"))}">${esc(S.note)}</textarea>
-        <pre class="report" id="report"></pre>
-        <div class="btns"><button type="button" class="btn sec small" id="copyBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg><span>${esc(t("report.copy"))}</span></button>` +
-        `<button type="button" class="btn sec small restart-final"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg><span>${esc(t("reset"))}</span></button>` +
-        `<button type="button" class="btn sec small" id="saveVenueBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6"/></svg><span>${esc(t("venue.save"))}</span></button>` +
-        (office && hasTests() ? `<button type="button" class="btn sec small danger" id="removeBtn2"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span>${esc(t("remove"))}</span></button>` : "") +
+      h += `<section class="pl-block"><p class="us-label">${esc(t("report"))}</p>
+        <textarea class="us-field" id="note" placeholder="${esc(t("report.note.ph"))}">${esc(S.note)}</textarea>
+        <pre class="pl-report" id="report"></pre>
+        <div class="pl-btns"><button type="button" class="us-btn" id="copyBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg><span>${esc(t("report.copy"))}</span></button>` +
+        `<button type="button" class="us-btn restart-final"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg><span>${esc(t("reset"))}</span></button>` +
+        `<button type="button" class="us-btn" id="saveVenueBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6"/></svg><span>${esc(t("venue.save"))}</span></button>` +
+        (office && hasTests() ? `<button type="button" class="us-btn is-warn" id="removeBtn2"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span>${esc(t("remove"))}</span></button>` : "") +
         `</div></section>`;
     }
     const art = $("#step"); art.innerHTML = h;
 
     // Collegamenti
-    $$(".thumb", art).forEach((b) => { b.onclick = () => goPattern(b.dataset.k); });
+    $$(".pl-thumb", art).forEach((b) => { b.onclick = () => goPattern(b.dataset.k); });
     markThumbs();
-    $$(".check input", art).forEach((c) => {
+    $$(".pl-check input", art).forEach((c) => {
       c.onchange = () => { const a = S.checks[s.id] || []; a[+c.dataset.ci] = c.checked; S.checks[s.id] = a; persist(); };
     });
-    $$(".rb", art).forEach((b) => {
+    $$(".pl-res", art).forEach((b) => {
       b.onclick = () => {
         S.results[s.id] = S.results[s.id] === b.dataset.r ? undefined : b.dataset.r;
         if (!S.results[s.id]) delete S.results[s.id];
@@ -802,18 +812,16 @@
     document.documentElement.lang = LANG;
     $$("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
     $$("[data-i18n-aria]").forEach((el) => el.setAttribute("aria-label", t(el.dataset.i18nAria)));
-    // Le pagine di supporto si aprono nella lingua del pannello
-    $$("a[data-page]").forEach((el) => { el.href = el.dataset.page + "?lang=" + LANG; });
+    // Le pagine di servizio si aprono nella lingua del pannello; «Richiedi un consiglio» con oggetto tradotto
+    $$(".us-links a").forEach((el) => { el.href = L.linkWithLang(el.getAttribute("href"), LANG); });
+    $("#usCta").href = "mailto:info@theultraspeaker.com?subject=" + encodeURIComponent(t("us.cta"));
+    // «Guida»: il PDF nella lingua scelta; su telefono e nel pannello resta solo l'icona, con il nome accessibile
+    const g = $("#usGuide"); g.href = L.guideHref("projector", LANG); g.setAttribute("aria-label", t("us.guide.title")); g.title = t("us.guide.title");
     setStatus(busy ? "busy" : "");
     renderSetup(); renderStep(); resetAllLabel();
   }
   function buildLang() {
-    const sel = $("#lang");
-    I18N.langs.forEach(([k, name]) => {
-      const o = document.createElement("option"); o.value = k; o.textContent = name; sel.appendChild(o);
-    });
-    sel.value = LANG;
-    sel.onchange = () => { LANG = sel.value; store.set("projectorlab.lang", LANG); applyStatic(); sendToWindow({ lang: LANG }); };
+    L.bindSelect($("#lang"), LANG, (code) => { LANG = code; applyStatic(); sendToWindow({ lang: LANG }); });
   }
   function wire() {
     $("#setupToggle").onclick = () => toggleSetup();
@@ -821,21 +829,21 @@
     $("#removeBtn").onclick = removeTests;
     $("#windowBtn").onclick = () => openWindow(S.current);
     $("#downloadBtn").onclick = download;
-    $$("#whereSeg .pill").forEach((b) => { b.onclick = () => { S.where = b.dataset.where; renderSetup(); }; });
+    $$("#whereSeg .us-chip").forEach((b) => { b.onclick = () => { S.where = b.dataset.where; renderSetup(); }; });
     $("#restartBtn").onclick = restart;
     $("#resetAllBtn").onclick = resetAll;
     $("#prevBtn").onclick = () => goStep(S.step - 1);
     $("#nextBtn").onclick = () => { if (S.step === STEPS().length - 1) copyReport(); else goStep(S.step + 1); };
     $("#photoIn").onchange = (e) => onPhoto(e.target.files && e.target.files[0]);
     // In PowerPoint i link si aprono nel browser di sistema
-    $$(".links a, .brand-link").forEach((el) => el.addEventListener("click", (e) => {
+    $$(".us-links a, .us-logo, .us-guide").forEach((el) => el.addEventListener("click", (e) => {
       if (office && supported("OpenBrowserWindowApi", "1.1")) { e.preventDefault(); Office.context.ui.openBrowserWindow(el.href); }
     }));
   }
 
   async function start(inPowerPoint) {
     office = inPowerPoint;
-    document.body.classList.toggle("web", !office);
+    document.body.classList.toggle("us-addin", office);
     LANG = detectLang();
     buildLang(); wire();
     if (office) {

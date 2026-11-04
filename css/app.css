@@ -1,0 +1,155 @@
+/* The Ultraspeaker Projector Lab — stile proprio del Lab, caricato dopo shared/ultraspeaker-lab.css.
+   Solo ciò che serve alla procedura (passi, pattern, domande, esiti) e solo variabili --us-*. */
+
+/* Colonna a tutta altezza: la barra Indietro / Avanti resta in fondo anche con poco contenuto */
+.app{min-height:100vh;display:flex;flex-direction:column}
+.app main{flex:1;display:flex;flex-direction:column;gap:16px}
+.app .us-footer{margin-top:16px}
+
+/* Testo piccolo di servizio (spiegazioni sotto i controlli) */
+.pl-note{font-size:var(--us-text-small);line-height:1.5;color:var(--us-ash);margin:0}
+.is-warn{color:var(--us-warn)}
+.pl-block{display:flex;flex-direction:column;gap:8px}
+.pl-btns{display:flex;gap:8px;flex-wrap:wrap}
+.pl-btns .us-btn{flex:1 1 auto;white-space:normal;line-height:1.3;height:auto;min-height:var(--us-h-button);padding:6px 12px;text-align:center}
+
+/* ---------- Scheda Screen Test (richiudibile) ---------- */
+.pl-setup{display:flex;flex-direction:column;gap:10px}
+.pl-setup-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pl-setup-head .us-label{margin:0;white-space:nowrap}
+.pl-setup-head button{background:none;border:0;color:var(--us-ash);padding:2px;display:flex;margin-left:auto}
+.pl-setup-head svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+.pl-setup.closed .pl-setup-body{display:none}
+.pl-setup.closed .pl-setup-head svg{transform:rotate(-90deg)}
+.pl-setup-body{display:flex;flex-direction:column;gap:10px}
+.pl-done{display:flex;align-items:center;gap:6px;font-size:var(--us-text-small);color:var(--us-spotlight);font-weight:600;min-width:0}
+.pl-done i{width:6px;height:6px;border-radius:50%;background:var(--us-ok);flex:none}
+.pl-row{display:grid;grid-template-columns:78px minmax(0,1fr);align-items:center;gap:8px}
+.pl-row > span{font-size:var(--us-text-small);font-weight:600;color:var(--us-silver)}
+.pl-chips{display:flex;gap:4px;flex-wrap:wrap}
+.pl-chips .us-chip small{font-weight:600;opacity:.7;margin-left:4px}
+
+/* ---------- Avanzamento e passi ---------- */
+.pl-progress{height:2px;background:var(--us-curtain);border-radius:1px;overflow:hidden}
+.pl-progress i{display:block;height:100%;background:var(--us-spotlight);transition:width .25s}
+.pl-stepper{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
+.pl-dot{height:30px;border-radius:var(--us-radius);border:var(--us-border);background:transparent;color:var(--us-silver);font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;position:relative;padding:0}
+.pl-dot[aria-current="step"]{background:var(--us-spotlight);color:var(--us-stage-black);border-color:var(--us-spotlight)}
+.pl-dot::after{content:"";position:absolute;right:3px;top:3px;width:5px;height:5px;border-radius:50%;background:transparent}
+.pl-dot.ok::after{background:var(--us-ok)}
+.pl-dot.fix::after{background:var(--us-warn)}
+.pl-dot.skip::after{background:var(--us-ash)}
+
+/* Ricomincia / Azzera tutto: azioni discrete, il primo tocco chiede conferma */
+.pl-restart-row{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:4px 8px;margin-top:-8px}
+.pl-restart{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid transparent;border-radius:var(--us-radius);padding:5px 8px;color:var(--us-ash);font-size:11.5px;font-weight:700;text-align:right;line-height:1.3}
+.pl-restart svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.pl-restart:hover{color:var(--us-spotlight)}
+.pl-restart.is-left{margin-right:auto;text-align:left}
+.pl-restart.armed,.us-btn.restart-final.armed{color:var(--us-warn);border-color:var(--us-warn);background:var(--us-warn-soft)}
+
+/* ---------- Contenuto del passo ---------- */
+.pl-step{display:flex;flex-direction:column;gap:16px}
+.pl-step-head{display:flex;flex-direction:column;gap:4px}
+.pl-step-head .us-label,.pl-step-head .us-title{margin:0}
+.pl-goal{margin:0;color:var(--us-silver)}
+
+/* Anteprime dei pattern del passo */
+.pl-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.pl-thumb{display:flex;flex-direction:column;gap:5px;padding:0;background:none;border:0;text-align:left}
+.pl-thumb .img{width:100%;aspect-ratio:var(--ar,16/9);border-radius:var(--us-radius);overflow:hidden;border:var(--us-border);background:var(--us-backstage);transition:border-color .15s}
+.pl-thumb .img svg{display:block;width:100%;height:100%}
+.pl-thumb:hover .img,.pl-thumb[aria-pressed="true"] .img{border-color:var(--us-spotlight)}
+.pl-thumb span{font-size:var(--us-text-small);font-weight:600;color:var(--us-silver);display:flex;align-items:center;gap:6px}
+.pl-thumb span svg{width:13px;height:13px;fill:currentColor}
+
+ul.pl-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px}
+ul.pl-list li{position:relative;padding-left:16px}
+ul.pl-list li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;border-radius:50%;border:1.5px solid var(--us-ash)}
+ul.pl-list.adj li::before{border-radius:1px;transform:rotate(45deg);width:5px;height:5px;top:.65em}
+
+/* Checklist */
+.pl-checks{display:flex;flex-direction:column;gap:6px}
+.pl-check{display:grid;grid-template-columns:20px minmax(0,1fr);gap:8px;align-items:start;cursor:pointer;padding:6px 8px;border-radius:var(--us-radius)}
+.pl-check:hover{background:var(--us-backstage)}
+.pl-check input{appearance:none;-webkit-appearance:none;width:18px;height:18px;border-radius:5px;border:1.5px solid var(--us-graphite);margin:3px 0 0;display:grid;place-items:center;cursor:pointer}
+.pl-check input:checked{background:var(--us-spotlight);border-color:var(--us-spotlight)}
+.pl-check input:checked::after{content:"";width:9px;height:5px;border:2px solid var(--us-stage-black);border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
+.pl-check input:checked + span{color:var(--us-ash)}
+
+/* Problemi frequenti */
+details.pl-issue{border:var(--us-divider);border-radius:var(--us-radius);background:var(--us-backstage)}
+details.pl-issue + details.pl-issue{margin-top:6px}
+details.pl-issue summary{list-style:none;cursor:pointer;padding:9px 34px 9px 12px;font-size:13px;font-weight:700;position:relative;line-height:1.4}
+details.pl-issue summary::-webkit-details-marker{display:none}
+details.pl-issue summary::after{content:"";position:absolute;right:13px;top:50%;width:7px;height:7px;border-right:2px solid var(--us-ash);border-bottom:2px solid var(--us-ash);transform:translateY(-70%) rotate(45deg);transition:transform .2s}
+details.pl-issue[open] summary::after{transform:translateY(-30%) rotate(-135deg)}
+details.pl-issue p{margin:0;padding:0 12px 12px;font-size:13px;color:var(--us-silver)}
+
+/* Esito del passo: parola + pallino (il colore non porta da solo il significato) */
+.pl-result{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.pl-res{padding:0 6px}
+.pl-res i{width:7px;height:7px;border-radius:50%;flex:none}
+.pl-res.ok i{background:var(--us-ok)}.pl-res.fix i{background:var(--us-warn)}.pl-res.skip i{background:var(--us-ash)}
+.pl-res[aria-pressed="true"].ok{border-color:var(--us-ok);background:var(--us-ok-soft)}
+.pl-res[aria-pressed="true"].fix{border-color:var(--us-warn);background:var(--us-warn-soft)}
+.pl-res[aria-pressed="true"].skip{border-color:var(--us-ash);background:var(--us-curtain)}
+
+/* Domande «Cosa vedi?» */
+.pl-dxq{display:flex;flex-direction:column;gap:8px}
+.pl-dxq-t{margin:0;font-size:13.5px;font-weight:700;line-height:1.4}
+.pl-opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.pl-opts.words{display:flex;flex-wrap:wrap}
+.pl-opts .us-chip{height:auto;min-height:32px;padding:4px 6px;color:var(--us-spotlight);font-variant-numeric:tabular-nums;line-height:1.2}
+.pl-opts.words .us-chip{padding:4px 10px}
+.pl-opts.q-black{grid-template-columns:repeat(5,minmax(0,1fr))}
+.pl-opts.q-black [data-v="g0"]{grid-column:span 3}
+.pl-opts.q-black [data-v="none"]{grid-column:span 2}
+.pl-castq{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.pl-castg{display:flex;flex-direction:column;gap:6px;min-width:0}
+.pl-castg .us-label{margin:0}
+.pl-pad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.pl-pad .us-chip{height:34px;padding:0;color:var(--us-spotlight)}
+.pl-opts .us-chip[aria-pressed="true"],.pl-pad .us-chip[aria-pressed="true"]{color:var(--us-stage-black)}
+.pl-dxr{display:flex;flex-direction:column;gap:6px;line-height:1.5}
+.pl-dxr p{margin:0}
+.pl-dxr.us-note{color:var(--us-spotlight)}
+.pl-dxq .us-btn{align-self:flex-start}
+
+/* Valori prima / dopo */
+.pl-sets{display:flex;flex-direction:column;gap:6px}
+.pl-set-row{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 14px minmax(0,1fr);gap:6px;align-items:center}
+.pl-set-row label{font-size:13px;font-weight:600;color:var(--us-silver)}
+.pl-set-row .us-field{min-height:36px;padding:6px 8px;text-align:center;font-variant-numeric:tabular-nums}
+.pl-set-row > span{color:var(--us-ash);text-align:center;font-size:12px}
+.pl-set-row.head .us-label{margin:0;text-align:center;letter-spacing:.2em}
+#venueInfo{display:flex;flex-direction:column;gap:8px}
+#venueInfo .vtitle{margin:0 0 6px;font-weight:700;color:var(--us-spotlight)}
+#venueInfo .vnote{margin:6px 0 0;color:var(--us-ash)}
+select.us-field{-webkit-appearance:none;appearance:none}
+textarea.us-field{resize:vertical;min-height:62px}
+
+.pl-timer{font-variant-numeric:tabular-nums}
+.pl-report{font:inherit;font-size:13px;white-space:pre-wrap;background:var(--us-backstage);border:var(--us-divider);border-radius:var(--us-radius);padding:10px 12px;color:var(--us-silver);margin:0;max-height:220px;overflow:auto}
+
+/* Barra fissa Indietro / Avanti: la chiusura della pagina resta sopra */
+.pl-foot{flex:none;position:sticky;bottom:0;z-index:5;background:var(--us-stage-black);padding:12px 0 14px;border-top:var(--us-divider);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:8px;margin-top:16px}
+.pl-foot .us-btn{height:var(--us-h-primary);overflow:hidden;text-overflow:ellipsis}
+
+.pl-toast{position:fixed;left:50%;bottom:86px;transform:translate(-50%,12px);background:var(--us-spotlight);color:var(--us-stage-black);font-weight:700;font-size:13px;padding:9px 14px;border-radius:var(--us-radius);opacity:0;pointer-events:none;transition:.2s;max-width:calc(100% - 32px);text-align:center;z-index:30}
+.pl-toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* Pattern dentro la pagina (show.html) */
+.pl-viewer{position:fixed;inset:0;z-index:50;width:100%;height:100%;border:0;background:var(--us-stage-black)}
+
+@media (max-width:360px){.pl-row{grid-template-columns:1fr}.pl-result{grid-template-columns:1fr}.pl-castq{grid-template-columns:1fr}}
+
+/* Pagine di servizio: indirizzi e percorsi lunghi vanno a capo anche su telefono */
+.us-doc code{font-size:12.5px;color:var(--us-spotlight);background:var(--us-backstage);border:var(--us-divider);border-radius:5px;padding:1px 5px;overflow-wrap:anywhere}
+.us-doc .us-note{margin:12px 0}
+.us-doc h3{font-size:14px;font-weight:700;margin:18px 0 4px}
+
+/* «Guida» solo icona su telefono e nel pannello: il nome resta in aria-label */
+@media (max-width:560px){.us-guide{width:var(--us-h-lang);padding:0}.us-guide span{display:none}}
+body.us-addin .us-guide{width:var(--us-h-lang);padding:0}
+body.us-addin .us-guide span{display:none}

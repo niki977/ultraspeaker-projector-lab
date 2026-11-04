@@ -32,13 +32,13 @@ campi pieni bianco/grigio/nero. I pattern portano l’Arena di The Ultraspeaker 
 ## Requisiti
 
 PowerPoint di Microsoft 365 (Windows, Mac o web) con PowerPointApi 1.2.
-Funzioni in più quando disponibili: etichette sulle slide (1.3, anche per ritrovare le slide per nome), selezione diretta della slide (1.5),
+Funzioni in più quando disponibili: lettura delle forme per ritrovare le slide di test (1.3), selezione diretta della slide (1.5),
 rilevamento automatico del formato (1.8), finestra dei pattern pilotata dal pannello (DialogApi 1.2).
 
 ## Pubblicazione su GitHub Pages
 
 1. Crea su GitHub un repository pubblico chiamato **ultraspeaker-projector-lab** (account `niki977`).
-2. Carica tutti i file di questa cartella (anche `assets`, `fonts` e `vendor`).
+2. Carica tutti i file di questa cartella (anche `assets`, `css`, `fonts`, `guide`, `shared` e `vendor`).
 3. In *Settings → Pages* scegli *Deploy from a branch*, ramo `main`, cartella `/ (root)`.
 4. Dopo un minuto il pannello è raggiungibile su `https://niki977.github.io/ultraspeaker-projector-lab/`
    (aperto nel browser funziona come guida, con pattern a schermo intero e download dello Screen Test .pptx).
@@ -54,7 +54,8 @@ nel gruppo «The Ultraspeaker», accanto a QR Lab e Image Lab.
 
 | File | Cosa contiene |
 |---|---|
-| `index.html` | Il pannello (struttura e stile) |
+| `index.html` | Il pannello e la versione web |
+| `css/app.css` | Stile proprio del Lab, caricato dopo `shared/ultraspeaker-lab.css` |
 | `app.js` | Procedura, collegamento con PowerPoint (inserimento, navigazione, rimozione, foto), report |
 | `patterns.js` | I 15 pattern, descritti una volta e disegnati in SVG (anteprime e finestra) e in PowerPoint (PptxGenJS) |
 | `show.html` | Pattern a schermo intero: finestra di PowerPoint, finestra del browser o riquadro dentro il pannello |
@@ -64,12 +65,41 @@ nel gruppo «The Ultraspeaker», accanto a QR Lab e Image Lab.
 | `vendor/pptxgen.bundle.js` | PptxGenJS 3.12 (licenza MIT) per creare le slide |
 | `projector-lab-manifest.xml` | Manifest dell’add-in per PowerPoint |
 | `assets/` | Lockup Projector Lab, Arena (chiusura delle pagine), favicon e icone PNG usate da manifest e browser |
-| `fonts/` | Champagne & Limousines in woff2 (carattere del brand book) |
+| `shared/` | Kit comune dei Lab The Ultraspeaker 1.2 (stile, lingua, guide, esempi): non si modifica qui |
+| `fonts/` | Champagne & Limousines in woff2, i quattro stili del kit |
 | `support.html`, `privacy.html`, `terms.html`, `GUIDA-INSTALLAZIONE.html` | Supporto, privacy, condizioni d’uso e guida, in 5 lingue con selettore come nel pannello |
-| `legal.css`, `legal.js` | Stile e cambio lingua di queste pagine |
+| `legal.js` | Testi del menu e link con la lingua scelta in queste pagine |
+| `guide/` | Guida d’utilizzo: PDF nelle 5 lingue, sorgenti, screenshot e `capture.mjs` |
 | `store/LISTING.md` | Testi per la scheda del Marketplace |
+
+## Guida d’utilizzo
+
+Cinque PDF in `guide/` (`projector-lab-guide-it.pdf` … `-de.pdf`), aperti dal pulsante **Guida** accanto al selettore
+lingua e linkati da Supporto e Installazione. Sorgenti in `guide/src/guide.<lingua>.html` (modello e stile del kit,
+nessuno stile proprio); i nomi dei pulsanti citati sono quelli dell’interfaccia in quella lingua.
+
+Per aggiornarla, dalla radice del repository (serve Playwright con Chromium: `npm install --no-save playwright`
+e `npx playwright install chromium`; `node_modules/` è escluso dal repository):
+
+1. `node guide/capture.mjs` rifà tutti gli screenshot in `guide/img/<lingua>/` (web 1440 px, telefono 390 px,
+   pannello 350 px, scala 2×) e la posizione dei richiami (`pins.json`), con dati di esempio neutri.
+2. Aggiorna i testi in `guide/src/guide.<lingua>.html` se l’interfaccia è cambiata (l’italiano è il riferimento).
+3. `node shared/guide/build-guide.mjs` rigenera i cinque PDF.
+
+## Memoria del browser
+
+La lingua sta in `ultraspeaker.lang`, comune a tutti i Lab The Ultraspeaker. Il resto in
+`ultraspeaker.projector.state` (procedura in corso), `.timer` (riscaldamento) e `.venues` (sale salvate).
+Le chiavi delle versioni precedenti (`projectorlab.*`) vengono copiate e cancellate al primo avvio.
+«Azzera tutto» cancella solo le chiavi del Lab.
+
+## Versioni
+
+- **1.1** (novembre 2026): uniformazione alla linea guida comune dei Lab 1.2: kit `shared/`, intestazione e chiusura
+  comuni, pagine di servizio scure, lingua comune con riserva inglese, manifest en-US, guida d’utilizzo PDF.
+- **1.0**: prima versione.
 
 ## Note per il Marketplace Microsoft
 
-Titolare indicato in privacy e condizioni d’uso: Nicholas D. Charles.
+Titolare indicato in tutte le pagine di servizio: Nicholas D. Charles (The Ultraspeaker), info@theultraspeaker.com.
 Servono anche screenshot del pannello 1366×768. L’add-in non invia dati a nessun server.

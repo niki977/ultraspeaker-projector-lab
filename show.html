@@ -6,30 +6,27 @@
 <title>Projector Lab – Screen Test</title>
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=5">
 <meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
 <!-- Office.js serve solo quando la finestra è aperta dal pannello di PowerPoint -->
 <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+<link rel="stylesheet" href="shared/ultraspeaker-lab.css?v=20261102">
 <style>
-@font-face{font-family:"Champagne & Limousines";font-weight:100 549;font-display:swap;src:url(fonts/champagne-limousines-regular.woff2) format("woff2")}
-@font-face{font-family:"Champagne & Limousines";font-weight:550 900;font-display:swap;src:url(fonts/champagne-limousines-bold.woff2) format("woff2")}
-:root{color-scheme:dark}
-html,body{margin:0;height:100%;background:#000000;overflow:hidden}
-body{font:400 14px/1.4 "Champagne & Limousines","Avenir Next","Segoe UI",-apple-system,sans-serif;color:#ffffff;user-select:none;-webkit-user-select:none}
+/* Pattern a tutto schermo: niente margini né barre di scorrimento, solo la barra dei comandi che si nasconde */
+html,body{height:100%;overflow:hidden;scrollbar-gutter:auto}
+body{line-height:1.4;user-select:none;-webkit-user-select:none}
 #stage{position:fixed;inset:0}
 #stage svg{display:block;width:100%;height:100%}
-#photo{position:fixed;inset:0;display:none;background:#000000}
+#photo{position:fixed;inset:0;display:none;background:var(--us-stage-black)}
 #photo img{width:100%;height:100%;object-fit:contain;display:block}
 body.idle{cursor:none}
-.bar{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:6px;border-radius:10px;background:rgba(17,17,17,.92);border:1px solid #2a2a2a;transition:opacity .3s;max-width:calc(100% - 24px)}
+.bar{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:6px;border-radius:var(--us-radius);background:var(--us-backstage);border:var(--us-divider);transition:opacity .3s;max-width:calc(100% - 24px)}
 body.idle .bar{opacity:0;pointer-events:none}
-.bar button{height:34px;min-width:34px;padding:0 10px;border-radius:10px;border:1px solid #3a3a3a;background:transparent;color:#ffffff;font:inherit;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
-.bar button svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2}
+.bar .us-btn{height:34px;min-width:34px;padding:0 10px;font-weight:700}
 .bar .name{padding:0 10px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
-.bar .count{color:#8e8e8e;font-variant-numeric:tabular-nums;padding-right:6px}
-[hidden]{display:none!important}
+.bar .count{color:var(--us-ash);font-variant-numeric:tabular-nums;padding-right:6px}
 @media (max-width:520px){#fsLabel,.help{display:none}}
-.help{position:fixed;left:50%;top:18px;transform:translateX(-50%);font-size:12px;color:#bdbdbd;background:rgba(12,12,12,.85);border:1px solid #2a2a2a;padding:6px 12px;border-radius:10px;transition:opacity .3s;white-space:nowrap;max-width:calc(100% - 24px);overflow:hidden;text-overflow:ellipsis}
+.help{position:fixed;left:50%;top:18px;transform:translateX(-50%);font-size:12px;color:var(--us-silver);background:var(--us-backstage);border:var(--us-divider);padding:6px 12px;border-radius:var(--us-radius);transition:opacity .3s;white-space:nowrap;max-width:calc(100% - 24px);overflow:hidden;text-overflow:ellipsis}
 body.idle .help{opacity:0}
-:focus-visible{outline:2px solid #4F8DFF;outline-offset:2px}
 </style>
 </head>
 <body>
@@ -37,22 +34,23 @@ body.idle .help{opacity:0}
 <div id="photo"><img alt=""></div>
 <div class="help" id="help"></div>
 <div class="bar" role="toolbar">
-  <button type="button" id="prev" aria-label="←"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button type="button" class="us-btn" id="prev" aria-label="←"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
   <div class="name" id="name"></div><div class="count" id="count"></div>
-  <button type="button" id="next" aria-label="→"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-  <button type="button" id="fs"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span id="fsLabel"></span></button>
-  <button type="button" id="close" aria-label="Esc" hidden><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <button type="button" class="us-btn" id="next" aria-label="→"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+  <button type="button" class="us-btn" id="fs"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span id="fsLabel"></span></button>
+  <button type="button" class="us-btn" id="close" aria-label="Esc" hidden><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
 </div>
-<script src="i18n.js"></script>
-<script src="venn-data.js"></script>
-<script src="wm-data.js"></script>
-<script src="patterns.js"></script>
+<script src="shared/ultraspeaker-lang.js?v=20261102"></script>
+<script src="i18n.js?v=20261102"></script>
+<script src="venn-data.js?v=20261102"></script>
+<script src="wm-data.js?v=20261102"></script>
+<script src="patterns.js?v=20261102"></script>
 <script>
 (function () {
   "use strict";
   const PLP = window.PL_PATTERNS, I18N = window.PL_I18N;
   const q = new URLSearchParams(location.search);
-  let LANG = I18N[q.get("lang")] ? q.get("lang") : "it";
+  let LANG = UltraspeakerLang.get(); // ?lang= dal pannello, altrimenti la lingua comune (riserva: inglese)
   const t = (k) => I18N[LANG][k] ?? k;
   const KEYS = PLP.ORDER;
   let idx = Math.max(0, KEYS.indexOf(q.get("k")));

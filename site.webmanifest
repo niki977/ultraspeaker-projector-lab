@@ -1,7 +1,9 @@
 {
   "name": "The Ultraspeaker Projector Lab",
   "short_name": "Projector Lab",
-  "start_url": "./index.html",
+  "description": "Set up the projector before you speak: a 10-step guide with test patterns.",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",

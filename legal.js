@@ -1,35 +1,27 @@
-/* The Ultraspeaker Projector Lab – lingua delle pagine di supporto, privacy, condizioni e guida.
-   Stessa scelta del pannello: ?lang=, poi la lingua salvata, poi quella del browser. */
+/* The Ultraspeaker Projector Lab – pagine di servizio (Supporto, Privacy, Condizioni d'uso, Installazione).
+   La lingua la gestisce shared/ultraspeaker-lang.js; qui restano i testi del menu e i link che portano ?lang=. */
 (function () {
   "use strict";
-  const LANGS = [["it", "Italiano"], ["en", "English"], ["es", "Español"], ["fr", "Français"], ["de", "Deutsch"]];
-  const CODES = LANGS.map((l) => l[0]);
-  const NAV = {
-    it: { support: "Supporto", privacy: "Privacy", terms: "Condizioni d’uso", guide: "Guida d’installazione", lang: "Lingua" },
-    en: { support: "Support", privacy: "Privacy", terms: "Terms of use", guide: "Installation guide", lang: "Language" },
-    es: { support: "Soporte", privacy: "Privacidad", terms: "Condiciones de uso", guide: "Guía de instalación", lang: "Idioma" },
-    fr: { support: "Assistance", privacy: "Confidentialité", terms: "Conditions d’utilisation", guide: "Guide d’installation", lang: "Langue" },
-    de: { support: "Support", privacy: "Datenschutz", terms: "Nutzungsbedingungen", guide: "Installationsanleitung", lang: "Sprache" },
+  const L = window.UltraspeakerLang;
+  const T = {
+    it: { support: "Supporto", privacy: "Privacy", terms: "Condizioni d’uso", install: "Installazione", guide: "Guida", guideTitle: "Guida d’utilizzo", cta: "Richiedi un consiglio", language: "Lingua" },
+    en: { support: "Support", privacy: "Privacy", terms: "Terms of use", install: "Installation", guide: "Guide", guideTitle: "User guide", cta: "Ask for advice", language: "Language" },
+    es: { support: "Soporte", privacy: "Privacidad", terms: "Condiciones de uso", install: "Instalación", guide: "Guía", guideTitle: "Guía de uso", cta: "Pide un consejo", language: "Idioma" },
+    fr: { support: "Assistance", privacy: "Confidentialité", terms: "Conditions d’utilisation", install: "Installation", guide: "Guide", guideTitle: "Guide d’utilisation", cta: "Demander un conseil", language: "Langue" },
+    de: { support: "Support", privacy: "Datenschutz", terms: "Nutzungsbedingungen", install: "Installation", guide: "Anleitung", guideTitle: "Bedienungsanleitung", cta: "Rat einholen", language: "Sprache" },
   };
-  const KEY = "projectorlab.lang"; // condivisa con il pannello, salvata come JSON
-  const saved = () => { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } };
-
-  function detect() {
-    const l = [new URLSearchParams(location.search).get("lang"), saved(), navigator.language.slice(0, 2).toLowerCase()].find((x) => CODES.includes(x));
-    return l || "en";
-  }
   function apply(lang) {
-    document.documentElement.lang = lang;
-    document.querySelectorAll("[data-lang]").forEach((b) => { b.hidden = b.dataset.lang !== lang; });
-    document.querySelectorAll("nav a[data-nav]").forEach((a) => { a.textContent = NAV[lang][a.dataset.nav]; a.href = a.dataset.href + "?lang=" + lang; });
-    // link interni (pagine .html del sito): portano la lingua scelta
-    document.querySelectorAll("main a:not([href*=':'])").forEach((a) => { a.setAttribute("href", a.getAttribute("href").split("?")[0] + "?lang=" + lang); });
-    document.title = NAV[lang][document.body.dataset.page] + " – The Ultraspeaker Projector Lab";
-    sel.value = lang; sel.setAttribute("aria-label", NAV[lang].lang);
+    const t = T[lang];
+    document.querySelectorAll("[data-nav]").forEach((a) => { a.textContent = t[a.dataset.nav]; a.href = L.linkWithLang(a.getAttribute("href"), lang); });
+    document.querySelectorAll("[data-t]").forEach((e) => { e.textContent = t[e.dataset.t]; });
+    // link interni (pagine .html del sito) nel testo: portano la lingua scelta
+    document.querySelectorAll("main a:not([href*=':']):not([href$='.pdf'])").forEach((a) => { a.href = L.linkWithLang(a.getAttribute("href"), lang); });
+    const g = document.getElementById("usGuide"); g.href = L.guideHref("projector", lang); g.setAttribute("aria-label", t.guideTitle); g.title = t.guideTitle;
+    document.getElementById("usCta").href = "mailto:info@theultraspeaker.com?subject=" + encodeURIComponent(t.cta);
+    document.title = t[document.body.dataset.page] + " · The Ultraspeaker Projector Lab";
     const u = new URL(location.href); u.searchParams.set("lang", lang); history.replaceState(null, "", u);
   }
-  const sel = document.getElementById("lang");
-  LANGS.forEach(([code, name]) => sel.add(new Option(name, code)));
-  sel.addEventListener("change", () => { try { localStorage.setItem(KEY, JSON.stringify(sel.value)); } catch (e) { /* archiviazione non disponibile */ } apply(sel.value); });
-  apply(detect());
+  const lang = document.documentElement.lang;
+  L.bindSelect(document.getElementById("lang"), lang, apply);
+  apply(lang);
 })();

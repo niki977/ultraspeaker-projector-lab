@@ -3,28 +3,34 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Supporto – The Ultraspeaker Projector Lab</title>
-<link rel="icon" type="image/png" sizes="32x32" href="assets/projector-lab-icon-32.png?v=5">
+<title>Supporto · The Ultraspeaker Projector Lab</title>
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=5">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/projector-lab-icon-32.png?v=5">
 <link rel="apple-touch-icon" href="assets/projector-lab-icon-180.png?v=5">
-<link rel="stylesheet" href="legal.css">
+<link rel="stylesheet" href="shared/ultraspeaker-lab.css?v=20261102">
+<link rel="stylesheet" href="css/app.css?v=20261102">
+<script src="shared/ultraspeaker-lang.js?v=20261102"></script>
+<!-- Lingua letta prima del disegno della pagina, così compare subito il testo giusto -->
+<script>document.documentElement.lang = UltraspeakerLang.get("projectorlab.lang");</script>
 </head>
 <body data-page="support">
-<header><div class="in">
-  <a class="brand-link" href="https://www.theultraspeaker.com" target="_blank" rel="noopener" title="www.theultraspeaker.com"><img src="assets/logo-projector-lab-white.svg?v=5" alt="The Ultraspeaker Projector Lab"></a>
-  <label class="lang"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><select id="lang" aria-label="Lingua"></select></label>
-</div></header>
-<nav aria-label="The Ultraspeaker Projector Lab">
-  <a data-nav="support" data-href="support.html" href="support.html" aria-current="page">Supporto</a>
-  <a data-nav="privacy" data-href="privacy.html" href="privacy.html">Privacy</a>
-  <a data-nav="terms" data-href="terms.html" href="terms.html">Condizioni d’uso</a>
-  <a data-nav="guide" data-href="GUIDA-INSTALLAZIONE.html" href="GUIDA-INSTALLAZIONE.html">Guida d’installazione</a>
-</nav>
+<div class="us-doc">
+  <header class="us-header">
+    <a class="us-logo" href="https://www.theultraspeaker.com" target="_blank" rel="noopener"><img src="assets/logo-projector-lab-white.svg?v=5" alt="The Ultraspeaker Projector Lab"></a>
+    <div class="us-header-tools">
+      <a class="us-btn us-guide" id="usGuide" href="guide/projector-lab-guide-it.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg><span data-t="guide">Guida</span></a>
+      <label class="us-lang"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg><span class="us-sr" data-t="language">Lingua</span><select id="lang"></select></label>
+    </div>
+  </header>
+  <nav class="us-doc-nav"><a href="support.html" data-nav="support" aria-current="page">Supporto</a><a href="privacy.html" data-nav="privacy">Privacy</a><a href="terms.html" data-nav="terms">Condizioni d’uso</a><a href="GUIDA-INSTALLAZIONE.html" data-nav="install">Installazione</a></nav>
 <main>
 <div data-lang="it" lang="it">
-<section>
 <h1>Supporto</h1>
-<p class="lead">Una procedura in 10 passi per regolare il proiettore prima di parlare: formato e bordi, geometria, fuoco, nero, bianco, grigi, colore, riferimenti clinici e uniformità, con pattern di test creati su misura per la tua presentazione.</p>
+<p class="us-updated">Ultimo aggiornamento: 2 novembre 2026</p>
+<p><b>Titolare:</b> Nicholas D. Charles (The Ultraspeaker) · <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a></p>
+<p>Una procedura in 10 passi per regolare il proiettore prima di parlare: formato e bordi, geometria, fuoco, nero, bianco, grigi, colore, riferimenti clinici e uniformità, con pattern di test creati su misura per la tua presentazione.</p>
 <h2>Come si usa</h2>
 <ol>
 <li>Apri <b>Home → Projector Lab</b> e premi <b>Inserisci le slide di test</b>: vengono create nel formato della presentazione, con le istruzioni nelle note del relatore.</li>
@@ -40,17 +46,22 @@
 <h3>Il proiettore è gestito dalla regia e non posso toccarlo</h3>
 <p>Al passo 10 trovi cosa chiedere al tecnico e cosa puoi fare dal computer e nelle slide.</p>
 <h3>Posso usarlo con Keynote?</h3>
-<p>Sì: dalla <a href="index.html">versione per il browser</a> scarichi lo Screen Test in .pptx, che Keynote apre, e segui la guida dal browser o dal telefono.</p>
+<p>Sì: dalla <a href="index.html">versione web</a> scarichi lo Screen Test in .pptx, che Keynote apre, e segui la guida dal browser o dal telefono.</p>
 <h3>I nomi dei menu del mio proiettore sono diversi</h3>
 <p>Ogni marca usa nomi propri: la guida indica i nomi più comuni (per esempio Luminosità/Brightness, Proporzioni/Aspect, Overscan). In caso di dubbio consulta il manuale del proiettore o il tecnico della sala.</p>
 <h2>Contatti</h2>
 <p>Scrivi a <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a> indicando la versione di PowerPoint (Mac, Windows o web) e, se possibile, uno screenshot. Rispondiamo di solito entro due giorni lavorativi.</p>
-</section>
+<h2>Guida d’utilizzo</h2>
+<p>La guida d’utilizzo in PDF spiega la procedura passo per passo, con le schermate del Lab. Si apre anche dal pulsante <b>Guida</b> accanto al selettore lingua.</p>
+<p><a href="guide/projector-lab-guide-it.pdf" target="_blank" rel="noopener" hreflang="it">Italiano</a> · <a href="guide/projector-lab-guide-en.pdf" target="_blank" rel="noopener" hreflang="en">English</a> · <a href="guide/projector-lab-guide-es.pdf" target="_blank" rel="noopener" hreflang="es">Español</a> · <a href="guide/projector-lab-guide-fr.pdf" target="_blank" rel="noopener" hreflang="fr">Français</a> · <a href="guide/projector-lab-guide-de.pdf" target="_blank" rel="noopener" hreflang="de">Deutsch</a></p>
+<h2>Altri strumenti The Ultraspeaker</h2>
+<ul><li><a href="https://niki977.github.io/ultraspeaker-qr-lab/" target="_blank" rel="noopener">The Ultraspeaker QR Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-image-lab/" target="_blank" rel="noopener">The Ultraspeaker Image Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-flipbook-lab/" target="_blank" rel="noopener">The Ultraspeaker Flipbook Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-projector-lab/" target="_blank" rel="noopener">The Ultraspeaker Projector Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-check-lab/" target="_blank" rel="noopener">The Ultraspeaker Check Lab</a></li></ul>
 </div>
-<div data-lang="en" lang="en" hidden>
-<section>
+<div data-lang="en" lang="en">
 <h1>Support</h1>
-<p class="lead">A 10-step procedure to set up the projector before you speak: format and edges, geometry, focus, black, white, greys, colour, clinical references and uniformity, with test patterns built to fit your presentation.</p>
+<p class="us-updated">Last updated: 2 November 2026</p>
+<p><b>Owner:</b> Nicholas D. Charles (The Ultraspeaker) · <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a></p>
+<p>A 10-step procedure to set up the projector before you speak: format and edges, geometry, focus, black, white, greys, colour, clinical references and uniformity, with test patterns built to fit your presentation.</p>
 <h2>How to use it</h2>
 <ol>
 <li>Open <b>Home → Projector Lab</b> and click <b>Insert the test slides</b>: they are built in the presentation’s format, with instructions in the speaker notes.</li>
@@ -66,17 +77,22 @@
 <h3>The projector is run by the AV desk and I can’t touch it</h3>
 <p>Step 10 lists what to ask the technician and what you can do on your computer and in your slides.</p>
 <h3>Can I use it with Keynote?</h3>
-<p>Yes: from the <a href="index.html">browser version</a> you download the Screen Test as .pptx, which Keynote opens, and follow the guide in the browser or on your phone.</p>
+<p>Yes: from the <a href="index.html">web version</a> you download the Screen Test as .pptx, which Keynote opens, and follow the guide in the browser or on your phone.</p>
 <h3>My projector’s menus have different names</h3>
 <p>Every brand uses its own names: the guide gives the most common ones (for example Brightness, Aspect, Overscan). If in doubt, check the projector manual or ask the venue technician.</p>
 <h2>Contact</h2>
 <p>Write to <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a> with your PowerPoint version (Mac, Windows or web) and, if possible, a screenshot. We usually reply within two working days.</p>
-</section>
+<h2>User guide</h2>
+<p>The PDF user guide explains the procedure step by step, with screenshots of the Lab. It also opens from the <b>Guide</b> button next to the language menu.</p>
+<p><a href="guide/projector-lab-guide-it.pdf" target="_blank" rel="noopener" hreflang="it">Italiano</a> · <a href="guide/projector-lab-guide-en.pdf" target="_blank" rel="noopener" hreflang="en">English</a> · <a href="guide/projector-lab-guide-es.pdf" target="_blank" rel="noopener" hreflang="es">Español</a> · <a href="guide/projector-lab-guide-fr.pdf" target="_blank" rel="noopener" hreflang="fr">Français</a> · <a href="guide/projector-lab-guide-de.pdf" target="_blank" rel="noopener" hreflang="de">Deutsch</a></p>
+<h2>Other The Ultraspeaker tools</h2>
+<ul><li><a href="https://niki977.github.io/ultraspeaker-qr-lab/" target="_blank" rel="noopener">The Ultraspeaker QR Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-image-lab/" target="_blank" rel="noopener">The Ultraspeaker Image Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-flipbook-lab/" target="_blank" rel="noopener">The Ultraspeaker Flipbook Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-projector-lab/" target="_blank" rel="noopener">The Ultraspeaker Projector Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-check-lab/" target="_blank" rel="noopener">The Ultraspeaker Check Lab</a></li></ul>
 </div>
-<div data-lang="es" lang="es" hidden>
-<section>
+<div data-lang="es" lang="es">
 <h1>Soporte</h1>
-<p class="lead">Un procedimiento en 10 pasos para ajustar el proyector antes de hablar: formato y bordes, geometría, enfoque, negro, blanco, grises, color, referencias clínicas y uniformidad, con patrones de prueba creados a medida para tu presentación.</p>
+<p class="us-updated">Última actualización: 2 de noviembre de 2026</p>
+<p><b>Titular:</b> Nicholas D. Charles (The Ultraspeaker) · <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a></p>
+<p>Un procedimiento en 10 pasos para ajustar el proyector antes de hablar: formato y bordes, geometría, enfoque, negro, blanco, grises, color, referencias clínicas y uniformidad, con patrones de prueba creados a medida para tu presentación.</p>
 <h2>Cómo se usa</h2>
 <ol>
 <li>Abre <b>Inicio → Projector Lab</b> y pulsa <b>Insertar diapositivas de prueba</b>: se crean en el formato de la presentación, con las instrucciones en las notas del orador.</li>
@@ -92,17 +108,22 @@
 <h3>El proyector lo gestiona la cabina técnica y no puedo tocarlo</h3>
 <p>En el paso 10 encontrarás qué pedir al técnico y qué puedes hacer desde el ordenador y en las diapositivas.</p>
 <h3>¿Puedo usarlo con Keynote?</h3>
-<p>Sí: desde la <a href="index.html">versión de navegador</a> descargas el Screen Test en .pptx, que Keynote abre, y sigues la guía desde el navegador o el teléfono.</p>
+<p>Sí: desde la <a href="index.html">versión web</a> descargas el Screen Test en .pptx, que Keynote abre, y sigues la guía desde el navegador o el teléfono.</p>
 <h3>Los menús de mi proyector tienen otros nombres</h3>
 <p>Cada marca usa sus propios nombres: la guía indica los más comunes (por ejemplo Brillo/Brightness, Relación de aspecto/Aspect, Overscan). En caso de duda consulta el manual del proyector o al técnico de la sala.</p>
 <h2>Contacto</h2>
 <p>Escribe a <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a> indicando tu versión de PowerPoint (Mac, Windows o web) y, si es posible, una captura de pantalla. Normalmente respondemos en dos días laborables.</p>
-</section>
+<h2>Guía de uso</h2>
+<p>La guía de uso en PDF explica el procedimiento paso a paso, con capturas del Lab. También se abre con el botón <b>Guía</b> junto al selector de idioma.</p>
+<p><a href="guide/projector-lab-guide-it.pdf" target="_blank" rel="noopener" hreflang="it">Italiano</a> · <a href="guide/projector-lab-guide-en.pdf" target="_blank" rel="noopener" hreflang="en">English</a> · <a href="guide/projector-lab-guide-es.pdf" target="_blank" rel="noopener" hreflang="es">Español</a> · <a href="guide/projector-lab-guide-fr.pdf" target="_blank" rel="noopener" hreflang="fr">Français</a> · <a href="guide/projector-lab-guide-de.pdf" target="_blank" rel="noopener" hreflang="de">Deutsch</a></p>
+<h2>Otras herramientas The Ultraspeaker</h2>
+<ul><li><a href="https://niki977.github.io/ultraspeaker-qr-lab/" target="_blank" rel="noopener">The Ultraspeaker QR Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-image-lab/" target="_blank" rel="noopener">The Ultraspeaker Image Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-flipbook-lab/" target="_blank" rel="noopener">The Ultraspeaker Flipbook Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-projector-lab/" target="_blank" rel="noopener">The Ultraspeaker Projector Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-check-lab/" target="_blank" rel="noopener">The Ultraspeaker Check Lab</a></li></ul>
 </div>
-<div data-lang="fr" lang="fr" hidden>
-<section>
+<div data-lang="fr" lang="fr">
 <h1>Assistance</h1>
-<p class="lead">Une procédure en 10 étapes pour régler le projecteur avant de parler : format et bords, géométrie, netteté, noir, blanc, gris, couleur, références cliniques et uniformité, avec des mires créées sur mesure pour votre présentation.</p>
+<p class="us-updated">Dernière mise à jour : 2 novembre 2026</p>
+<p><b>Titulaire:</b> Nicholas D. Charles (The Ultraspeaker) · <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a></p>
+<p>Une procédure en 10 étapes pour régler le projecteur avant de parler : format et bords, géométrie, netteté, noir, blanc, gris, couleur, références cliniques et uniformité, avec des mires créées sur mesure pour votre présentation.</p>
 <h2>Utilisation</h2>
 <ol>
 <li>Ouvrez <b>Accueil → Projector Lab</b> et cliquez sur <b>Insérer les diapositives de test</b> : elles sont créées au format de la présentation, avec les instructions dans les notes de l’orateur.</li>
@@ -118,17 +139,22 @@
 <h3>Le projecteur est géré par la régie et je ne peux pas y toucher</h3>
 <p>L’étape 10 indique quoi demander au technicien et ce que vous pouvez faire sur votre ordinateur et dans vos diapositives.</p>
 <h3>Puis-je l’utiliser avec Keynote ?</h3>
-<p>Oui : depuis la <a href="index.html">version navigateur</a>, téléchargez le Screen Test en .pptx, que Keynote ouvre, et suivez le guide dans le navigateur ou sur votre téléphone.</p>
+<p>Oui : depuis la <a href="index.html">version web</a>, téléchargez le Screen Test en .pptx, que Keynote ouvre, et suivez le guide dans le navigateur ou sur votre téléphone.</p>
 <h3>Les menus de mon projecteur ont d’autres noms</h3>
 <p>Chaque marque utilise ses propres noms : le guide donne les plus courants (par exemple Luminosité/Brightness, Format/Aspect, Overscan). En cas de doute, consultez le manuel du projecteur ou le technicien de la salle.</p>
 <h2>Contact</h2>
 <p>Écrivez à <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a> en indiquant votre version de PowerPoint (Mac, Windows ou web) et, si possible, une capture d’écran. Nous répondons généralement sous deux jours ouvrés.</p>
-</section>
+<h2>Guide d’utilisation</h2>
+<p>Le guide d’utilisation en PDF explique la procédure étape par étape, avec des captures du Lab. Il s’ouvre aussi avec le bouton <b>Guide</b> à côté du sélecteur de langue.</p>
+<p><a href="guide/projector-lab-guide-it.pdf" target="_blank" rel="noopener" hreflang="it">Italiano</a> · <a href="guide/projector-lab-guide-en.pdf" target="_blank" rel="noopener" hreflang="en">English</a> · <a href="guide/projector-lab-guide-es.pdf" target="_blank" rel="noopener" hreflang="es">Español</a> · <a href="guide/projector-lab-guide-fr.pdf" target="_blank" rel="noopener" hreflang="fr">Français</a> · <a href="guide/projector-lab-guide-de.pdf" target="_blank" rel="noopener" hreflang="de">Deutsch</a></p>
+<h2>Autres outils The Ultraspeaker</h2>
+<ul><li><a href="https://niki977.github.io/ultraspeaker-qr-lab/" target="_blank" rel="noopener">The Ultraspeaker QR Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-image-lab/" target="_blank" rel="noopener">The Ultraspeaker Image Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-flipbook-lab/" target="_blank" rel="noopener">The Ultraspeaker Flipbook Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-projector-lab/" target="_blank" rel="noopener">The Ultraspeaker Projector Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-check-lab/" target="_blank" rel="noopener">The Ultraspeaker Check Lab</a></li></ul>
 </div>
-<div data-lang="de" lang="de" hidden>
-<section>
+<div data-lang="de" lang="de">
 <h1>Support</h1>
-<p class="lead">Ein Ablauf in 10 Schritten, um den Projektor vor Ihrem Vortrag einzustellen: Format und Ränder, Geometrie, Schärfe, Schwarz, Weiß, Graustufen, Farbe, klinische Referenzen und Gleichmäßigkeit, mit Testbildern passend zu Ihrer Präsentation.</p>
+<p class="us-updated">Zuletzt aktualisiert: 2. November 2026</p>
+<p><b>Inhaber:</b> Nicholas D. Charles (The Ultraspeaker) · <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a></p>
+<p>Ein Ablauf in 10 Schritten, um den Projektor vor Ihrem Vortrag einzustellen: Format und Ränder, Geometrie, Schärfe, Schwarz, Weiß, Graustufen, Farbe, klinische Referenzen und Gleichmäßigkeit, mit Testbildern passend zu Ihrer Präsentation.</p>
 <h2>So funktioniert es</h2>
 <ol>
 <li>Öffnen Sie <b>Start → Projector Lab</b> und klicken Sie auf <b>Testfolien einfügen</b>: Sie werden im Format der Präsentation erstellt, mit der Anleitung in den Referentennotizen.</li>
@@ -144,15 +170,23 @@
 <h3>Der Projektor wird von der Technik bedient und ich darf ihn nicht einstellen</h3>
 <p>In Schritt 10 steht, worum Sie den Techniker bitten und was Sie am Computer und in Ihren Folien tun können.</p>
 <h3>Kann ich es mit Keynote verwenden?</h3>
-<p>Ja: In der <a href="index.html">Browser-Version</a> laden Sie den Screen Test als .pptx herunter, den Keynote öffnet, und folgen der Anleitung im Browser oder auf dem Smartphone.</p>
+<p>Ja: In der <a href="index.html">Webversion</a> laden Sie den Screen Test als .pptx herunter, den Keynote öffnet, und folgen der Anleitung im Browser oder auf dem Smartphone.</p>
 <h3>Die Menüs meines Projektors heißen anders</h3>
 <p>Jeder Hersteller verwendet eigene Bezeichnungen: Die Anleitung nennt die gängigsten (z. B. Helligkeit/Brightness, Seitenverhältnis/Aspect, Overscan). Im Zweifel hilft das Handbuch des Projektors oder der Techniker vor Ort.</p>
 <h2>Kontakt</h2>
 <p>Schreiben Sie an <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a> und nennen Sie Ihre PowerPoint-Version (Mac, Windows oder Web), wenn möglich mit einem Screenshot. Wir antworten in der Regel innerhalb von zwei Werktagen.</p>
-</section>
+<h2>Bedienungsanleitung</h2>
+<p>Die PDF-Bedienungsanleitung erklärt den Ablauf Schritt für Schritt, mit Bildschirmfotos des Lab. Sie öffnet sich auch über die Schaltfläche <b>Anleitung</b> neben der Sprachauswahl.</p>
+<p><a href="guide/projector-lab-guide-it.pdf" target="_blank" rel="noopener" hreflang="it">Italiano</a> · <a href="guide/projector-lab-guide-en.pdf" target="_blank" rel="noopener" hreflang="en">English</a> · <a href="guide/projector-lab-guide-es.pdf" target="_blank" rel="noopener" hreflang="es">Español</a> · <a href="guide/projector-lab-guide-fr.pdf" target="_blank" rel="noopener" hreflang="fr">Français</a> · <a href="guide/projector-lab-guide-de.pdf" target="_blank" rel="noopener" hreflang="de">Deutsch</a></p>
+<h2>Weitere Tools von The Ultraspeaker</h2>
+<ul><li><a href="https://niki977.github.io/ultraspeaker-qr-lab/" target="_blank" rel="noopener">The Ultraspeaker QR Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-image-lab/" target="_blank" rel="noopener">The Ultraspeaker Image Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-flipbook-lab/" target="_blank" rel="noopener">The Ultraspeaker Flipbook Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-projector-lab/" target="_blank" rel="noopener">The Ultraspeaker Projector Lab</a></li><li><a href="https://niki977.github.io/ultraspeaker-check-lab/" target="_blank" rel="noopener">The Ultraspeaker Check Lab</a></li></ul>
 </div>
-<p class="tag"><a class="brand-link" href="https://www.theultraspeaker.com" target="_blank" rel="noopener" title="www.theultraspeaker.com"><picture><source srcset="assets/arena-white.svg" media="(prefers-color-scheme: dark)"><img src="assets/arena-black.svg" alt="The Ultraspeaker"></picture></a><a href="https://www.theultraspeaker.com" target="_blank" rel="noopener">theultraspeaker.com</a> · <a href="mailto:info@theultraspeaker.com">info@theultraspeaker.com</a></p>
 </main>
-<script src="legal.js"></script>
+  <footer class="us-footer">
+    <a class="us-cta" id="usCta" href="mailto:info@theultraspeaker.com?subject=Richiedi%20un%20consiglio"><img src="assets/arena-white.svg" alt=""><span data-t="cta">Richiedi un consiglio</span></a>
+    <p class="us-links"><a href="support.html" data-nav="support">Supporto</a><a href="privacy.html" data-nav="privacy">Privacy</a><a href="terms.html" data-nav="terms">Condizioni d’uso</a><a href="GUIDA-INSTALLAZIONE.html" data-nav="install">Installazione</a></p>
+  </footer>
+</div>
+<script src="legal.js?v=20261102"></script>
 </body>
 </html>
