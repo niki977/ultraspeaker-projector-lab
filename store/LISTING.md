@@ -28,7 +28,7 @@ Different rooms, different projectors: washed-out colours, cropped edges, unreco
 - Venue log: the settings you used are saved for next time
 - Clinical references for dentistry: enamel whites, soft tissue, oral cavity shadows, and your own clinical photo
 - Full-screen pattern window, without touching your presentation
-- Final report with the settings used; remove the test slides in one click
+- Final PDF report with the results and settings used; remove the test slides in one click
 - A small, discreet The Ultraspeaker Arena on the patterns, like a watermark
 - No data sent anywhere: everything happens on your computer. Italiano, English, Español, Français, Deutsch.
 

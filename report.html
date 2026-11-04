@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Report · The Ultraspeaker Projector Lab</title>
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=5">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/projector-lab-icon-32.png?v=5">
+<link rel="apple-touch-icon" href="assets/projector-lab-icon-180.png?v=5">
+<link rel="stylesheet" href="shared/ultraspeaker-lab.css?v=20261104">
+<link rel="stylesheet" href="css/app.css?v=20261104">
+</head>
+<!-- Report in PDF aperto dal pannello di PowerPoint: i dati arrivano dopo il # (non vengono mai inviati al server) -->
+<body>
+<div class="us-page us-page--narrow">
+  <header class="us-header">
+    <a class="us-logo" href="https://www.theultraspeaker.com" target="_blank" rel="noopener"><img src="assets/logo-projector-lab-white.svg?v=5" alt="The Ultraspeaker Projector Lab"></a>
+  </header>
+  <main class="pl-repage">
+    <p class="us-label" id="kicker"></p>
+    <h1 class="us-title" id="title"></h1>
+    <p class="us-subtitle" id="meta"></p>
+    <button type="button" class="us-btn us-btn--primary us-btn--block" id="dl" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8zM14 3v5h5M12 11v6M9 14l3 3 3-3"/></svg><span id="dlText"></span></button>
+    <iframe class="pl-repreview" id="preview" title="PDF" hidden></iframe>
+  </main>
+</div>
+<script src="vendor/jspdf.umd.min.js?v=20261104"></script>
+<script src="report-pdf.js?v=20261104"></script>
+<script>
+(async function () {
+  const $ = (id) => document.getElementById(id);
+  let m = null;
+  try {
+    const b = atob(location.hash.slice(1).replace(/-/g, "+").replace(/_/g, "/"));
+    m = JSON.parse(new TextDecoder().decode(Uint8Array.from(b, (c) => c.charCodeAt(0))));
+  } catch (e) { /* link incompleto */ }
+  if (!m || !m.L) {
+    $("title").textContent = "The report can't be read: go back to the Projector Lab and try again.";
+    $("dl").hidden = true; return;
+  }
+  document.documentElement.lang = m.lang;
+  document.title = `${m.L.file} · The Ultraspeaker Projector Lab`;
+  $("kicker").textContent = m.L.ready;
+  $("title").textContent = m.venue || m.L.untitled;
+  $("meta").textContent = `${m.date} · ${m.L.formatL} ${m.format}`;
+  $("dlText").textContent = m.L.again;
+  try {
+    const doc = await window.PLReport.build(m, "");
+    const name = window.PLReport.fileName(m);
+    $("dl").disabled = false;
+    $("dl").onclick = () => window.PLReport.save(doc, name);
+    // anteprima nella pagina (dove il browser mostra i PDF)
+    const pv = $("preview"); pv.src = URL.createObjectURL(doc.output("blob")); pv.hidden = false;
+  } catch (e) {
+    $("title").textContent = m.L.error; $("dl").hidden = true;
+  }
+})();
+</script>
+</body>
+</html>

@@ -153,3 +153,8 @@ textarea.us-field{resize:vertical;min-height:62px}
 @media (max-width:560px){.us-guide{width:var(--us-h-lang);padding:0}.us-guide span{display:none}}
 body.us-addin .us-guide{width:var(--us-h-lang);padding:0}
 body.us-addin .us-guide span{display:none}
+
+/* ---------- Pagina del report (report.html) ---------- */
+.pl-repage{padding:8px 0 32px}
+.pl-repage .us-subtitle{margin:0 0 20px}
+.pl-repreview{display:block;width:100%;height:78vh;margin-top:20px;border:var(--us-divider);border-radius:var(--us-radius);background:var(--us-house-lights)}

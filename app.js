@@ -406,38 +406,84 @@
   }
 
   /* ---------- Report ---------- */
+  // Contenuto del report, già tradotto: lo usano il testo d'anteprima e il PDF (report-pdf.js)
+  function answerLines() {
+    const ans = [];
+    ["black", "white", "cast", "ramps", "yellow", "gum", "enamel"].forEach((q) => {
+      const v = S.answers[q]; if (v == null) return;
+      let txt;
+      if (q === "cast") txt = CAST_GROUPS.map((g) => {
+        if (v[g] == null) return `${t("dx.cast." + g)}: –`;
+        const c = castOf(v[g]), d = [];
+        if (c.m > 0) d.push(t("dir.magenta")); if (c.m < 0) d.push(t("dir.green"));
+        if (c.y > 0) d.push(t("dir.yellow")); if (c.y < 0) d.push(t("dir.blue"));
+        return `${t("dx.cast." + g)}: ${d.join(" + ") || t("rep.neutral")}`;
+      }).join(" · ");
+      else if (q === "ramps") txt = v.map((k) => (k === "none" ? t("dx.ramps.none") : t("c." + k))).join(", ");
+      else txt = optLabel(q, v);
+      if (txt) ans.push([t("q." + q), txt]);
+    });
+    return ans;
+  }
+  const testSteps = () => STEPS().map((s, i) => [i + 1, s]).filter(([, s]) => s.id !== "prep" && s.id !== "final");
   function reportText() {
     const d = new Date();
     const lines = [t("report.title"), `${t("report.date")}: ${d.toLocaleDateString(LANG)} ${d.toLocaleTimeString(LANG, { hour: "2-digit", minute: "2-digit" })}`];
     if (S.venue) lines.push(`${t("venue")}: ${S.venue}`);
     lines.push(`${t("report.format")}: ${fmtKey()}`, "");
-    STEPS().forEach((s, i) => {
-      if (s.id === "prep" || s.id === "final") return;
+    testSteps().forEach(([n, s]) => {
       const r = S.results[s.id];
       const mark = r === "ok" ? "✓" : r === "fix" ? "!" : r === "skip" ? "–" : "·";
-      lines.push(`${mark} ${i + 1}. ${s.title}${r ? " — " + t("res." + r) : ""}`);
+      lines.push(`${mark} ${n}. ${s.title}${r ? " — " + t("res." + r) : ""}`);
     });
-    const ans = [];
-    ["black", "white", "cast", "ramps", "yellow", "gum", "enamel"].forEach((q) => {
-      const v = S.answers[q]; if (v == null) return;
-      let txt;
-      if (q === "cast") txt = CAST_GROUPS.map((g) => v[g] || "–").join(" / ");
-      else if (q === "ramps") txt = v.map((k) => (k === "none" ? t("dx.ramps.none") : t("c." + k))).join(", ");
-      else txt = optLabel(q, v);
-      if (txt) ans.push(`${t("q." + q)}: ${txt}`);
-    });
+    const ans = answerLines().map(([q, a]) => `${q}: ${a}`);
     if (ans.length) lines.push("", t("rep.answers") + ":", ...ans.map((x) => "  " + x));
     const vals = valueLines(S.values);
     if (vals.length) lines.push("", t("rep.values") + ":", ...vals.map((x) => "  " + x));
     if (S.note) lines.push("", `${t("report.note")}: ${S.note}`);
     return lines.join("\n");
   }
-  async function copyReport() {
-    const txt = reportText();
-    try { await navigator.clipboard.writeText(txt); toast(t("report.copied")); return; } catch (e) { /* uso il metodo classico */ }
-    const ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta); ta.select();
-    try { document.execCommand("copy"); toast(t("report.copied")); } catch (e) { /* niente */ }
-    ta.remove();
+  function reportModel() {
+    const d = new Date(), loc = LANG === "en" ? "en-GB" : LANG;
+    const pad = (n) => String(n).padStart(2, "0");
+    const L = {};
+    ["kicker", "steps", "step", "result", "question", "answer", "setting", "before", "after", "skip", "none", "footer", "untitled", "file", "ready", "again", "error"].forEach((k) => { L[k] = t("rep." + k); });
+    Object.assign(L, { ok: t("res.ok"), fix: t("res.fix"), answers: t("rep.answers"), values: t("rep.values"), note: t("report.note"),
+      formatL: t("report.format"), cta: t("us.cta"), download: t("report.pdf") });
+    return {
+      v: 1, lang: LANG, L, venue: (S.venue || "").trim(), format: fmtKey(),
+      date: `${d.toLocaleDateString(loc, { day: "numeric", month: "long", year: "numeric" })} · ${d.toLocaleTimeString(loc, { hour: "2-digit", minute: "2-digit" })}`,
+      iso: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`,
+      steps: testSteps().map(([n, s]) => [n, s.title, S.results[s.id] || ""]),
+      answers: answerLines(),
+      values: SET_ORDER.filter((k) => S.values[k] && (S.values[k].a || S.values[k].b)).map((k) => [t("set." + k), S.values[k].a || "", S.values[k].b || ""]),
+      note: (S.note || "").trim(),
+      mail: "mailto:info@theultraspeaker.com?subject=" + encodeURIComponent(t("us.cta")),
+    };
+  }
+  const loadScript = (src) => new Promise((ok, ko) => {
+    if (document.querySelector(`script[src="${src}"]`)) return ok();
+    const el = document.createElement("script"); el.src = src; el.onload = ok; el.onerror = () => ko(new Error(src)); document.head.appendChild(el);
+  });
+  // Nel pannello di PowerPoint scaricare un file spesso non funziona (soprattutto su Mac):
+  // il report si apre nel browser (report.html), che crea il PDF da lì. I dati viaggiano dopo il #, quindi restano sul dispositivo.
+  async function downloadReport() {
+    const m = reportModel();
+    if (office && supported("OpenBrowserWindowApi", "1.1")) {
+      const json = new TextEncoder().encode(JSON.stringify(m));
+      let bin = ""; json.forEach((b) => { bin += String.fromCharCode(b); });
+      Office.context.ui.openBrowserWindow(new URL("report.html", location.href).href + "#" + btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""));
+      toast(t("report.browser"));
+      return;
+    }
+    setBusy(true);
+    try {
+      await loadScript("vendor/jspdf.umd.min.js?v=20261104");
+      await loadScript("report-pdf.js?v=20261104");
+      const doc = await window.PLReport.build(m, "");
+      window.PLReport.save(doc, window.PLReport.fileName(m));
+      toast(t("report.done"));
+    } catch (e) { toast(t("err", { m: (e && e.message) || e })); } finally { setBusy(false); }
   }
 
   /* ---------- Domande guidate "Cosa vedi?" e diagnosi ---------- */
@@ -759,7 +805,7 @@
       h += `<section class="pl-block"><p class="us-label">${esc(t("report"))}</p>
         <textarea class="us-field" id="note" placeholder="${esc(t("report.note.ph"))}">${esc(S.note)}</textarea>
         <pre class="pl-report" id="report"></pre>
-        <div class="pl-btns"><button type="button" class="us-btn" id="copyBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg><span>${esc(t("report.copy"))}</span></button>` +
+        <div class="pl-btns"><button type="button" class="us-btn" id="pdfBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8zM14 3v5h5M12 11v6M9 14l3 3 3-3"/></svg><span>${esc(t("report.pdf"))}</span></button>` +
         `<button type="button" class="us-btn restart-final"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg><span>${esc(t("reset"))}</span></button>` +
         `<button type="button" class="us-btn" id="saveVenueBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6"/></svg><span>${esc(t("venue.save"))}</span></button>` +
         (office && hasTests() ? `<button type="button" class="us-btn is-warn" id="removeBtn2"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span>${esc(t("remove"))}</span></button>` : "") +
@@ -791,11 +837,11 @@
     const pb = $("#photoBtn", art); if (pb) pb.onclick = pickPhoto;
     const note = $("#note", art); if (note) note.oninput = () => { S.note = note.value; persist(); $("#report").textContent = reportText(); };
     const rep = $("#report", art); if (rep) rep.textContent = reportText();
-    const cb = $("#copyBtn", art); if (cb) cb.onclick = copyReport;
+    const pdf = $("#pdfBtn", art); if (pdf) pdf.onclick = downloadReport;
     const rb2 = $("#removeBtn2", art); if (rb2) rb2.onclick = removeTests;
 
     $("#prevBtn").disabled = S.step === 0;
-    $("#nextBtn").textContent = S.step === steps.length - 1 ? t("report.copy") : t("next");
+    $("#nextBtn").textContent = S.step === steps.length - 1 ? t("report.pdf") : t("next");
   }
 
   function goStep(i) {
@@ -833,7 +879,7 @@
     $("#restartBtn").onclick = restart;
     $("#resetAllBtn").onclick = resetAll;
     $("#prevBtn").onclick = () => goStep(S.step - 1);
-    $("#nextBtn").onclick = () => { if (S.step === STEPS().length - 1) copyReport(); else goStep(S.step + 1); };
+    $("#nextBtn").onclick = () => { if (S.step === STEPS().length - 1) downloadReport(); else goStep(S.step + 1); };
     $("#photoIn").onchange = (e) => onPhoto(e.target.files && e.target.files[0]);
     // In PowerPoint i link si aprono nel browser di sistema
     $$(".us-links a, .us-logo, .us-guide").forEach((el) => el.addEventListener("click", (e) => {

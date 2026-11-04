@@ -18,8 +18,10 @@ uniformità, prova finale con report. Interfaccia, etichette e note in italiano,
    Nero e bianco insieme riconoscono il problema del range HDMI; i **Grigi a confronto** (ring-around 3×3 su ombre,
    mezzitoni e luci) rivelano la dominante e indicano temperatura/tinta o Gain/Offset RGB. Ogni passo ha i campi
    **valori prima → dopo**, che finiscono nel report e nel **registro delle sale** (richiamabile al passo 1).
-4. Passo 10: checklist finale, cosa chiedere al tecnico se non puoi toccare il proiettore, report copiabile
-   e **Rimuovi le slide di test**.
+4. Passo 10: checklist finale, cosa chiedere al tecnico se non puoi toccare il proiettore, **Scarica il report (PDF)**
+   e **Rimuovi le slide di test**. Il report è un PDF A4 nello stile delle guide (intestazione nera, esiti dei passi,
+   risposte, valori prima → dopo, note, chiusura con l’Arena). Nella versione web si scarica subito; nel pannello di
+   PowerPoint, dove i download spesso non funzionano, si apre `report.html` nel browser con i dati dopo il `#`.
 
 In alternativa **Apri i pattern in una finestra** mostra gli stessi pattern in una finestra separata da trascinare
 sul proiettore (doppio clic = tutto schermo): si adattano al formato reale dello schermo e seguono i passi del pannello.
@@ -56,17 +58,20 @@ nel gruppo «The Ultraspeaker», accanto a QR Lab e Image Lab.
 |---|---|
 | `index.html` | Il pannello e la versione web |
 | `css/app.css` | Stile proprio del Lab, caricato dopo `shared/ultraspeaker-lab.css` |
-| `app.js` | Procedura, collegamento con PowerPoint (inserimento, navigazione, rimozione, foto), report |
+| `app.js` | Procedura, collegamento con PowerPoint (inserimento, navigazione, rimozione, foto), contenuto del report |
+| `report-pdf.js` | Impaginazione del report in PDF (A4), usata dalla versione web e da `report.html` |
+| `report.html` | Pagina del report aperta nel browser dal pannello di PowerPoint: anteprima e download del PDF |
 | `patterns.js` | I 15 pattern, descritti una volta e disegnati in SVG (anteprime e finestra) e in PowerPoint (PptxGenJS) |
 | `show.html` | Pattern a schermo intero: finestra di PowerPoint, finestra del browser o riquadro dentro il pannello |
 | `i18n.js` | Testi e procedura nelle 5 lingue |
 | `venn-data.js` | Immagine del cerchio RGB del Screen Test |
 | `wm-data.js` | Arena di The Ultraspeaker semitrasparente (watermark dei pattern) |
 | `vendor/pptxgen.bundle.js` | PptxGenJS 3.12 (licenza MIT) per creare le slide |
+| `vendor/jspdf.umd.min.js` | jsPDF 4.2.1 (licenza MIT) per creare il report in PDF, caricato solo quando serve |
 | `projector-lab-manifest.xml` | Manifest dell’add-in per PowerPoint |
-| `assets/` | Lockup Projector Lab, Arena (chiusura delle pagine), favicon e icone PNG usate da manifest e browser |
+| `assets/` | Lockup Projector Lab, Arena (chiusura delle pagine), favicon e icone PNG usate da manifest e browser; `report-logo.png` e `report-arena.png` per il PDF |
 | `shared/` | Kit comune dei Lab The Ultraspeaker 1.2 (stile, lingua, guide, esempi): non si modifica qui |
-| `fonts/` | Champagne & Limousines in woff2, i quattro stili del kit |
+| `fonts/` | Champagne & Limousines in woff2, i quattro stili del kit; in `fonts/pdf/` regular, bold e italic in TTF per il report PDF |
 | `support.html`, `privacy.html`, `terms.html`, `GUIDA-INSTALLAZIONE.html` | Supporto, privacy, condizioni d’uso e guida, in 5 lingue con selettore come nel pannello |
 | `legal.js` | Testi del menu e link con la lingua scelta in queste pagine |
 | `guide/` | Guida d’utilizzo: PDF nelle 5 lingue, sorgenti, screenshot e `capture.mjs` |
@@ -95,6 +100,7 @@ Le chiavi delle versioni precedenti (`projectorlab.*`) vengono copiate e cancell
 
 ## Versioni
 
+- **1.1.1** (4 novembre 2026): report in PDF scaricabile al posto di «Copia il report».
 - **1.1** (novembre 2026): uniformazione alla linea guida comune dei Lab 1.2: kit `shared/`, intestazione e chiusura
   comuni, pagine di servizio scure, lingua comune con riserva inglese, manifest en-US, guida d’utilizzo PDF.
 - **1.0**: prima versione.
