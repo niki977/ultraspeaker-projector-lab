@@ -150,8 +150,14 @@ textarea.us-field{resize:vertical;min-height:62px}
 .us-doc h3{font-size:14px;font-weight:700;margin:18px 0 4px}
 
 /* «Guida» solo icona su telefono e nel pannello: il nome resta in aria-label */
-@media (max-width:560px){.us-guide{width:var(--us-h-lang);padding:0}.us-guide span{display:none}}
-body.us-addin .us-guide{width:var(--us-h-lang);padding:0}
+/* Pulsante «Guida» identico al selettore lingua: stessa altezza (32 px), stesso fondo, bordo e carattere
+   (nel kit .us-btn, 36 px e 600, viene dopo .us-guide e ne vincerebbe altezza e peso) */
+.us-header-tools .us-guide,.us-header-tools .us-lang select{box-sizing:border-box;height:var(--us-h-lang);line-height:normal;font-size:13px;font-weight:400;color:var(--us-spotlight)}
+.us-header-tools .us-guide{padding:0 12px;gap:6px;background:var(--us-backstage);border:var(--us-border)}
+.us-header-tools .us-guide:hover{border-color:var(--us-ash)}
+.us-header-tools .us-guide svg{width:14px;height:14px}
+@media (max-width:560px){.us-header-tools .us-guide{width:var(--us-h-lang);padding:0}.us-guide span{display:none}}
+body.us-addin .us-header-tools .us-guide{width:var(--us-h-lang);padding:0}
 body.us-addin .us-guide span{display:none}
 
 /* ---------- Pagina del report (report.html) ---------- */

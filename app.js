@@ -478,8 +478,8 @@
     }
     setBusy(true);
     try {
-      await loadScript("vendor/jspdf.umd.min.js?v=20261104");
-      await loadScript("report-pdf.js?v=20261104");
+      await loadScript("vendor/jspdf.umd.min.js?v=20261104b");
+      await loadScript("report-pdf.js?v=20261104b");
       const doc = await window.PLReport.build(m, "");
       window.PLReport.save(doc, window.PLReport.fileName(m));
       toast(t("report.done"));
