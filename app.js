@@ -85,11 +85,11 @@
   const stepOfPattern = (key) => STEPS().findIndex((s) => (s.slides || []).includes(key));
 
   /* ---------- Stato in alto ---------- */
-  function setStatus(kind) {
-    $("#statusText").textContent = t(kind === "busy" ? "status.busy" : office ? "status.office" : "us.web");
+  function setStatus() {
+    $("#statusText").textContent = t(busy ? "status.busy" : office ? "status.office" : "us.web");
   }
   function setBusy(b) {
-    busy = b; setStatus(b ? "busy" : "");
+    busy = b; setStatus();
     ["#insertBtn", "#removeBtn", "#downloadBtn"].forEach((s) => { $(s).disabled = b; });
   }
 
@@ -319,7 +319,6 @@
       } catch (e) { toast(t("err", { m: e.message })); }
     } else {
       if (showWin && !showWin.closed) { sendToWindow({ k: key }); showWin.focus(); return; }
-      if (window.PL_INLINE_VIEW) { openInline(key); return; }
       try { showWin = window.open(showUrl(key), "uspl-projector-lab", "popup,width=1280,height=720"); } catch (e) { showWin = null; }
       if (!showWin) openInline(key); // popup bloccato: vista integrata nella pagina
     }
@@ -364,8 +363,8 @@
     if (!file) return;
     const url = await readFile(file);
     if (!office) {
-      shownPhoto = url; // se la finestra non è ancora pronta, la foto parte di nuovo al suo messaggio «ready»
-      if (!winOpen()) { openWindow("photo"); await wait(700); } // tempo per caricare la finestra
+      shownPhoto = url; // se la finestra si sta ancora aprendo, la foto riparte al suo messaggio «ready»
+      if (!winOpen()) openWindow("photo");
       sendToWindow({ k: "photo", photo: url });
       photoUsed = true;
       return;
@@ -468,10 +467,7 @@
       let txt;
       if (q === "cast") txt = CAST_GROUPS.map((g) => {
         if (v[g] == null) return `${t("dx.cast." + g)}: –`;
-        const c = castOf(v[g]), d = [];
-        if (c.m > 0) d.push(t("dir.magenta")); if (c.m < 0) d.push(t("dir.green"));
-        if (c.y > 0) d.push(t("dir.yellow")); if (c.y < 0) d.push(t("dir.blue"));
-        return `${t("dx.cast." + g)}: ${d.join(" + ") || t("rep.neutral")}`;
+        return `${t("dx.cast." + g)}: ${castDirs(castOf(v[g])).join(" + ") || t("rep.neutral")}`;
       }).join(" · ");
       else if (q === "ramps") txt = v.map((k) => (k === "none" ? t("dx.ramps.none") : t("c." + k))).join(", ");
       else txt = optLabel(q, v);
@@ -497,6 +493,7 @@
     if (S.note) lines.push("", `${t("report.note")}: ${S.note}`);
     return lines.join("\n");
   }
+  function refreshReport() { const rep = $("#report"); if (rep) rep.textContent = reportText(); }
   function reportModel() {
     const d = new Date(), loc = LANG === "en" ? "en-GB" : LANG;
     const pad = (n) => String(n).padStart(2, "0");
@@ -510,7 +507,7 @@
       iso: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`,
       steps: testSteps().map(([n, s]) => [n, s.title, S.results[s.id] || ""]),
       answers: answerLines(),
-      values: SET_ORDER.filter((k) => S.values[k] && (S.values[k].a || S.values[k].b)).map((k) => [t("set." + k), S.values[k].a || "", S.values[k].b || ""]),
+      values: filledSets(S.values).map((k) => [t("set." + k), S.values[k].a || "", S.values[k].b || ""]),
       note: (S.note || "").trim(),
       mail: "mailto:info@theultraspeaker.com?subject=" + encodeURIComponent(t("us.cta")),
     };
@@ -532,8 +529,8 @@
     }
     setBusy(true);
     try {
-      await loadScript("vendor/jspdf.umd.min.js?v=20261111b");
-      await loadScript("report-pdf.js?v=20261111b");
+      await loadScript("vendor/jspdf.umd.min.js?v=20261111c");
+      await loadScript("report-pdf.js?v=20261111c");
       const doc = await window.PLReport.build(m, "");
       window.PLReport.save(doc, window.PLReport.fileName(m));
       toast(t("report.done"));
@@ -562,19 +559,19 @@
     if (q === "white") return v === "none" ? t("dx.none") : v + "%";
     return t("dx." + q + "." + v);
   };
-  const cName = (k) => t("c." + k);
 
   function rangeCrush() {
     const b = S.answers.black, w = S.answers.white;
     return ["6", "8", "10", "15", "20", "none"].includes(b) && ["94", "92", "90", "88", "85", "80", "none"].includes(w);
   }
   function castOf(i) { const o = PLP.castOffset(+i); return { y: -o.y, m: -o.m }; }
-  function castName(c) {
+  function castDirs(c) {
     const parts = [];
     if (c.m > 0) parts.push(t("dir.magenta")); if (c.m < 0) parts.push(t("dir.green"));
     if (c.y > 0) parts.push(t("dir.yellow")); if (c.y < 0) parts.push(t("dir.blue"));
-    return parts.join(t("dir.and"));
+    return parts;
   }
+  const castName = (c) => castDirs(c).join(t("dir.and"));
   function castActs(c) {
     const a = [];
     if (c.y < 0) a.push(t("act.blue")); if (c.y > 0) a.push(t("act.yellow"));
@@ -630,7 +627,7 @@
       if (v.includes("none")) return { sev: "ok", lines: [t("dx.ramps.ok")] };
       if (v.includes("gray")) return { sev: "fix", lines: [t("dx.ramps.gray")], back: 5 };
       if (v.length >= 3) return { sev: "fix", lines: [t("dx.ramps.many")] };
-      return { sev: "fix", lines: [t("dx.ramps.one", { c: v.map(cName).join(", ") })] };
+      return { sev: "fix", lines: [t("dx.ramps.one", { c: v.map((k) => t("c." + k)).join(", ") })] };
     }
     if (q === "yellow") return { sev: v === "ok" ? "ok" : "fix", lines: [t("dx.yellow.r." + v)] };
     if (q === "gum") return { sev: v === "ok" ? "ok" : "fix", lines: [t("dx.gum.r." + v)] };
@@ -711,7 +708,7 @@
       inp.oninput = () => {
         const k = inp.dataset.set, v = S.values[k] || {};
         v[inp.dataset.side] = inp.value.trim(); S.values[k] = v; persist();
-        const rep = $("#report"); if (rep) rep.textContent = reportText();
+        refreshReport();
       };
     });
   }
@@ -739,13 +736,13 @@
     toast(t("reset.done"));
     if (photoUsed || (office && await photoInSlide())) askPhoto();
   });
-  // Azzera tutto (solo versione browser): cancella le chiavi di questo Lab (anche le vecchie, finché esistono);
+  // Azzera tutto (solo versione browser): cancella le chiavi di questo Lab (le vecchie projectorlab.* sono già migrate all'avvio);
   // la lingua è comune a tutti i Lab e resta
   function resetAllLabel() {
     $("#resetAllLabel").textContent = t($("#resetAllBtn").classList.contains("armed") ? "resetAll.confirm" : "resetAll");
   }
   const resetAll = () => twoTaps($("#resetAllBtn"), resetAllLabel, () => {
-    try { Object.keys(localStorage).filter((k) => k.startsWith(PREFIX) || k.startsWith(OLD)).forEach((k) => localStorage.removeItem(k)); } catch (e) { /* memoria non disponibile */ }
+    try { Object.keys(localStorage).filter((k) => k.startsWith(PREFIX)).forEach((k) => localStorage.removeItem(k)); } catch (e) { /* memoria non disponibile */ }
     clearRun(); S.fmt = "auto"; S.where = "end";
     closeInline(); frameLoaded = false; // al prossimo uso il riquadro riparte da zero (senza foto)
     applyStatic(); window.scrollTo({ top: 0, behavior: "smooth" });
@@ -762,8 +759,9 @@
     store.set("venues", list.slice(0, 40));
     toast(t("venue.saved"));
   }
+  const filledSets = (values) => SET_ORDER.filter((k) => values[k] && (values[k].a || values[k].b));
   function valueLines(values) {
-    return SET_ORDER.filter((k) => values[k] && (values[k].a || values[k].b)).map((k) => {
+    return filledSets(values).map((k) => {
       const v = values[k];
       return `${t("set." + k)}: ${v.a && v.b && v.a !== v.b ? v.a + " → " + v.b : v.b || v.a}`;
     });
@@ -896,8 +894,8 @@
       dz.ondragleave = (e) => { if (!dz.contains(e.relatedTarget)) dz.classList.remove("is-over"); };
       dz.ondrop = (e) => { e.preventDefault(); dz.classList.remove("is-over"); dropPhoto(e.dataTransfer.files); };
     }
-    const note = $("#note", art); if (note) note.oninput = () => { S.note = note.value; persist(); $("#report").textContent = reportText(); };
-    const rep = $("#report", art); if (rep) rep.textContent = reportText();
+    const note = $("#note", art); if (note) note.oninput = () => { S.note = note.value; persist(); refreshReport(); };
+    refreshReport();
     const pdf = $("#pdfBtn", art); if (pdf) pdf.onclick = downloadReport;
     const rb2 = $("#removeBtn2", art); if (rb2) rb2.onclick = removeTests;
 
@@ -924,7 +922,7 @@
     $("#usCta").href = "mailto:info@theultraspeaker.com?subject=" + encodeURIComponent(t("us.cta"));
     // «Guida»: il PDF nella lingua scelta; su telefono e nel pannello resta solo l'icona, con il nome accessibile
     const g = $("#usGuide"); g.href = L.guideHref("projector", LANG); g.setAttribute("aria-label", t("us.guide.title")); g.title = t("us.guide.title");
-    setStatus(busy ? "busy" : "");
+    setStatus();
     renderSetup(); renderStep(); resetAllLabel();
   }
   function buildLang() {
