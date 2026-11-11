@@ -100,6 +100,7 @@ Le chiavi delle versioni precedenti (`projectorlab.*`) vengono copiate e cancell
 
 ## Versioni
 
+- **1.2.4** (11 novembre 2026): sotto l’anteprima della foto c’è il pulsante «Proietta la foto», che apre la finestra dei pattern sulla foto.
 - **1.2.3** (11 novembre 2026): nella versione web la foto scelta o trascinata non apre più da sola i pattern sopra il Lab: compare un’anteprima nel riquadro e si proietta con «La tua foto»; uscendo dal tutto schermo il riquadro dei pattern si chiude e non blocca più i clic.
 - **1.2.2** (11 novembre 2026): pulizia del codice senza cambi di funzionamento (rami mai usati, duplicati, attesa fissa per la foto sostituita dal messaggio «ready»).
 - **1.2.1** (11 novembre 2026): nella versione web il riquadro dei pattern non resta più bianco quando il browser blocca la finestra (Safari, dopo il drag & drop della foto); la foto arriva anche se la finestra si apre lentamente.

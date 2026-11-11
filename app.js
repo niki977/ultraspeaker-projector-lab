@@ -284,7 +284,7 @@
     const v = frame();
     v.hidden = false; document.body.style.overflow = "hidden";
     // Già caricato (dopo una chiusura): riprende con la foto eventualmente inserita
-    if (frameLoaded) v.contentWindow.postMessage({ uspl: 1, k: key, f: S.fmt === "auto" ? "" : S.fmt, lang: LANG }, target);
+    if (frameLoaded) v.contentWindow.postMessage({ uspl: 1, k: key, f: S.fmt === "auto" ? "" : S.fmt, lang: LANG, photo: shownPhoto || "" }, target);
     else { frameLoaded = true; v.onload = () => v.contentWindow.focus(); v.src = showUrl(key); }
     v.contentWindow.focus(); toggleFs();
   }
@@ -366,11 +366,10 @@
     if (!file) return;
     const url = await readFile(file);
     // Versione web: il Lab resta in pagina. Fuori da un clic il browser bloccherebbe la finestra dei pattern e il riquadro
-    // coprirebbe il Lab: la foto va subito nella finestra se è aperta, altrimenti parte quando si preme «La tua foto»
+    // coprirebbe il Lab: la foto va subito nella finestra se è aperta, altrimenti parte con «Proietta la foto»
     if (!office) {
       shownPhoto = url; photoUsed = true;
       if (winOpen()) sendToWindow({ k: "photo", photo: url });
-      else toast(t("photoReady", { p: t("p.photo.name") }));
       renderStep();
       return;
     }
@@ -534,8 +533,8 @@
     }
     setBusy(true);
     try {
-      await loadScript("vendor/jspdf.umd.min.js?v=20261111d");
-      await loadScript("report-pdf.js?v=20261111d");
+      await loadScript("vendor/jspdf.umd.min.js?v=20261111e");
+      await loadScript("report-pdf.js?v=20261111e");
       const doc = await window.PLReport.build(m, "");
       window.PLReport.save(doc, window.PLReport.fileName(m));
       toast(t("report.done"));
@@ -848,7 +847,7 @@
     if (STEP_SET[s.id]) h += renderSettings(STEP_SET[s.id]);
     if (s.id === "clinical") {
       h += `<div class="pl-drop us-spotlight" id="photoDrop"><button type="button" class="us-btn us-btn--block" id="photoBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg><span>${esc(t(office ? "photo" : "photoWeb"))}</span></button>` +
-        (shownPhoto ? `<img class="pl-drop-img" src="${shownPhoto}" alt=""><p class="pl-note">${esc(t("photoReady", { p: t("p.photo.name") }))}</p>` : `<p class="pl-note">${esc(t("photoDrop"))}</p>`) + `</div>`;
+        (shownPhoto ? `<img class="pl-drop-img" src="${shownPhoto}" alt=""><button type="button" class="us-btn us-btn--block" id="photoShow">${ICON_PLAY}<span>${esc(t("photoShow"))}</span></button>` : `<p class="pl-note">${esc(t("photoDrop"))}</p>`) + `</div>`;
     }
     if (s.issues) {
       h += `<section class="pl-block"><p class="us-label">${esc(t("issues"))}</p><div>` +
@@ -894,6 +893,7 @@
     const tb = $("#timerBtn", art);
     if (tb) { tb.onclick = startTimer; tickTimer(); if (timerEnd && Date.now() < timerEnd && !timerT) timerT = setInterval(tickTimer, 1000); }
     const pb = $("#photoBtn", art); if (pb) pb.onclick = pickPhoto;
+    const ps = $("#photoShow", art); if (ps) ps.onclick = () => goPattern("photo"); // un clic: il browser lascia aprire la finestra
     const dz = $("#photoDrop", art);
     if (dz) {
       dz.ondragover = (e) => { e.preventDefault(); dz.classList.add("is-over"); };
