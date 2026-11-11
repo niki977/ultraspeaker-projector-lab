@@ -350,6 +350,7 @@
   }
 
   /* ---------- Foto clinica ---------- */
+  let photoUsed = false; // in questa sessione è stata mostrata o inserita una foto
   function pickPhoto() { $("#photoIn").value = ""; $("#photoIn").click(); }
   function readFile(file) {
     return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
@@ -363,6 +364,7 @@
     if (!office) {
       if (!winOpen()) { openWindow("photo"); await wait(700); } // tempo per caricare la finestra
       sendToWindow({ k: "photo", photo: url });
+      photoUsed = true;
       return;
     }
     if (!S.map.photo) { toast(t("notInserted")); return; }
@@ -375,7 +377,45 @@
     Office.context.document.setSelectedDataAsync(url.split(",")[1], {
       coercionType: Office.CoercionType.Image,
       imageLeft: bx + (bw - w) / 2, imageTop: by + (bh - h) / 2, imageWidth: w, imageHeight: h,
-    }, (r) => toast(r.status === Office.AsyncResultStatus.Succeeded ? t("photoDone") : t("err", { m: r.error && r.error.message })));
+    }, (r) => {
+      if (r.status !== Office.AsyncResultStatus.Succeeded) { toast(t("err", { m: r.error && r.error.message })); return; }
+      photoUsed = true; toast(t("photoDone")); tagPhoto();
+    });
+  }
+
+  /* La foto inserita è l'ultima forma della slide «La tua foto»: le si dà un nome per ritrovarla
+     e toglierla con «Ricomincia» senza toccare il pattern (serve PowerPointApi 1.3) */
+  const PHOTO_TAG = PLP.MARK + "userphoto";
+  async function photoShapes(fn) {
+    if (!api.shapes || !S.map.photo) return false;
+    let done = false;
+    try {
+      await PowerPoint.run(async (ctx) => {
+        const shapes = ctx.presentation.slides.getItem(S.map.photo).shapes; shapes.load("items/name"); await ctx.sync();
+        done = fn(shapes.items); await ctx.sync();
+      });
+    } catch (e) { /* slide già tolta */ }
+    return done;
+  }
+  const tagPhoto = () => photoShapes((items) => { const last = items[items.length - 1]; if (last) last.name = PHOTO_TAG; return true; });
+  const photoInSlide = () => photoShapes((items) => items.some((s) => s.name === PHOTO_TAG));
+  async function removePhoto() {
+    if (!office) {
+      if (inlineOpen() || (showWin && !showWin.closed)) sendToWindow({ photo: "" });
+      photoUsed = false; toast(t("photoRemoved")); return;
+    }
+    if (!api.shapes) { toast(t("photoManual")); return; }
+    await photoShapes((items) => { items.forEach((s) => { if (s.name === PHOTO_TAG) s.delete(); }); return true; });
+    photoUsed = false; toast(t("photoRemoved"));
+  }
+  // Dopo «Ricomincia», se c'è una foto: toglierla o lasciarla
+  function askPhoto() {
+    const old = $("#photoAsk"); if (old) old.remove();
+    const box = document.createElement("div");
+    box.className = "us-note pl-ask"; box.id = "photoAsk"; box.setAttribute("role", "alertdialog"); box.setAttribute("aria-labelledby", "photoAskQ");
+    box.innerHTML = `<p id="photoAskQ">${esc(t("photoAsk"))}</p><div class="pl-ask-btns"><button type="button" class="us-btn" data-a="remove">${esc(t("photoRemove"))}</button><button type="button" class="us-btn" data-a="keep">${esc(t("photoKeep"))}</button></div>`;
+    box.onclick = (e) => { const b = e.target.closest("button"); if (!b) return; box.remove(); if (b.dataset.a === "remove") removePhoto(); };
+    $("#main").prepend(box); box.querySelector("button").focus();
   }
 
   // Foto trascinata nel riquadro del passo 8: solo JPG e PNG, come nel selettore dei file
@@ -686,11 +726,12 @@
     $("#restartLabel").textContent = armed ? t("reset.confirm") : t("reset");
     $$(".restart-final").forEach((x) => { x.classList.toggle("armed", armed); x.querySelector("span").textContent = armed ? t("reset.confirm") : t("reset"); });
   }
-  // Ricomincia: le sale salvate, la lingua, il formato e le slide di test restano
-  const restart = () => twoTaps($("#restartBtn"), restartLabel, () => {
+  // Ricomincia: le sale salvate, la lingua, il formato e le slide di test restano; la foto solo se si sceglie così
+  const restart = () => twoTaps($("#restartBtn"), restartLabel, async () => {
     clearRun(); store.set("timer", 0);
     persist(); renderStep(); window.scrollTo({ top: 0, behavior: "smooth" });
     toast(t("reset.done"));
+    if (photoUsed || (office && await photoInSlide())) askPhoto();
   });
   // Azzera tutto (solo versione browser): cancella le chiavi di questo Lab (anche le vecchie, finché esistono);
   // la lingua è comune a tutti i Lab e resta

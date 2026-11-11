@@ -12,6 +12,10 @@
 .pl-drop{border:1px dashed var(--us-graphite);border-radius:var(--us-radius);padding:12px;text-align:center}
 .pl-drop.is-over{border-color:var(--us-spotlight)}
 .pl-drop .pl-note{margin-top:8px}
+/* Dopo «Ricomincia»: togliere o lasciare la foto */
+.pl-ask{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 16px}
+.pl-ask p{margin:0;color:var(--us-spotlight)}
+.pl-ask-btns{display:flex;gap:8px}
 .is-warn{color:var(--us-warn)}
 .pl-block{display:flex;flex-direction:column;gap:8px}
 .pl-btns{display:flex;gap:8px;flex-wrap:wrap}

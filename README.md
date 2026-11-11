@@ -100,7 +100,7 @@ Le chiavi delle versioni precedenti (`projectorlab.*`) vengono copiate e cancell
 
 ## Versioni
 
-- **1.2** (11 novembre 2026): logo The Ultraspeaker al posto dell’Arena nei pattern; al passo 8 la foto clinica si può anche trascinare nel riquadro; kit comune 1.3 (pulsante «Guida» definito nel kit, non più nel CSS del Lab).
+- **1.2** (11 novembre 2026): logo The Ultraspeaker al posto dell’Arena nei pattern; al passo 8 la foto clinica si può anche trascinare nel riquadro; dopo «Ricomincia» il Lab chiede se togliere anche la foto; kit comune 1.3 (pulsante «Guida» definito nel kit, non più nel CSS del Lab).
 - **1.1.1** (4 novembre 2026): report in PDF scaricabile al posto di «Copia il report».
 - **1.1** (novembre 2026): uniformazione alla linea guida comune dei Lab 1.2: kit `shared/`, intestazione e chiusura
   comuni, pagine di servizio scure, lingua comune con riserva inglese, manifest en-US, guida d’utilizzo PDF.

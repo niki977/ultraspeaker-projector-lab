@@ -86,7 +86,7 @@ body.idle .help{opacity:0}
   function go(d) { idx = (idx + d + KEYS.length) % KEYS.length; render(); tellParent(); wake(); }
   function apply(m) {
     if (I18N[m.lang]) LANG = m.lang;
-    if (m.photo) photo = m.photo;
+    if ("photo" in m) photo = m.photo || null; // stringa vuota = foto tolta con «Ricomincia»
     if (m.f != null) fixed = PLP.FORMATS[m.f] ? m.f : "";
     if (m.k && KEYS.includes(m.k)) idx = KEYS.indexOf(m.k);
     render();
