@@ -378,6 +378,14 @@
     }, (r) => toast(r.status === Office.AsyncResultStatus.Succeeded ? t("photoDone") : t("err", { m: r.error && r.error.message })));
   }
 
+  // Foto trascinata nel riquadro del passo 8: solo JPG e PNG, come nel selettore dei file
+  function dropPhoto(files) {
+    const f = files && files[0];
+    if (!f) return;
+    if (!/^image\/(jpeg|png)$/.test(f.type)) { toast(t("photoType")); return; }
+    onPhoto(f);
+  }
+
   /* ---------- Download (versione browser) ---------- */
   async function download() {
     setBusy(true);
@@ -478,8 +486,8 @@
     }
     setBusy(true);
     try {
-      await loadScript("vendor/jspdf.umd.min.js?v=20261104b");
-      await loadScript("report-pdf.js?v=20261104b");
+      await loadScript("vendor/jspdf.umd.min.js?v=20261111");
+      await loadScript("report-pdf.js?v=20261111");
       const doc = await window.PLReport.build(m, "");
       window.PLReport.save(doc, window.PLReport.fileName(m));
       toast(t("report.done"));
@@ -789,7 +797,7 @@
     if (s.adjust) h += `<section class="pl-block"><p class="us-label">${esc(t("adjust"))}</p>${list(s.adjust, "adj")}</section>`;
     if (STEP_SET[s.id]) h += renderSettings(STEP_SET[s.id]);
     if (s.id === "clinical") {
-      h += `<button type="button" class="us-btn us-btn--block" id="photoBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg><span>${esc(t(office ? "photo" : "photoWeb"))}</span></button>`;
+      h += `<div class="pl-drop us-spotlight" id="photoDrop"><button type="button" class="us-btn us-btn--block" id="photoBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg><span>${esc(t(office ? "photo" : "photoWeb"))}</span></button><p class="pl-note">${esc(t("photoDrop"))}</p></div>`;
     }
     if (s.issues) {
       h += `<section class="pl-block"><p class="us-label">${esc(t("issues"))}</p><div>` +
@@ -835,6 +843,12 @@
     const tb = $("#timerBtn", art);
     if (tb) { tb.onclick = startTimer; tickTimer(); if (timerEnd && Date.now() < timerEnd && !timerT) timerT = setInterval(tickTimer, 1000); }
     const pb = $("#photoBtn", art); if (pb) pb.onclick = pickPhoto;
+    const dz = $("#photoDrop", art);
+    if (dz) {
+      dz.ondragover = (e) => { e.preventDefault(); dz.classList.add("is-over"); };
+      dz.ondragleave = (e) => { if (!dz.contains(e.relatedTarget)) dz.classList.remove("is-over"); };
+      dz.ondrop = (e) => { e.preventDefault(); dz.classList.remove("is-over"); dropPhoto(e.dataTransfer.files); };
+    }
     const note = $("#note", art); if (note) note.oninput = () => { S.note = note.value; persist(); $("#report").textContent = reportText(); };
     const rep = $("#report", art); if (rep) rep.textContent = reportText();
     const pdf = $("#pdfBtn", art); if (pdf) pdf.onclick = downloadReport;
@@ -881,6 +895,10 @@
     $("#prevBtn").onclick = () => goStep(S.step - 1);
     $("#nextBtn").onclick = () => { if (S.step === STEPS().length - 1) downloadReport(); else goStep(S.step + 1); };
     $("#photoIn").onchange = (e) => onPhoto(e.target.files && e.target.files[0]);
+    // Un file lasciato fuori dal riquadro della foto non deve aprirsi al posto del Lab
+    ["dragover", "drop"].forEach((ev) => document.addEventListener(ev, (e) => {
+      if (e.dataTransfer && Array.from(e.dataTransfer.types).includes("Files")) e.preventDefault();
+    }));
     // In PowerPoint i link si aprono nel browser di sistema
     $$(".us-links a, .us-logo, .us-guide").forEach((el) => el.addEventListener("click", (e) => {
       if (office && supported("OpenBrowserWindowApi", "1.1")) { e.preventDefault(); Office.context.ui.openBrowserWindow(el.href); }

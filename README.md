@@ -29,7 +29,7 @@ sul proiettore (doppio clic = tutto schermo): si adattano al formato reale dello
 I pattern derivano dal Screen Test The Ultraspeaker 2.1 (bordo a scacchi, mirini, triangoli, quadrati e riquadro RGB)
 più: griglia, stelle di Siemens e scala dei corpi, nero 0–20%, bianco 80–99%, scala di grigi, grigi a confronto per la dominante, barre SMPTE 75%,
 rampe colore a 32 gradini, bianchi dello smalto / tessuti molli / ombre del cavo orale, spazio per una foto clinica,
-campi pieni bianco/grigio/nero. I pattern portano l’Arena di The Ultraspeaker piccola e semitrasparente in basso a destra, come un watermark (tranne Screen Test chiaro e scuro, Geometria e barre SMPTE).
+campi pieni bianco/grigio/nero. I pattern portano il logo The Ultraspeaker piccolo e semitrasparente in basso a destra, come un watermark (tranne Screen Test chiaro e scuro, Geometria e barre SMPTE).
 
 ## Requisiti
 
@@ -65,12 +65,12 @@ nel gruppo «The Ultraspeaker», accanto a QR Lab e Image Lab.
 | `show.html` | Pattern a schermo intero: finestra di PowerPoint, finestra del browser o riquadro dentro il pannello |
 | `i18n.js` | Testi e procedura nelle 5 lingue |
 | `venn-data.js` | Immagine del cerchio RGB del Screen Test |
-| `wm-data.js` | Arena di The Ultraspeaker semitrasparente (watermark dei pattern) |
+| `wm-data.js` | Logo The Ultraspeaker semitrasparente, nero e bianco (watermark dei pattern) |
 | `vendor/pptxgen.bundle.js` | PptxGenJS 3.12 (licenza MIT) per creare le slide |
 | `vendor/jspdf.umd.min.js` | jsPDF 4.2.1 (licenza MIT) per creare il report in PDF, caricato solo quando serve |
 | `projector-lab-manifest.xml` | Manifest dell’add-in per PowerPoint |
 | `assets/` | Lockup Projector Lab, Arena (chiusura delle pagine), favicon e icone PNG usate da manifest e browser; `report-logo.png` e `report-arena.png` per il PDF |
-| `shared/` | Kit comune dei Lab The Ultraspeaker 1.2 (stile, lingua, guide, esempi): non si modifica qui |
+| `shared/` | Kit comune dei Lab The Ultraspeaker 1.3 (stile, lingua, guide, esempi): non si modifica qui |
 | `fonts/` | Champagne & Limousines in woff2, i quattro stili del kit; in `fonts/pdf/` regular, bold e italic in TTF per il report PDF |
 | `support.html`, `privacy.html`, `terms.html`, `GUIDA-INSTALLAZIONE.html` | Supporto, privacy, condizioni d’uso e guida, in 5 lingue con selettore come nel pannello |
 | `legal.js` | Testi del menu e link con la lingua scelta in queste pagine |
@@ -100,6 +100,7 @@ Le chiavi delle versioni precedenti (`projectorlab.*`) vengono copiate e cancell
 
 ## Versioni
 
+- **1.2** (11 novembre 2026): logo The Ultraspeaker al posto dell’Arena nei pattern; al passo 8 la foto clinica si può anche trascinare nel riquadro; kit comune 1.3 (pulsante «Guida» definito nel kit, non più nel CSS del Lab).
 - **1.1.1** (4 novembre 2026): report in PDF scaricabile al posto di «Copia il report».
 - **1.1** (novembre 2026): uniformazione alla linea guida comune dei Lab 1.2: kit `shared/`, intestazione e chiusura
   comuni, pagine di servizio scure, lingua comune con riserva inglese, manifest en-US, guida d’utilizzo PDF.

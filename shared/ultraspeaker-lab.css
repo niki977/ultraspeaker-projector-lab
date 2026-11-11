@@ -1,5 +1,5 @@
 /* ==========================================================================
-   The Ultraspeaker Lab — stile comune  ·  versione 1.2 (novembre 2026)
+   The Ultraspeaker Lab — stile comune  ·  versione 1.3 (novembre 2026)
    File IDENTICO in tutti i Lab: shared/ultraspeaker-lab.css
    Non modificarlo dentro un singolo Lab: si cambia qui e si ricopia in tutti.
    Ogni Lab mette le proprie regole in un secondo foglio, caricato DOPO questo,
@@ -75,10 +75,6 @@ body.us-addin .us-page{max-width:none;padding:0 12px 24px}
 body.us-addin .us-logo img{height:44px}
 @media (max-width:560px){.us-logo img{height:48px}}
 
-/* ---------- Pulsante «Guida»: accanto al selettore lingua, apre il PDF in una nuova scheda ---------- */
-.us-guide{height:var(--us-h-lang);padding:0 12px;font-size:13px}
-.us-guide svg{width:15px;height:15px}
-
 /* ---------- Selettore lingua: mappamondo + nome intero ---------- */
 .us-lang{display:inline-flex;align-items:center;gap:6px;color:var(--us-ash)}
 .us-lang svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;flex:none}
@@ -99,6 +95,16 @@ body.us-addin .us-logo img{height:44px}
 .us-btn--primary:hover:not(:disabled){background:var(--us-house-lights)}
 .us-btn--block{display:flex;width:100%}
 .us-btn--icon{width:var(--us-h-button);padding:0}
+
+/* ---------- Pulsante «Guida»: subito a destra del selettore lingua e identico a lui ----------
+   Sta dopo .us-btn perché a parità di specificità vince l'ultima regola: prima, .us-btn
+   gli imponeva 36 px e peso 600. Su telefono e nel pannello resta l'icona; il nome va in aria-label. */
+.us-guide{height:var(--us-h-lang);padding:0 12px;gap:6px;background:var(--us-backstage);border:var(--us-border);font-size:13px;font-weight:400;line-height:normal}
+.us-guide:hover:not(:disabled){border-color:var(--us-ash)}
+.us-guide svg{width:14px;height:14px}
+body.us-addin .us-guide{width:var(--us-h-lang);padding:0}
+body.us-addin .us-guide span{display:none}
+@media (max-width:560px){.us-guide{width:var(--us-h-lang);padding:0}.us-guide span{display:none}}
 
 /* Scelte brevi (formati, stili rapidi): stessa forma, piu piccole */
 .us-chip{height:var(--us-h-chip);padding:0 10px;background:transparent;border:var(--us-border);border-radius:var(--us-radius);color:var(--us-silver);font-size:11.5px;font-weight:700}
