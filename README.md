@@ -100,6 +100,7 @@ Le chiavi delle versioni precedenti (`projectorlab.*`) vengono copiate e cancell
 
 ## Versioni
 
+- **1.2.1** (11 novembre 2026): nella versione web il riquadro dei pattern non resta più bianco quando il browser blocca la finestra (Safari, dopo il drag & drop della foto); la foto arriva anche se la finestra si apre lentamente.
 - **1.2** (11 novembre 2026): logo The Ultraspeaker al posto dell’Arena nei pattern; al passo 8 la foto clinica si può anche trascinare nel riquadro; dopo «Ricomincia» il Lab chiede se togliere anche la foto; kit comune 1.3 (pulsante «Guida» definito nel kit, non più nel CSS del Lab).
 - **1.1.1** (4 novembre 2026): report in PDF scaricabile al posto di «Copia il report».
 - **1.1** (novembre 2026): uniformazione alla linea guida comune dei Lab 1.2: kit `shared/`, intestazione e chiusura

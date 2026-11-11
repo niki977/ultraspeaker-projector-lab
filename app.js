@@ -328,6 +328,7 @@
   window.addEventListener("message", (e) => {
     const m = e.data;
     if (!m || !m.uspl || m.from !== "show") return;
+    if (m.ready && shownPhoto) sendToWindow({ photo: shownPhoto });
     if (m.k) followPattern(m.k);
     if (m.close) closeInline();
     if (m.fs) toggleFs();
@@ -351,6 +352,7 @@
 
   /* ---------- Foto clinica ---------- */
   let photoUsed = false; // in questa sessione è stata mostrata o inserita una foto
+  let shownPhoto = null; // foto mostrata nella finestra dei pattern (versione web)
   function pickPhoto() { $("#photoIn").value = ""; $("#photoIn").click(); }
   function readFile(file) {
     return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
@@ -362,6 +364,7 @@
     if (!file) return;
     const url = await readFile(file);
     if (!office) {
+      shownPhoto = url; // se la finestra non è ancora pronta, la foto parte di nuovo al suo messaggio «ready»
       if (!winOpen()) { openWindow("photo"); await wait(700); } // tempo per caricare la finestra
       sendToWindow({ k: "photo", photo: url });
       photoUsed = true;
@@ -401,7 +404,10 @@
   const photoInSlide = () => photoShapes((items) => items.some((s) => s.name === PHOTO_TAG));
   async function removePhoto() {
     if (!office) {
-      if (inlineOpen() || (showWin && !showWin.closed)) sendToWindow({ photo: "" });
+      shownPhoto = null;
+      // Anche il riquadro chiuso ma già caricato tiene la foto: riaprendolo ricomparirebbe
+      if (frameLoaded) frame().contentWindow.postMessage({ uspl: 1, photo: "" }, target);
+      if (showWin && !showWin.closed) showWin.postMessage({ uspl: 1, photo: "" }, target);
       photoUsed = false; toast(t("photoRemoved")); return;
     }
     if (!api.shapes) { toast(t("photoManual")); return; }
@@ -526,8 +532,8 @@
     }
     setBusy(true);
     try {
-      await loadScript("vendor/jspdf.umd.min.js?v=20261111");
-      await loadScript("report-pdf.js?v=20261111");
+      await loadScript("vendor/jspdf.umd.min.js?v=20261111b");
+      await loadScript("report-pdf.js?v=20261111b");
       const doc = await window.PLReport.build(m, "");
       window.PLReport.save(doc, window.PLReport.fileName(m));
       toast(t("report.done"));
