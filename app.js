@@ -288,6 +288,9 @@
     else { frameLoaded = true; v.onload = () => v.contentWindow.focus(); v.src = showUrl(key); }
     v.contentWindow.focus(); toggleFs();
   }
+  ["fullscreenchange", "webkitfullscreenchange"].forEach((ev) => document.addEventListener(ev, () => {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement && inlineOpen()) closeInline();
+  }));
   function closeInline() {
     if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
     frame().hidden = true; document.body.style.overflow = "";
@@ -362,11 +365,13 @@
   async function onPhoto(file) {
     if (!file) return;
     const url = await readFile(file);
+    // Versione web: il Lab resta in pagina. Fuori da un clic il browser bloccherebbe la finestra dei pattern e il riquadro
+    // coprirebbe il Lab: la foto va subito nella finestra se è aperta, altrimenti parte quando si preme «La tua foto»
     if (!office) {
-      shownPhoto = url; // se la finestra si sta ancora aprendo, la foto riparte al suo messaggio «ready»
-      if (!winOpen()) openWindow("photo");
-      sendToWindow({ k: "photo", photo: url });
-      photoUsed = true;
+      shownPhoto = url; photoUsed = true;
+      if (winOpen()) sendToWindow({ k: "photo", photo: url });
+      else toast(t("photoReady", { p: t("p.photo.name") }));
+      renderStep();
       return;
     }
     if (!S.map.photo) { toast(t("notInserted")); return; }
@@ -529,8 +534,8 @@
     }
     setBusy(true);
     try {
-      await loadScript("vendor/jspdf.umd.min.js?v=20261111c");
-      await loadScript("report-pdf.js?v=20261111c");
+      await loadScript("vendor/jspdf.umd.min.js?v=20261111d");
+      await loadScript("report-pdf.js?v=20261111d");
       const doc = await window.PLReport.build(m, "");
       window.PLReport.save(doc, window.PLReport.fileName(m));
       toast(t("report.done"));
@@ -842,7 +847,8 @@
     if (s.adjust) h += `<section class="pl-block"><p class="us-label">${esc(t("adjust"))}</p>${list(s.adjust, "adj")}</section>`;
     if (STEP_SET[s.id]) h += renderSettings(STEP_SET[s.id]);
     if (s.id === "clinical") {
-      h += `<div class="pl-drop us-spotlight" id="photoDrop"><button type="button" class="us-btn us-btn--block" id="photoBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg><span>${esc(t(office ? "photo" : "photoWeb"))}</span></button><p class="pl-note">${esc(t("photoDrop"))}</p></div>`;
+      h += `<div class="pl-drop us-spotlight" id="photoDrop"><button type="button" class="us-btn us-btn--block" id="photoBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg><span>${esc(t(office ? "photo" : "photoWeb"))}</span></button>` +
+        (shownPhoto ? `<img class="pl-drop-img" src="${shownPhoto}" alt=""><p class="pl-note">${esc(t("photoReady", { p: t("p.photo.name") }))}</p>` : `<p class="pl-note">${esc(t("photoDrop"))}</p>`) + `</div>`;
     }
     if (s.issues) {
       h += `<section class="pl-block"><p class="us-label">${esc(t("issues"))}</p><div>` +
