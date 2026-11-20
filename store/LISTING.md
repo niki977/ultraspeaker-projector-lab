@@ -14,7 +14,7 @@ Sale diverse, proiettori diversi: colori slavati, bordi tagliati, foto cliniche 
 - Finestra dei pattern a schermo intero, senza modificare la presentazione
 - Report finale con le impostazioni usate; rimozione delle slide di test in un clic
 - Arena di The Ultraspeaker piccola e discreta sui pattern, come un watermark
-- Nessun dato inviato: tutto avviene sul tuo computer. Italiano, English, Español, Français, Deutsch.
+- Foto, risposte e nomi delle sale restano sul tuo computer; il Lab invia solo un conteggio anonimo di aperture e azioni principali. Italiano, English, Español, Français, Deutsch.
 
 ## English
 **Short description**: Set up the projector before you speak: a 10-step guide with tailored test patterns.
@@ -30,7 +30,7 @@ Different rooms, different projectors: washed-out colours, cropped edges, unreco
 - Full-screen pattern window, without touching your presentation
 - Final PDF report with the results and settings used; remove the test slides in one click
 - A small, discreet The Ultraspeaker Arena on the patterns, like a watermark
-- No data sent anywhere: everything happens on your computer. Italiano, English, Español, Français, Deutsch.
+- Photos, answers and venue names stay on your computer; the Lab only sends an anonymous count of openings and main actions. Italiano, English, Español, Français, Deutsch.
 
 **Categorie / Categories**: Productivity, Utilities
 **Support URL**: https://niki977.github.io/ultraspeaker-projector-lab/support.html

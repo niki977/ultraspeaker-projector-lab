@@ -70,7 +70,7 @@ nel gruppo «The Ultraspeaker», accanto a QR Lab e Image Lab.
 | `vendor/jspdf.umd.min.js` | jsPDF 4.2.1 (licenza MIT) per creare il report in PDF, caricato solo quando serve |
 | `projector-lab-manifest.xml` | Manifest dell’add-in per PowerPoint |
 | `assets/` | Lockup Projector Lab, Arena (chiusura delle pagine), favicon e icone PNG usate da manifest e browser; `report-logo.png` e `report-arena.png` per il PDF |
-| `shared/` | Kit comune dei Lab The Ultraspeaker 1.3 (stile, lingua, guide, esempi): non si modifica qui |
+| `shared/` | Kit comune dei Lab The Ultraspeaker 1.5 (stile, lingua, guide, esempi): non si modifica qui |
 | `fonts/` | Champagne & Limousines in woff2, i quattro stili del kit; in `fonts/pdf/` regular, bold e italic in TTF per il report PDF |
 | `support.html`, `privacy.html`, `terms.html`, `GUIDA-INSTALLAZIONE.html` | Supporto, privacy, condizioni d’uso e guida, in 5 lingue con selettore come nel pannello |
 | `legal.js` | Testi del menu e link con la lingua scelta in queste pagine |
@@ -100,6 +100,7 @@ Le chiavi delle versioni precedenti (`projectorlab.*`) vengono copiate e cancell
 
 ## Versioni
 
+- **1.2.5** (20 novembre 2026): kit comune 1.5 con statistiche d’uso anonime (`shared/ultraspeaker-stats.js`): `projector:open`, `session:start`/`session:done`, `screentest`, `report`, `photo`; Privacy, installazione, guide e testi dello store aggiornati.
 - **1.2.4** (11 novembre 2026): sotto l’anteprima della foto c’è il pulsante «Proietta la foto», che apre la finestra dei pattern sulla foto.
 - **1.2.3** (11 novembre 2026): nella versione web la foto scelta o trascinata non apre più da sola i pattern sopra il Lab: compare un’anteprima nel riquadro e si proietta con «La tua foto»; uscendo dal tutto schermo il riquadro dei pattern si chiude e non blocca più i clic.
 - **1.2.2** (11 novembre 2026): pulizia del codice senza cambi di funzionamento (rami mai usati, duplicati, attesa fissa per la foto sostituita dal messaggio «ready»).
@@ -113,4 +114,4 @@ Le chiavi delle versioni precedenti (`projectorlab.*`) vengono copiate e cancell
 ## Note per il Marketplace Microsoft
 
 Titolare indicato in tutte le pagine di servizio: Nicholas D. Charles (The Ultraspeaker), info@theultraspeaker.com.
-Servono anche screenshot del pannello 1366×768. L’add-in non invia dati a nessun server.
+Servono anche screenshot del pannello 1366×768. L’add-in non invia contenuti a nessun server: solo statistiche d’uso anonime (kit 1.5, `shared/ultraspeaker-stats.js`), vedi la Privacy.

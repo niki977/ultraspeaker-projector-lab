@@ -9,9 +9,9 @@
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=5">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/projector-lab-icon-32.png?v=5">
 <link rel="apple-touch-icon" href="assets/projector-lab-icon-180.png?v=5">
-<link rel="stylesheet" href="shared/ultraspeaker-lab.css?v=20261111e">
-<link rel="stylesheet" href="css/app.css?v=20261111e">
-<script src="shared/ultraspeaker-lang.js?v=20261111e"></script>
+<link rel="stylesheet" href="shared/ultraspeaker-lab.css?v=20261120">
+<link rel="stylesheet" href="css/app.css?v=20261120">
+<script src="shared/ultraspeaker-lang.js?v=20261120"></script>
 <!-- Lingua letta prima del disegno della pagina, così compare subito il testo giusto -->
 <script>document.documentElement.lang = UltraspeakerLang.get("projectorlab.lang");</script>
 </head>
@@ -115,7 +115,7 @@
 <li><b>Prima del talk</b>: <b>Rimuovi le slide di test</b> (in alto o al passo 10) le cancella tutte in un clic. <b>Scarica il report (PDF)</b> crea un PDF con gli esiti, i valori e le tue note: nel pannello di PowerPoint si apre nel browser, da cui lo salvi.</li>
 <li><b>Foto clinica</b>: al passo 8 puoi inserire una tua foto nella slide dedicata, per vedere come la rende quel proiettore.</li>
 <li><b>Versione web</b> (senza installare nulla): <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Guida completa, pattern a schermo intero e download dello Screen Test in <b>.pptx</b> (si apre anche in Keynote). Il link è pubblico: chi lo riceve può usarlo.</li>
-<li><b>Privacy</b>: nulla esce dal computer. Pattern e slide vengono creati nel pannello, senza server esterni.</li>
+<li><b>Privacy</b>: pattern e slide vengono creati nel pannello; foto, risposte e nomi delle sale non escono dal computer. Il Lab invia solo un conteggio anonimo di aperture e azioni principali (vedi Privacy).</li>
 <li>Per aggiornare l’add-in basta ricaricare i file nuovi su GitHub: PowerPoint userà la nuova versione alla prossima apertura. Solo se cambia <code>projector-lab-manifest.xml</code> va ricopiato anche nella cartella <code>wef</code> (Mac) o nella cartella condivisa (Windows).</li>
 <li><b>Lingue:</b> l’add-in è in italiano, inglese, spagnolo, francese e tedesco. Parte nella lingua di PowerPoint e si cambia dal menu in alto a destra del pannello; anche le etichette e le note delle slide di test escono nella lingua scelta.</li>
 </ol>
@@ -210,7 +210,7 @@
 <li><b>Before the talk</b>: <b>Remove the test slides</b> (at the top or in step 10) deletes them all in one click. <b>Download the report (PDF)</b> creates a PDF with the results, the settings and your notes: in the PowerPoint panel it opens in your browser, where you save it.</li>
 <li><b>Clinical photo</b>: in step 8 you can place one of your photos on its dedicated slide, to see how that projector renders it.</li>
 <li><b>Web version</b> (nothing to install): <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Full guide, full-screen patterns and download of the Screen Test as <b>.pptx</b> (it also opens in Keynote). The link is public: anyone who receives it can use it.</li>
-<li><b>Privacy</b>: nothing leaves the computer. Patterns and slides are built in the pane, with no external servers.</li>
+<li><b>Privacy</b>: patterns and slides are built in the pane; photos, answers and venue names never leave the computer. The Lab only sends an anonymous count of openings and main actions (see Privacy).</li>
 <li>To update the add-in just upload the new files to GitHub: PowerPoint uses the new version the next time it opens. Only if <code>projector-lab-manifest.xml</code> changes does it need copying again into the <code>wef</code> folder (Mac) or the shared folder (Windows).</li>
 <li><b>Languages:</b> the add-in is in Italian, English, Spanish, French and German. It starts in PowerPoint’s language and you change it from the menu at the top right of the pane; the labels and notes of the test slides follow the chosen language too.</li>
 </ol>
@@ -305,7 +305,7 @@
 <li><b>Antes de la charla</b>: <b>Quitar diapositivas de prueba</b> (arriba o en el paso 10) las borra todas con un clic. <b>Descargar el informe (PDF)</b> crea un PDF con los resultados, los valores y tus notas: en el panel de PowerPoint se abre en el navegador, desde donde lo guardas.</li>
 <li><b>Foto clínica</b>: en el paso 8 puedes colocar una foto tuya en su diapositiva, para ver cómo la reproduce ese proyector.</li>
 <li><b>Versión web</b> (sin instalar nada): <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Guía completa, patrones a pantalla completa y descarga del Screen Test en <b>.pptx</b> (también se abre en Keynote). El enlace es público: quien lo reciba puede usarlo.</li>
-<li><b>Privacidad</b>: nada sale del ordenador. Patrones y diapositivas se crean en el panel, sin servidores externos.</li>
+<li><b>Privacidad</b>: patrones y diapositivas se crean en el panel; fotos, respuestas y nombres de salas no salen del ordenador. El Lab solo envía un recuento anónimo de aperturas y acciones principales (ver Privacidad).</li>
 <li>Para actualizar el complemento basta con subir los archivos nuevos a GitHub: PowerPoint usará la nueva versión la próxima vez que se abra. Solo si cambia <code>projector-lab-manifest.xml</code> hay que copiarlo de nuevo en la carpeta <code>wef</code> (Mac) o en la carpeta compartida (Windows).</li>
 <li><b>Idiomas:</b> el complemento está en italiano, inglés, español, francés y alemán. Empieza en el idioma de PowerPoint y se cambia desde el menú arriba a la derecha del panel; las etiquetas y las notas de las diapositivas de prueba también salen en el idioma elegido.</li>
 </ol>
@@ -400,7 +400,7 @@
 <li><b>Avant l’intervention</b> : <b>Supprimer les diapositives de test</b> (en haut ou à l’étape 10) les efface toutes en un clic. <b>Télécharger le rapport (PDF)</b> crée un PDF avec les résultats, les réglages et vos notes : dans le volet de PowerPoint, il s’ouvre dans le navigateur, d’où vous l’enregistrez.</li>
 <li><b>Photo clinique</b> : à l’étape 8, vous pouvez placer une de vos photos sur sa diapositive dédiée, pour voir comment ce projecteur la restitue.</li>
 <li><b>Version web</b> (rien à installer) : <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Guide complet, mires en plein écran et téléchargement du Screen Test en <b>.pptx</b> (il s’ouvre aussi dans Keynote). Le lien est public : toute personne qui le reçoit peut l’utiliser.</li>
-<li><b>Confidentialité</b> : rien ne quitte l’ordinateur. Mires et diapositives sont créées dans le volet, sans serveur externe.</li>
+<li><b>Confidentialité</b> : mires et diapositives sont créées dans le volet ; photos, réponses et noms des salles ne quittent pas l’ordinateur. Le Lab envoie seulement un comptage anonyme des ouvertures et des actions principales (voir Confidentialité).</li>
 <li>Pour mettre à jour le complément, il suffit d’envoyer les nouveaux fichiers sur GitHub : PowerPoint utilisera la nouvelle version à la prochaine ouverture. Seulement si <code>projector-lab-manifest.xml</code> change, il faut le recopier dans le dossier <code>wef</code> (Mac) ou dans le dossier partagé (Windows).</li>
 <li><b>Langues :</b> le complément est en italien, anglais, espagnol, français et allemand. Il démarre dans la langue de PowerPoint et se change depuis le menu en haut à droite du volet ; les étiquettes et les notes des diapositives de test suivent aussi la langue choisie.</li>
 </ol>
@@ -495,7 +495,7 @@
 <li><b>Vor dem Vortrag</b>: <b>Testfolien entfernen</b> (oben oder in Schritt 10) löscht alle mit einem Klick. <b>Bericht herunterladen (PDF)</b> erstellt ein PDF mit den Ergebnissen, Werten und Ihren Notizen: Im PowerPoint-Bereich öffnet es sich im Browser, wo Sie es speichern.</li>
 <li><b>Klinisches Foto</b>: In Schritt 8 können Sie ein eigenes Foto auf die dafür vorgesehene Folie setzen, um zu sehen, wie dieser Projektor es wiedergibt.</li>
 <li><b>Webversion</b> (ohne Installation): <code>https://niki977.github.io/ultraspeaker-projector-lab/</code>. Vollständige Anleitung, Testbilder im Vollbild und Download des Screen Test als <b>.pptx</b> (öffnet sich auch in Keynote). Der Link ist öffentlich: Wer ihn erhält, kann ihn nutzen.</li>
-<li><b>Datenschutz</b>: Nichts verlässt den Computer. Testbilder und Folien werden im Aufgabenbereich erstellt, ohne externe Server.</li>
+<li><b>Datenschutz</b>: Testbilder und Folien werden im Aufgabenbereich erstellt; Fotos, Antworten und Raumnamen verlassen den Computer nicht. Das Lab sendet nur eine anonyme Zählung von Aufrufen und Hauptaktionen (siehe Datenschutz).</li>
 <li>Zum Aktualisieren genügt es, die neuen Dateien auf GitHub hochzuladen: PowerPoint verwendet beim nächsten Öffnen die neue Version. Nur wenn sich <code>projector-lab-manifest.xml</code> ändert, muss es erneut in den Ordner <code>wef</code> (Mac) oder den freigegebenen Ordner (Windows) kopiert werden.</li>
 <li><b>Sprachen:</b> Das Add-In ist auf Italienisch, Englisch, Spanisch, Französisch und Deutsch verfügbar. Es startet in der Sprache von PowerPoint und lässt sich über das Menü oben rechts im Aufgabenbereich umstellen; auch Beschriftungen und Notizen der Testfolien folgen der gewählten Sprache.</li>
 </ol>
@@ -507,6 +507,6 @@
     <p class="us-links"><a href="support.html" data-nav="support">Supporto</a><a href="privacy.html" data-nav="privacy">Privacy</a><a href="terms.html" data-nav="terms">Condizioni d’uso</a><a href="GUIDA-INSTALLAZIONE.html" data-nav="install">Installazione</a></p>
   </footer>
 </div>
-<script src="legal.js?v=20261111e"></script>
+<script src="legal.js?v=20261120"></script>
 </body>
 </html>

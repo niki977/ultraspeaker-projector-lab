@@ -29,6 +29,8 @@
   }
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const PLP = window.PL_PATTERNS;
+  // Statistiche anonime (kit 1.5): solo il nome dell'azione, mai contenuti; se lo script manca il Lab funziona lo stesso
+  const stat = (action, once) => { if (window.UltraspeakerStats) UltraspeakerStats.track(action, once); };
   const ICON_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>';
 
   /* ---------- Lingua ---------- */
@@ -211,6 +213,7 @@
       const b64 = await pres.write({ outputType: "base64" });
       if (needsNewPres()) {
         await PowerPoint.createPresentation(b64);
+        stat("screentest", true);
         toast(t("opened", { f: fmtKey() }));
         return;
       }
@@ -228,6 +231,7 @@
         fresh.forEach((s, i) => { if (PLP.ORDER[i]) map[PLP.ORDER[i]] = s.id; });
       });
       S.map = map; saveMapSetting();
+      stat("screentest", true);
       renderSetup(); renderStep();
       toast(t("inserted"));
       toggleSetup(false);
@@ -313,7 +317,7 @@
       try {
         Office.context.ui.displayDialogAsync(showUrl(key), { height: 60, width: 60, displayInIframe: false, promptBeforeOpen: false }, (res) => {
           if (res.status !== Office.AsyncResultStatus.Succeeded) { toast(t("err", { m: res.error && res.error.message })); return; }
-          dialog = res.value;
+          dialog = res.value; stat("screentest", true);
           dialog.addEventHandler(Office.EventType.DialogEventReceived, () => { dialog = null; });
           dialog.addEventHandler(Office.EventType.DialogMessageReceived, (a) => {
             try { const m = JSON.parse(a.message); if (m.k) followPattern(m.k); } catch (e) { /* messaggio non valido */ }
@@ -324,6 +328,7 @@
       if (showWin && !showWin.closed) { sendToWindow({ k: key }); showWin.focus(); return; }
       try { showWin = window.open(showUrl(key), "uspl-projector-lab", "popup,width=1280,height=720"); } catch (e) { showWin = null; }
       if (!showWin) openInline(key); // popup bloccato: vista integrata nella pagina
+      stat("screentest", true);
     }
   }
   // Messaggi da show.html (finestra o riquadro): pattern cambiato, chiudi, tutto schermo
@@ -369,7 +374,7 @@
     // coprirebbe il Lab: la foto va subito nella finestra se è aperta, altrimenti parte con «Proietta la foto»
     if (!office) {
       shownPhoto = url; photoUsed = true;
-      if (winOpen()) sendToWindow({ k: "photo", photo: url });
+      if (winOpen()) { sendToWindow({ k: "photo", photo: url }); stat("photo", true); }
       renderStep();
       return;
     }
@@ -385,7 +390,7 @@
       imageLeft: bx + (bw - w) / 2, imageTop: by + (bh - h) / 2, imageWidth: w, imageHeight: h,
     }, (r) => {
       if (r.status !== Office.AsyncResultStatus.Succeeded) { toast(t("err", { m: r.error && r.error.message })); return; }
-      photoUsed = true; toast(t("photoDone")); tagPhoto();
+      photoUsed = true; stat("photo", true); toast(t("photoDone")); tagPhoto();
     });
   }
 
@@ -441,6 +446,7 @@
     try {
       const pres = PLP.buildDeck(PptxGenJS, fmtW(), labels(), notesFor);
       await pres.writeFile({ fileName: `The Ultraspeaker Projector Lab - Screen Test ${fmtKey().replace(":", "x")}.pptx` });
+      stat("screentest", true);
     } catch (e) { toast(t("err", { m: e.message })); } finally { setBusy(false); }
   }
 
@@ -528,15 +534,16 @@
       const json = new TextEncoder().encode(JSON.stringify(m));
       let bin = ""; json.forEach((b) => { bin += String.fromCharCode(b); });
       Office.context.ui.openBrowserWindow(new URL("report.html", location.href).href + "#" + btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""));
-      toast(t("report.browser"));
+      stat("report"); toast(t("report.browser"));
       return;
     }
     setBusy(true);
     try {
-      await loadScript("vendor/jspdf.umd.min.js?v=20261111e");
-      await loadScript("report-pdf.js?v=20261111e");
+      await loadScript("vendor/jspdf.umd.min.js?v=20261120");
+      await loadScript("report-pdf.js?v=20261120");
       const doc = await window.PLReport.build(m, "");
       window.PLReport.save(doc, window.PLReport.fileName(m));
+      stat("report");
       toast(t("report.done"));
     } catch (e) { toast(t("err", { m: (e && e.message) || e })); } finally { setBusy(false); }
   }
@@ -893,7 +900,7 @@
     const tb = $("#timerBtn", art);
     if (tb) { tb.onclick = startTimer; tickTimer(); if (timerEnd && Date.now() < timerEnd && !timerT) timerT = setInterval(tickTimer, 1000); }
     const pb = $("#photoBtn", art); if (pb) pb.onclick = pickPhoto;
-    const ps = $("#photoShow", art); if (ps) ps.onclick = () => goPattern("photo"); // un clic: il browser lascia aprire la finestra
+    const ps = $("#photoShow", art); if (ps) ps.onclick = () => { goPattern("photo"); stat("photo", true); }; // un clic: il browser lascia aprire la finestra
     const dz = $("#photoDrop", art);
     if (dz) {
       dz.ondragover = (e) => { e.preventDefault(); dz.classList.add("is-over"); };
@@ -912,6 +919,8 @@
   function goStep(i) {
     const steps = STEPS();
     S.step = Math.max(0, Math.min(steps.length - 1, i)); persist();
+    if (S.step > 0) stat("session:start", true);
+    if (S.step === steps.length - 1) stat("session:done", true);
     renderStep();
     window.scrollTo({ top: 0, behavior: "smooth" });
     const first = (steps[S.step].slides || [])[0];
@@ -969,6 +978,7 @@
     } else S.detected = PLP.formatFromRatio(screen.width / screen.height); // nel browser "automatico" = formato dello schermo
     if (S.step >= STEPS().length) S.step = 0;
     applyStatic();
+    if (window.UltraspeakerStats) UltraspeakerStats.init("projector"); // statistiche anonime (kit 1.5): «projector:open», una volta per caricamento
     if (office) {
       setBusy(true);
       await Promise.all([detectFormat(), loadMap()]);
